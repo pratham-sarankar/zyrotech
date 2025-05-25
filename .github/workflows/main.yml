@@ -1,78 +1,33 @@
-name: Release APK and App Bundle
-
 on:
+  pull_request:
+    branches:
+      - main
+      - master
   push:
-    tags:
-      - "v*"
-
+    branches:
+      - main
+      - master
+      - develop
+name: "Android Build & Release"
 jobs:
   build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    name: Android Build & Release
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
-          distribution: "zulu"
-          java-version: "17"
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+          distribution: 'zulu'
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.29.3"
-          channel: "stable"
+          channel: 'stable'
+          architecture: x64
 
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Run tests
-        run: flutter test
-
-      - name: Create key.properties
-        run: |
-          echo "storeFile=key.jks" >> android/key.properties
-          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> android/key.properties
-          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
-          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
-
-      - name: Decode Keystore
-        run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/key.jks
-
-      - name: Setup Gradle
-        run: |
-          cd android
-          echo "org.gradle.jvmargs=-Xmx4g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" >> gradle.properties
-          echo "org.gradle.parallel=true" >> gradle.properties
-          echo "org.gradle.daemon=true" >> gradle.properties
-          echo "org.gradle.configureondemand=true" >> gradle.properties
-          cd ..
-
-      - name: Build APK
-        run: |
-          flutter build apk --split-per-abi --release --no-tree-shake-icons
-
-      - name: Build App Bundle
-        run: |
-          flutter build appbundle --release --no-tree-shake-icons
-
-      - name: Get version
-        id: get_version
-        run: |
-          VERSION=$(grep 'version:' pubspec.yaml | sed 's/version: //' | tr -d "'")
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - run: flutter build apk --release --split-per-abi
+      - name: Push to Releases
+        uses: ncipollo/release-action@v1
         with:
-          files: |
-            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
-            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
-            build/app/outputs/flutter-apk/app-x86_64-release.apk
-            build/app/outputs/bundle/release/app-release.aab
-          tag_name: v${{ env.VERSION }}
-          name: Release v${{ env.VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          artifacts: "build/app/outputs/apk/release/*"
+          tag: v1.0.${{ github.run_number }}
+          token: ${{ secrets.TOKEN }}
