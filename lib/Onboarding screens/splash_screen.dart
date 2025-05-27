@@ -21,7 +21,7 @@ class _SplashState extends State<Splash> {
 
   init() {
     Future.delayed(
-      const Duration(seconds: 10),
+      const Duration(seconds: 2),
       () {
         Navigator.pushReplacement(
           context,
@@ -50,14 +50,14 @@ class _SplashState extends State<Splash> {
             children: [
               Image(
                 image: const AssetImage(
-                  "assets/images/Crowwn.png",
+                  "assets/images/144.png",
                 ),
                 color: notifier.isDark ? Colors.white : null,
                 height: height / 8.5,
               ),
               AppConstants.Width(width / 19),
               Text(
-                "Crowwn",
+                "Zyroteck",
                 style: TextStyle(
                   color: notifier.textColor,
                   fontSize: 30,
@@ -76,7 +76,7 @@ class _SplashState extends State<Splash> {
           child: Column(
             children: [
               Text(
-                "All in One Investment Platform",
+                "where automation meets assurance",
                 style: TextStyle(
                   fontSize: 15,
                   fontFamily: "Manrope-Bold",

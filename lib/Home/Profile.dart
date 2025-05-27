@@ -100,11 +100,11 @@ class _ProfileState extends State<Profile> {
                     Center(
                       child: Container(
                         height: height / 7,
-                        width: width / 3,
+                        width: width / 2.5,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                            image: AssetImage("assets/images/Krishna.jpg"),
+                            image: AssetImage("assets/images/profile.png"),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -113,7 +113,7 @@ class _ProfileState extends State<Profile> {
                     AppConstants.Height(20),
                     const Center(
                       child: Text(
-                        "Helena Sarapova",
+                        "John Doe",
                         style: TextStyle(
                           fontFamily: "Manrope-Bold",
                           color: Color(0xffFFFFFF),
@@ -124,7 +124,7 @@ class _ProfileState extends State<Profile> {
                     AppConstants.Height(5),
                     const Center(
                       child: Text(
-                        "helenasarapova@mail.com",
+                        "johndoe@mail.com",
                         style: TextStyle(
                           fontFamily: "Manrope-Regular",
                           color: Color(0xffB59CFA),

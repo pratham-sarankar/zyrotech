@@ -2,6 +2,7 @@ import 'package:crowwn/Home/Market.dart';
 import 'package:crowwn/Home/Portfolio.dart';
 import 'package:crowwn/Home/Profile.dart';
 import 'package:crowwn/Home/home.dart';
+import 'package:crowwn/Home/waiting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +19,9 @@ class BottomBarScreen extends StatefulWidget {
 class _BottomBarScreenState extends State<BottomBarScreen> {
   int currentIndex = 0;
   List<Widget> myChildren = [
-    const home(),
-    const Market(),
-    const Wallet(),
+    const WaitingScreen(),
+    const WaitingScreen(),
+    const WaitingScreen(),
     const Portfolio(),
     const Profile(),
   ];
@@ -39,10 +40,12 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
             });
           },
           backgroundColor: const Color(0xff6B39F4),
-          child: const Image(
-              image: AssetImage("assets/images/Floating action.png"),
-              height: 20,
-              width: 20,
+          child: Image(
+              image: const AssetImage("assets/images/robot.png"),
+              fit: BoxFit.contain,
+              color: Colors.white,
+              height: 26,
+              width: 26,
           ),
         ),
       ),

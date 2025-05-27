@@ -105,7 +105,7 @@ class _Reffle_codeState extends State<Reffle_code> {
                                               fontSize: 13,
                                               fontFamily: "Manrope-Regular")),
                                        Text(
-                                        "@helena02",
+                                        "@sample01",
                                         style: TextStyle(
                                             fontSize: 19,
                                             color: notifier.textColor,
@@ -208,7 +208,7 @@ class _Reffle_codeState extends State<Reffle_code> {
                                                     AppConstants.Height(20),
                                                     Padding(
                                                       padding: const EdgeInsets.only(left: 15),
-                                                      child: Text("Helena journeys",style:TextStyle(color:notifier.textColor,fontSize: 17,fontFamily: "Manrope-Bold"),),
+                                                      child: Text("John journeys",style:TextStyle(color:notifier.textColor,fontSize: 17,fontFamily: "Manrope-Bold"),),
                                                     ),
                                                     AppConstants.Height(10),
                                                     Padding(
@@ -308,7 +308,7 @@ class _Reffle_codeState extends State<Reffle_code> {
                                                           Container(
                                                             height: 45,
                                                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.white),
-                                                            child: const Center(child: Text("@helena02",style: TextStyle(color: Color(0xff0F172A),fontFamily: "Manrope-Medium",fontSize: 17))),
+                                                            child: const Center(child: Text("@sample01",style: TextStyle(color: Color(0xff0F172A),fontFamily: "Manrope-Medium",fontSize: 17))),
                                                           )
                                                         ],
                                                       ),

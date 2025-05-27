@@ -57,227 +57,315 @@ class _Personal_dataState extends State<Personal_data> {
         backgroundColor: notifier.background,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppConstants.Height(40),
-            Center(
-              child: Stack(
-                alignment: AlignmentDirectional.bottomEnd,
-                children: [
-                  Container(
-                    height: 100,
-                    width: 100,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage("assets/images/Krishna.jpg"),
-                        fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppConstants.Height(40),
+              Center(
+                child: Stack(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  children: [
+                    Container(
+                      height: 120,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color(0xff6B39F4),
+                          width: 2,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                        image: const DecorationImage(
+                          image: AssetImage("assets/images/profile.png"),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    height: 30,
-                    width: 30,
-                    decoration: BoxDecoration(
+                    Container(
+                      height: 36,
+                      width: 36,
+                      decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: const Color(0xff6B39F4),
                         border: Border.all(
-                            color: notifier.isDark
-                                ? const Color(0xff0F172A)
-                                : Colors.white,
-                            width: 1)),
-                    child: Image.asset(
-                      "assets/images/edit.png",
-                      color: Colors.white,
-                      scale: 5,
+                          color: notifier.isDark
+                              ? const Color(0xff0F172A)
+                              : Colors.white,
+                          width: 2,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 5,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              AppConstants.Height(40),
+              Text(
+                "Full name",
+                style: TextStyle(
+                  fontFamily: "Manrope-Bold",
+                  fontSize: 16,
+                  color: notifier.textColor.withOpacity(0.7),
+                ),
+              ),
+              AppConstants.Height(10),
+              Container(
+                height: 56,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: notifier.isDark 
+                      ? Colors.grey.withOpacity(0.1)
+                      : Colors.grey.withOpacity(0.05),
+                  border: Border.all(
+                    color: Colors.grey.withOpacity(0.2),
                   ),
-                ],
-              ),
-            ),
-            AppConstants.Height(40),
-            const Text(
-              "Full name",
-              style: TextStyle(
-                fontFamily: "Manrope-Bold",
-                fontSize: 16,
-                color: Color(0xff64748B),
-              ),
-            ),
-            AppConstants.Height(15),
-            Container(
-              height: height / 15,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.grey.withOpacity(0.1),
-              ),
-              child: Center(
+                ),
                 child: TextField(
-                  style: TextStyle(color: notifier.textColor),
+                  style: TextStyle(
+                    color: notifier.textColor,
+                    fontSize: 16,
+                    fontFamily: "Manrope-Regular",
+                  ),
                   decoration: InputDecoration(
+                    hintText: "Enter your full name",
+                    hintStyle: TextStyle(
+                      color: notifier.textColor.withOpacity(0.5),
+                      fontSize: 14,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
                     ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                   ),
                 ),
               ),
-            ),
-            AppConstants.Height(15),
-            const Text(
-              "Phone number",
-              style: TextStyle(
-                fontFamily: "Manrope-Bold",
-                fontSize: 16,
-                color: Color(0xff64748B),
+              AppConstants.Height(20),
+              Text(
+                "Phone number",
+                style: TextStyle(
+                  fontFamily: "Manrope-Bold",
+                  fontSize: 16,
+                  color: notifier.textColor.withOpacity(0.7),
+                ),
               ),
-            ),
-            AppConstants.Height(15),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    showCountryPicker(
-                      context: context,
-                      showPhoneCode: true,
-                      countryListTheme: CountryListThemeData(
+              AppConstants.Height(10),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showCountryPicker(
+                        context: context,
+                        showPhoneCode: true,
+                        countryListTheme: CountryListThemeData(
+                          borderRadius: BorderRadius.circular(15),
+                          inputDecoration: InputDecoration(
+                            hintText: 'Search',
+                            hintStyle: TextStyle(color: notifier.textColor),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide.none,
+                            ),
+                            filled: true,
+                            fillColor: notifier.isDark 
+                                ? Colors.grey.withOpacity(0.1)
+                                : Colors.grey.withOpacity(0.05),
+                          ),
+                          backgroundColor: notifier.background,
+                          textStyle: TextStyle(color: notifier.textColor),
+                        ),
+                        onSelect: (Country country) {
+                          setState(() {
+                            selectedCountry = country;
+                          });
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 56,
+                      width: 100,
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        inputDecoration: InputDecoration(
-                          hintText: 'Search',
-                          hintStyle: TextStyle(color: notifier.textColor),
+                        color: notifier.isDark 
+                            ? Colors.grey.withOpacity(0.1)
+                            : Colors.grey.withOpacity(0.05),
+                        border: Border.all(
+                          color: Colors.grey.withOpacity(0.2),
+                        ),
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (selectedCountry != null)
+                              Text(
+                                selectedCountry!.flagEmoji,
+                                style: const TextStyle(fontSize: 20),
+                              )
+                            else
+                              const Text(
+                                "🇺🇸",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            const SizedBox(width: 5),
+                            Text(
+                              selectedCountry?.phoneCode ?? "+1",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: notifier.textColor,
+                                fontFamily: "Manrope-Regular",
+                              ),
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down,
+                              color: notifier.textColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  AppConstants.Width(10),
+                  Expanded(
+                    child: Container(
+                      height: 56,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: notifier.isDark 
+                            ? Colors.grey.withOpacity(0.1)
+                            : Colors.grey.withOpacity(0.05),
+                        border: Border.all(
+                          color: Colors.grey.withOpacity(0.2),
+                        ),
+                      ),
+                      child: TextField(
+                        style: TextStyle(
+                          color: notifier.textColor,
+                          fontSize: 16,
+                          fontFamily: "Manrope-Regular",
+                        ),
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          hintText: "Phone Number",
+                          hintStyle: TextStyle(
+                            color: notifier.textColor.withOpacity(0.5),
+                            fontSize: 14,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                             borderSide: BorderSide.none,
                           ),
-                          filled: true,
-                          fillColor: Colors.grey.withOpacity(0.1),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                         ),
-                        backgroundColor: notifier.background,
-                        textStyle: TextStyle(color: notifier.textColor),
                       ),
-                      onSelect: (Country country) {
-                        setState(() {
-                          selectedCountry = country;
-                        });
-                      },
-                    );
-                  },
-                  child: Container(
-                    height: 50,
-                    width: 100,
-                    decoration: BoxDecoration(
+                    ),
+                  ),
+                ],
+              ),
+              AppConstants.Height(20),
+              Text(
+                "Email",
+                style: TextStyle(
+                  fontFamily: "Manrope-Bold",
+                  fontSize: 16,
+                  color: notifier.textColor.withOpacity(0.7),
+                ),
+              ),
+              AppConstants.Height(10),
+              Container(
+                height: 56,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: notifier.isDark 
+                      ? Colors.grey.withOpacity(0.1)
+                      : Colors.grey.withOpacity(0.05),
+                  border: Border.all(
+                    color: Colors.grey.withOpacity(0.2),
+                  ),
+                ),
+                child: TextField(
+                  style: TextStyle(
+                    color: notifier.textColor,
+                    fontSize: 16,
+                    fontFamily: "Manrope-Regular",
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    hintText: "Enter your email",
+                    hintStyle: TextStyle(
+                      color: notifier.textColor.withOpacity(0.5),
+                      fontSize: 14,
+                    ),
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
-                      color: Colors.grey.withOpacity(0.1),
+                      borderSide: BorderSide.none,
                     ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (selectedCountry != null)
-                            Text(
-                              selectedCountry!.flagEmoji,
-                              style: const TextStyle(fontSize: 20),
-                            )
-                          else
-                            const Text(
-                              "🇺🇸",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          const SizedBox(width: 5),
-                          Text(
-                            selectedCountry?.phoneCode ?? "+1",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: notifier.textColor,
-                            ),
-                          ),
-                          Icon(
-                            Icons.arrow_drop_down,
-                            color: notifier.textColor,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                AppConstants.Width(5),
-                Expanded(
-                  child: Container(
-                    height: 56,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Colors.grey.withOpacity(0.1),
-                    ),
-                    child: TextField(
-                      style: TextStyle(color: notifier.textColor),
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        hintText: "Phone Number",
-                        hintStyle: TextStyle(
-                          color: notifier.textColor.withOpacity(0.5),
-                          fontSize: 14,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            AppConstants.Height(15),
-            const Text(
-              "Email",
-              style: TextStyle(
-                fontFamily: "Manrope-Bold",
-                fontSize: 16,
-                color: Color(0xff64748B),
-              ),
-            ),
-            AppConstants.Height(15),
-            Container(
-              height: 56,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.grey.withOpacity(0.1),
-              ),
-              child: TextField(
-                style: TextStyle(color: notifier.textColor),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                    borderSide: BorderSide.none,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                   ),
                 ),
               ),
-            ),
-          ],
+              AppConstants.Height(40),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 20, bottom: 15, right: 20),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            height: 56,
-            decoration: BoxDecoration(
+        padding: const EdgeInsets.all(20),
+        child: Container(
+          height: 56,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: const Color(0xff6B39F4),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xff6B39F4).withOpacity(0.3),
+                blurRadius: 10,
+                spreadRadius: 0,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
               borderRadius: BorderRadius.circular(15),
-              color: const Color(0xff6B39F4),
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Center(
+                child: Text(
+                  "Save Changes",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontFamily: "Manrope-Bold",
+                  ),
+                ),
+              ),
             ),
-            child: const Center(
-                child: Text("Save Change",
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontFamily: "̌Manrope-Bold"))),
           ),
         ),
       ),

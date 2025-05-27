@@ -51,12 +51,12 @@ class _Succcess extends State<Success> {
             ),
             AppConstants.Height(20),
              Text(
-              "Thanks for submitting your \n Selfie with ID Card",
+              "Thanks for submitting your \n Documents for Verification",
               style: TextStyle(fontSize: 24, fontFamily: "Manrope-Bold",color: notifier.textColor),
             ),
             AppConstants.Height(10),
             const Text(
-              "We can review it now, Wait a few moments\n we will verify it as soon as possible.",
+              "We are reviewing your Aadhar Card and PAN Card.\n Please wait while we verify your documents.",
               style: TextStyle(
                 fontSize: 14,
                 fontFamily: "Manrope-Regular",

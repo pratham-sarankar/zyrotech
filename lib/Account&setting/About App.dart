@@ -1,4 +1,3 @@
-
 // ignore_for_file: file_names, camel_case_types
 
 import 'package:flutter/material.dart';
@@ -28,13 +27,20 @@ class _About_AppState extends State<About_App> {
         backgroundColor: const Color(0xff6B39F4),
         // flexibleSpace: Image.asset("assets/images/Background (2).png",fit: BoxFit.cover,),
         elevation: 0,
+        title: const Text(
+          "About Us",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontFamily: "Manrope-Bold",
+          ),
+        ),
         leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
             },
             child: Image.asset("assets/images/arrow-narrow-left (1).png",scale: 3,color: Colors.white,)),
         actions: const [
-          Icon(Icons.menu, size: 25, color: Color(0xffFFFFFF)),
           SizedBox(width: 20,)
         ],
       ),
@@ -43,108 +49,117 @@ class _About_AppState extends State<About_App> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: height/3,
+              height: height/2.5,
               width: width,
               decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/images/Background (2).png"),
-                      // scale: 1,
                       fit: BoxFit.cover)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     AppConstants.Height(40),
+                    AppConstants.Height(60),
                     const Text(
-                      "All in one investment platform",
+                      "Where automation meets assurance",
                       style: TextStyle(
                           fontFamily: "Manrope-Bold",
-                          fontSize: 25,
+                          fontSize: 28,
                           color: Colors.white),
                     ),
-                    AppConstants.Height(20),
+                    AppConstants.Height(25),
                     const Text(
                       "We are on a mission to transform the world's money management with a multi-asset investment platform that is easy to use and supported by a trusted community.",
                       style: TextStyle(
                           color: Color(0xffD3C4FC),
-                          fontSize: 15,
+                          fontSize: 16,
                           fontFamily: "Manrope-Regular"),
                     )
                   ],
                 ),
               ),
             ),
-            AppConstants.Height(30),
+            AppConstants.Height(40),
             Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "About Us",
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: notifier.textColor,
-                        fontFamily: "Manrope-Bold"),
-                  ),
-                  AppConstants.Height(10),
                   const Text(
-                    "Ante vitae mi volutpat neque blandit egestas elementum sed vel. Quis volutpat luctus blandit. Adipiscing pellentesque adipiscing lectus tempus auctor. At egestas ipsum, donec.",
+                    "At Zyroteck, we are passionate about reshaping the future of finance through intelligent automation and cutting-edge technology. Founded with a vision to empower traders and investors, we develop high-performance trading bots and tools that harness the power of AI, data analytics, and algorithmic precision.",
                     style: TextStyle(
                         color: Color(0xff64748B),
                         fontSize: 16,
-                        fontFamily: "Manrope-Regular"),
+                        fontFamily: "Manrope-Regular",
+                        height: 1.5),
                   ),
-                  AppConstants.Height(5),
+                  AppConstants.Height(15),
                   const Text(
-                    "Proin consectetur aliquam sed pellentesque ultrices aenean. Urna eu netus eu enim. Consectetur integer pellentesque lorem sit.",
+                    "Our mission is to make crypto trading smarter, faster, and more accessible—whether you're a beginner or a seasoned professional. With a team of engineers, data scientists, and market analysts, Zyroteck is committed to delivering secure, transparent, and adaptive solutions for the evolving digital economy.",
                     style: TextStyle(
                         color: Color(0xff64748B),
                         fontSize: 16,
-                        fontFamily: "Manrope-Regular"),
+                        fontFamily: "Manrope-Regular",
+                        height: 1.5),
                   ),
-                  AppConstants.Height(30),
+                  AppConstants.Height(15),
+                  const Text(
+                    "We're not just building software—we're building the future of autonomous trading.",
+                    style: TextStyle(
+                        color: Color(0xff64748B),
+                        fontSize: 16,
+                        fontFamily: "Manrope-Regular",
+                        height: 1.5),
+                  ),
+                  AppConstants.Height(40),
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
                     },
                     child: Container(
-                      height: height/6,
+                      height: height/5,
                       decoration: BoxDecoration(
                           color: notifier.onboardBackgroundColor,
                           borderRadius: BorderRadius.circular(15)),
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 15, top: 30),
+                        padding: const EdgeInsets.all(20),
                         child: Row(
                           children: [
-                            Column(
-                              children: [
-                                Image.asset(
-                                  "assets/images/join team.png",
-                                  scale: 3,
-                                )
-                              ],
+                            Image.asset(
+                              "assets/images/join team.png",
+                              scale: 2.5,
                             ),
-                            AppConstants.Width(30),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Join Our Team",
+                            AppConstants.Width(25),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Join Our Team",
+                                      style: TextStyle(
+                                          color: notifier.textColor,
+                                          fontSize: 18,
+                                          fontFamily: "Manrope-Bold")),
+                                  AppConstants.Height(10),
+                                  const Text(
+                                    "We make investing accessible to more people and help them to reach their financial goals.",
                                     style: TextStyle(
-                                        color: notifier.textColor,
-                                        fontSize: 16,
-                                        fontFamily: "Manrope-Bold")),
-                                AppConstants.Height(7),
-                                const Text("We make investing accessible\nto more people and help them to reach\ntheir financial goals.",style: TextStyle(fontFamily: "Manrope-Regular",fontSize: 10,color: Color(0xff64748B)),)
-                              ],
+                                      fontFamily: "Manrope-Regular",
+                                      fontSize: 14,
+                                      color: Color(0xff64748B),
+                                      height: 1.5,
+                                    ),
+                                  )
+                                ],
+                              ),
                             )
                           ],
                         ),
                       ),
                     ),
                   ),
-                  AppConstants.Height(20),
+                  AppConstants.Height(30),
                 ],
               ),
             )

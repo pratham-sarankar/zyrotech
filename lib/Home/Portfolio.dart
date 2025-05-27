@@ -75,12 +75,12 @@ class _PortfolioState extends State<Portfolio> {
         actions: [
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Trans_chart(),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const Trans_chart(),
+              //   ),
+              // );
             },
             child: Image.asset(
               "assets/images/Portfolio.png",
@@ -91,12 +91,12 @@ class _PortfolioState extends State<Portfolio> {
           SizedBox(width: 5),
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Transaction(),
-                ),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const Transaction(),
+              //   ),
+              // );
             },
             child: Image.asset(
               "assets/images/receipt.png",
