@@ -478,34 +478,35 @@ class _homeState extends State<home> with SingleTickerProviderStateMixin {
                               child: Container(
                                 height: height / 4.8,
                                 width: width / 1.2,
-                                padding:
-                                    const EdgeInsets.only(right: 5, left: 5),
+                                padding: const EdgeInsets.only(right: 5, left: 5),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(
-                                        color: notifier.getContainerBorder,
-                                        width: 1,),),
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: notifier.isDark ? const Color(0xff1E293B) : Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.05),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
                                 child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20, top: 20, right: 20, bottom: 20),
+                                  padding: const EdgeInsets.all(20),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             alignment: Alignment.center,
                                             height: height / 18,
                                             width: width / 10,
                                             decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(35),
-                                                color: notifier.textField,),
+                                              borderRadius: BorderRadius.circular(35),
+                                              color: notifier.isDark ? const Color(0xff2D3748) : const Color(0xffF8F9FD),
+                                            ),
                                             child: Image.asset(
                                               notifier.isDark
                                                   ? "assets/images/crypto_dark.png"
@@ -516,55 +517,54 @@ class _homeState extends State<home> with SingleTickerProviderStateMixin {
                                           ),
                                           AppConstants.Width(10),
                                           Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              // AppConstants.Width(90),
                                               Text(
                                                 "Crypto",
                                                 style: TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 16,
                                                   fontFamily: "Manrope-Bold",
                                                   color: notifier.textColor,
                                                 ),
                                               ),
                                               AppConstants.Height(5),
-                                              const Padding(
-                                                padding:
-                                                    EdgeInsets.only(bottom: 5),
-                                                child: Text("10 Assets",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xff64748B),
-                                                        fontSize: 12,
-                                                        fontFamily:
-                                                            "Manrope-Regular",),),
+                                              Text(
+                                                "10 Assets",
+                                                style: TextStyle(
+                                                  color: notifier.isDark ? const Color(0xff94A3B8) : const Color(0xff64748B),
+                                                  fontSize: 12,
+                                                  fontFamily: "Manrope-Regular",
+                                                ),
                                               ),
                                             ],
                                           ),
                                           const Spacer(),
                                           Column(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
                                             children: [
-                                              Text("\$20,321.00",
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontFamily: "Manrope-Bold",
-                                                    color: notifier.textColor,
-                                                  )),
+                                              Text(
+                                                "\$20,321.00",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontFamily: "Manrope-Bold",
+                                                  color: notifier.textColor,
+                                                ),
+                                              ),
                                               AppConstants.Height(5),
                                               Row(
                                                 children: [
                                                   Image.asset(
-                                                      "assets/images/up-arrow.png",
-                                                      height: 10,
-                                                      width: 10),
+                                                    "assets/images/up-arrow.png",
+                                                    height: 10,
+                                                    width: 10,
+                                                  ),
                                                   AppConstants.Width(3),
                                                   const Text(
                                                     "0.24%",
                                                     style: TextStyle(
-                                                        fontSize: 13,
-                                                        color:
-                                                            Color(0xff1DCE5C),),
+                                                      fontSize: 13,
+                                                      color: Color(0xff1DCE5C),
+                                                    ),
                                                   )
                                                 ],
                                               )
@@ -572,42 +572,58 @@ class _homeState extends State<home> with SingleTickerProviderStateMixin {
                                           )
                                         ],
                                       ),
-                                      AppConstants.Height(10),
+                                      AppConstants.Height(15),
                                       Divider(
                                         height: 2,
-                                        thickness: 2,
-                                        color: notifier.getContainerBorder,
+                                        thickness: 1,
+                                        color: notifier.isDark ? const Color(0xff2D3748) : const Color(0xffE2E8F0),
                                       ),
-                                      AppConstants.Height(12),
-                                      const Text("Profits",
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: Color(0xff64748B,),),),
+                                      AppConstants.Height(15),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text("\$16,988.00",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontFamily: "Manrope-Bold",
-                                                color: notifier.textColor,
-                                              )),
-                                          const Spacer(),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Profits",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: notifier.isDark ? const Color(0xff94A3B8) : const Color(0xff64748B),
+                                                ),
+                                              ),
+                                              AppConstants.Height(5),
+                                              Text(
+                                                "\$16,988.00",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontFamily: "Manrope-Bold",
+                                                  color: notifier.textColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                           Container(
-                                            height: 32,
-                                            width: 64,
+                                            height: 40,
+                                            width: 80,
                                             decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: const Color(0xff6B39F4),
+                                              borderRadius: BorderRadius.circular(12),
+                                              gradient: const LinearGradient(
+                                                colors: [Color(0xff6B39F4), Color(0xff8B5CF6)],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                              ),
                                             ),
                                             child: const Center(
-                                                child: Text("Buy",
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            "Manrope-SemiBold",),),),
+                                              child: Text(
+                                                "Buy",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontFamily: "Manrope-SemiBold",
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),

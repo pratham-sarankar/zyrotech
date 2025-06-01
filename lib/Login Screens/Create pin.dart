@@ -1,4 +1,5 @@
 // ignore_for_file: file_names
+import 'package:crowwn/Login%20Screens/Verify%20success.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
@@ -126,7 +127,7 @@ class _PinState extends State<Pin> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Proof(),
+                    builder: (context) => const Success(),
                   ),
                 );
               },
@@ -155,7 +156,7 @@ class _PinState extends State<Pin> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Proof(),
+                    builder: (context) => Success(),
                   ),
                 );
               },

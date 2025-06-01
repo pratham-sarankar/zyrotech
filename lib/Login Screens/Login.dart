@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 import 'package:crowwn/Login%20Screens/Country%20residence.dart';
+import 'package:crowwn/Onboarding%20screens/kyc_onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -148,7 +149,9 @@ class _LoginState extends State<Login> {
                     // AppConstants.Height(5),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        // TODO: Implement actual login logic
+                        // For now, just navigate to Country Selection
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const CountrySelection(),

@@ -1,10 +1,12 @@
 // ignore_for_file: file_names, camel_case_types
 
+import 'package:crowwn/Login%20Screens/Create%20pin.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:crowwn/Login%20Screens/verification%20code.dart';
 import '../Dark mode.dart';
 import '../config/common.dart';
+import 'package:country_picker/country_picker.dart';
 
 class phone extends StatefulWidget {
   const phone({super.key});
@@ -15,6 +17,9 @@ class phone extends StatefulWidget {
 
 class _phoneState extends State<phone> {
   ColorNotifire notifier = ColorNotifire();
+  String selectedCountryCode = '+91'; // Default to India
+  String selectedCountryFlag = '🇮🇳';
+
   @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
@@ -43,7 +48,7 @@ class _phoneState extends State<phone> {
             ),
             AppConstants.Height(20),
             const Text(
-              "Enter your phone number and we’ll text you a \n code to activate your account.",
+              "Enter your phone number and we'll text you a \n code to activate your account.",
               style: TextStyle(
                   fontSize: 14,
                   color: Color(0xff64748B),
@@ -51,21 +56,37 @@ class _phoneState extends State<phone> {
             ),
             AppConstants.Height(20),
             Row(
-              // mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  height: 50,
-                  width: 100,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: notifier.textField,),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(0),
-                      leading: const Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Image(image: AssetImage("assets/images/united-states.png"),height: 30,width: 30),
-                      ),
-                      title: Text("+1", style: TextStyle(fontSize: 17,color: notifier.textColor,)),
-                      ),
+                GestureDetector(
+                  onTap: () {
+                    showCountryPicker(
+                      context: context,
+                      showPhoneCode: true,
+                      onSelect: (Country country) {
+                        setState(() {
+                          selectedCountryCode = '+${country.phoneCode}';
+                          selectedCountryFlag = country.flagEmoji;
+                        });
+                      },
+                    );
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: notifier.textField,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(selectedCountryFlag, style: const TextStyle(fontSize: 20)),
+                        const SizedBox(width: 5),
+                        Text(selectedCountryCode, style: TextStyle(fontSize: 17, color: notifier.textColor)),
+                      ],
+                    ),
+                  ),
                 ),
                 Expanded(child: AppConstants.Width(20)),
                 Container(
@@ -73,18 +94,18 @@ class _phoneState extends State<phone> {
                   width: 226,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: notifier.textField,/*border: Border.all(color: Color(0xff6B39F4))*/
+                    color: notifier.textField,
                   ),
                   child: TextField(
                     style: TextStyle(color: notifier.textColor),
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          ),
-
+                        borderSide: BorderSide.none,
+                      ),
+                      hintText: 'Phone Number',
+                      hintStyle: TextStyle(color: Color(0xff64748B)),
                     ),
-
                   ),
                 ),
               ],
@@ -92,7 +113,7 @@ class _phoneState extends State<phone> {
             AppConstants.Height(30),
             GestureDetector(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Verification(),));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Pin (),));
               },
               child: Container(
                 height: height/11,
@@ -100,12 +121,6 @@ class _phoneState extends State<phone> {
                 child:const Center(child: Text("Continue",style: TextStyle(fontSize: 16,color: Colors.white,fontFamily: "Manrope-Bold"))) ,
               ),
             ),
-            // CommonButton(
-            //   tap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => Verification(),));},
-            //   color: Color(0xff6B39F4),
-            //   text: "Continue",
-            //   textcolor: Colors.white, fontsize: 16,
-            // ),
           ],
         ),
       ),

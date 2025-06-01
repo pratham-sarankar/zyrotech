@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../Dark mode.dart';
 import 'Get started.dart';
+import 'kyc_onboarding.dart';
 
 class Onboard1 extends StatefulWidget {
   const Onboard1({super.key});
@@ -171,7 +172,19 @@ class _Onboard1State extends State<Onboard1> {
                       height: MediaQuery.of(context).size.height / 2.8,
                       width: double.infinity,
                       color: notifier.onboardBackgroundColor,
-                      child: Image.asset("assets/images/Card 2.png", scale: 0.9),
+   child: Container(
+                        width: 300,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Icon(
+                          Icons.image,
+                          size: 100,
+                          color: Colors.grey,
+                        ),
+                      ),
                     ),
                   ),
                   Padding(

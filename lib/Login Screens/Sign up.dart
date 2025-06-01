@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../Dark mode.dart';
 import '../config/common.dart';
 import 'Login.dart';
-import 'Sign phone.dart';
+import 'Email verification.dart';
 
 
 class Sign extends StatefulWidget {
@@ -126,7 +126,7 @@ class _SignState extends State<Sign> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const phone(),
+                        builder: (context) => const EmailVerification(),
                       ));
                 },
                 child: Container(

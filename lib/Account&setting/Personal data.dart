@@ -19,6 +19,23 @@ class _Personal_dataState extends State<Personal_data> {
   Country? selectedCountry;
 
   @override
+  void initState() {
+    super.initState();
+    selectedCountry = Country(
+      phoneCode: '91',
+      countryCode: 'IN',
+      e164Sc: 0,
+      geographic: true,
+      level: 1,
+      name: 'India',
+      example: '9876543210',
+      displayName: 'India (IN) [+91]',
+      displayNameNoCountryCode: 'India (IN)',
+      e164Key: '91-IN-0',
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
     var height = MediaQuery.of(context).size.height;

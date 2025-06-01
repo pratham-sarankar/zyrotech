@@ -2,9 +2,12 @@ import 'package:crowwn/Home/Market.dart';
 import 'package:crowwn/Home/Portfolio.dart';
 import 'package:crowwn/Home/Profile.dart';
 import 'package:crowwn/Home/home.dart';
+import 'package:crowwn/Home/my_signals.dart';
 import 'package:crowwn/Home/waiting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:crowwn/Home/new_home_screen.dart';
+import 'package:crowwn/Home/bot.dart';
 
 import '../Dark mode.dart';
 import '../Wallet/My wallet.dart';
@@ -19,9 +22,9 @@ class BottomBarScreen extends StatefulWidget {
 class _BottomBarScreenState extends State<BottomBarScreen> {
   int currentIndex = 0;
   List<Widget> myChildren = [
-    const WaitingScreen(),
-    const WaitingScreen(),
-    const WaitingScreen(),
+    const NewHomeScreen(),
+    const MySignals(),
+    const BotScreen(),
     const Portfolio(),
     const Profile(),
   ];
@@ -50,10 +53,15 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor:  notifier.background,
+        backgroundColor: notifier.background,
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
-        elevation: 0,
+        elevation: 10,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        selectedFontSize: 8,
+        unselectedFontSize: 8,
+        iconSize: 20,
         onTap: (int index) {
           setState(() {
             currentIndex = index;
@@ -63,83 +71,150 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
         selectedItemColor: notifier.textColor,
         unselectedLabelStyle: const TextStyle(
           fontFamily: "Manrope_bold",
-          fontSize: 10,
+          fontSize: 8,
           letterSpacing: 0.2,
         ),
-        selectedLabelStyle:  TextStyle(
+        selectedLabelStyle: TextStyle(
           fontFamily: "Manrope_bold",
-          fontSize: 10,
+          fontSize: 8,
           fontWeight: FontWeight.w700,
           color: notifier.textColor,
           letterSpacing: 0.2,
         ),
         items: [
           BottomNavigationBarItem(
-              icon: Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Image.asset("assets/images/home.png", scale: 3.5,color: notifier.bottom),
-              ),
-              activeIcon: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Image.asset(
-                  "assets/images/home_fill.png",
-                  scale: 3.5,
-                  color: notifier.bottom,
+            icon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/images/home.png",
+                    color: notifier.bottom,
+                  ),
                 ),
-              ),
-              label: "Home",
+                const SizedBox(height: 4),
+              ],
+            ),
+            activeIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/images/home_fill.png",
+                    color: notifier.bottom,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+            label: "Home",
           ),
           BottomNavigationBarItem(
-              icon: Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Image.asset(
-                  "assets/images/Market.png",
-                  scale: 3.5,
-                    color: notifier.bottom
+            icon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/images/Market_fill.png",
+                    color: notifier.bottom,
+                  ),
                 ),
-              ),
-              activeIcon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset("assets/images/Market_fill.png",
-                    scale: 3.5, color: notifier.bottom),
-              ),
-              label: "Market"),
+                const SizedBox(height: 4),
+              ],
+            ),
+            activeIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/images/Market_fill.png",
+                    color: notifier.bottom,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+            label: "Signals",
+          ),
           const BottomNavigationBarItem(
             label: "",
             icon: Text(""),
           ),
           BottomNavigationBarItem(
-              icon: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Image.asset(
-                  "assets/images/Portfolio.png",
-                  scale: 3.5,
-                    color: notifier.bottom
+            icon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/images/Portfolio.png",
+                    color: notifier.bottom,
+                  ),
                 ),
-              ),
-              activeIcon: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Image.asset(
-                  "assets/images/Portfolio_fill.png",
-                  // color: Colors.black,
-                  scale: 3.5,
-                    color: notifier.bottom
+                const SizedBox(height: 4),
+              ],
+            ),
+            activeIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/images/Portfolio_fill.png",
+                    color: notifier.bottom,
+                  ),
                 ),
-              ),
-              label: "Portfolio"),
+                const SizedBox(height: 4),
+              ],
+            ),
+            label: "Portfolio",
+          ),
           BottomNavigationBarItem(
-              icon: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0,right: 5),
-                child: Image.asset("assets/images/Person.png", scale: 3.5,color: notifier.bottom),
-              ),
-              activeIcon: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Image.asset("assets/images/Person_fill.png", scale: 3.5,color: notifier.bottom),
-              ),
-              label: "Profile"),
+            icon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/images/Person.png",
+                    color: notifier.bottom,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+            activeIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/images/Person_fill.png",
+                    color: notifier.bottom,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+            label: "Profile",
+          ),
         ],
       ),
       body: myChildren.elementAt(currentIndex),
     );
   }
 }
+
+

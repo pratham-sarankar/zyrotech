@@ -5,6 +5,7 @@ import 'package:country_picker/country_picker.dart';
 
 import '../Dark mode.dart';
 import '../config/common.dart';
+import '../Onboarding screens/kyc_onboarding.dart';
 import 'Select reason.dart';
 
 class CountrySelection extends StatefulWidget {
@@ -15,7 +16,18 @@ class CountrySelection extends StatefulWidget {
 }
 
 class _CountrySelectionState extends State<CountrySelection> {
-  Country? selectedCountry;
+  Country? selectedCountry = Country(
+    phoneCode: '91',
+    countryCode: 'IN',
+    e164Sc: 91,
+    geographic: true,
+    level: 1,
+    name: 'India',
+    example: '9123456789',
+    displayName: 'India (IN) [+91]',
+    displayNameNoCountryCode: 'India (IN)',
+    e164Key: '91-IN-0',
+  );
   ColorNotifire notifier = ColorNotifire();
 
   @override
@@ -120,7 +132,7 @@ class _CountrySelectionState extends State<CountrySelection> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Reason(),
+                  builder: (context) => const KYCOnboarding(),
                 ),
               );
             }

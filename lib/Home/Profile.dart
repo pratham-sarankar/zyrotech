@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../Account&setting/About App.dart';
 import '../Account&setting/Bank Account.dart';
 import '../Account&setting/Help Center.dart';
+import '../Account&setting/Identify_Verification.dart';
 import '../Account&setting/Personal data.dart';
 import '../Account&setting/Privacy&Policy.dart';
 import '../Account&setting/Push Notification.dart';
@@ -18,6 +19,7 @@ import '../Dark mode.dart';
 import '../Message & Notification/Notifications.dart';
 import '../config/common.dart';
 import 'bottom.dart';
+import '../Account&setting/API_Connection.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -239,12 +241,147 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
-                    child: accountDetails(
-                      image: "assets/images/Identycard_.png",
-                      name: "Identify Verification",
-                      desc: "Your verification status",
-                      onPress: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Identify_Verification(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 75,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: notifier.getContainerBorder)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          children: [
+                            Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25),
+                                    color: notifier.tabBar1),
+                                child: Image.asset(
+                                  "assets/images/Identycard_.png",
+                                  scale: 3,
+                                  color: notifier.passwordIcon,
+                                )),
+                            const SizedBox(width: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AppConstants.Height(20),
+                                Text(
+                                  "Identify Verification",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Manrope_bold",
+                                    fontSize: 14,
+                                    color: notifier.textColor,
+                                  ),
+                                ),
+                                const SizedBox(height: 7),
+                                Text(
+                                  "Verify your identity",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Manrope_bold",
+                                    fontSize: 12,
+                                    letterSpacing: 0.2,
+                                    color: Color(0xff64748B),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: notifier.tabBarText2,
+                                size: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const API_Connection(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 75,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: notifier.getContainerBorder)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          children: [
+                            Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(25),
+                                    color: notifier.tabBar1),
+                                child: Image.asset(
+                                  "assets/images/cloud-connection.png",
+                                  fit: BoxFit.contain,
+                                  height: 10,
+                                  width: 10,
+                                  scale: 3,
+                                  color: notifier.passwordIcon,
+                                )),
+                            const SizedBox(width: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AppConstants.Height(20),
+                                Text(
+                                  "API Connection",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Manrope_bold",
+                                    fontSize: 14,
+                                    color: notifier.textColor,
+                                  ),
+                                ),
+                                const SizedBox(height: 7),
+                                Text(
+                                  "Connect to external services",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Manrope_bold",
+                                    fontSize: 12,
+                                    letterSpacing: 0.2,
+                                    color: Color(0xff64748B),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: notifier.tabBarText2,
+                                size: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                   // GestureDetector(
@@ -352,15 +489,27 @@ class _ProfileState extends State<Profile> {
                         fontSize: 16),
                   ),
                   AppConstants.Height(20),
-                  GestureDetector(
-                    onTap: () {},
-                    child: accountDetails(
-                      image: "assets/images/Privacy.png",
-                      name: "Privacy & Security",
-                      desc: "PIN & Biometric protection",
-                      onPress: () {},
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => const Push_Notifications(),
+                  //         ));
+                  //   },
+                  //   child: accountDetails(
+                  //     image: "assets/images/notification.png",
+                  //     name: "Push Notifications",
+                  //     desc: "Notification preferences",
+                  //     onPress: () {
+                  //       Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //             builder: (context) => const Notifications(),
+                  //           ));
+                  //     },
+                  //   ),
+                  // ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -592,63 +741,69 @@ class _ProfileState extends State<Profile> {
       required void Function()? onPress}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
-      child: Container(
-        height: 75,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: notifier.getContainerBorder)),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Row(
-            children: [
-              Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: notifier.tabBar1),
-                  child: Image.asset(
-                    image,
-                    scale: 3,
-                    color: notifier.passwordIcon,
-                  )),
-              const SizedBox(width: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppConstants.Height(20),
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "Manrope_bold",
-                      fontSize: 14,
-                      color: notifier.textColor,
+      child: GestureDetector(
+        onTap: onPress,
+        child: Container(
+          height: 75,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: notifier.getContainerBorder)),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+              children: [
+                Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: notifier.tabBar1),
+                    child: Image.asset(
+                      image,
+                      scale: 3,
+                      color: notifier.passwordIcon,
+                    )),
+                const SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppConstants.Height(20),
+                    Text(
+                      name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "Manrope_bold",
+                        fontSize: 14,
+                        color: notifier.textColor,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 7),
-                  Text(
-                    desc,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "Manrope_bold",
-                      fontSize: 12,
-                      letterSpacing: 0.2,
-                      color: Color(0xff64748B),
+                    const SizedBox(height: 7),
+                    Text(
+                      desc,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Manrope_bold",
+                        fontSize: 12,
+                        letterSpacing: 0.2,
+                        color: Color(0xff64748B),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: onPress,
-                icon: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: notifier.tabBarText2,
-                  size: 18,
+                  ],
                 ),
-              ),
-            ],
+                const Spacer(),
+                GestureDetector(
+                  onTap: onPress,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: notifier.tabBarText2,
+                      size: 18,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
