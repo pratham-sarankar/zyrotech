@@ -627,7 +627,7 @@ class _Detail_stockState extends State<Detail_stock> {
             ],
             // primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 5),
             tooltipBehavior: _tooltip1,
-            series: <ChartSeries>[
+            series: <CartesianSeries>[
               FastLineSeries<_ChartData1, double>(
                 // isVisibleInLegend: false,
                 dataSource: data1,

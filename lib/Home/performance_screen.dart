@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../Dark mode.dart';
 import 'package:provider/provider.dart';
-import 'package:fl_chart/fl_chart.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:intl/intl.dart';
 
 class PerformanceScreen extends StatefulWidget {
   final String strategyName;
@@ -31,6 +32,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
   late TabController _tabController;
   ColorNotifire notifier = ColorNotifire();
   int? selectedSignalIndex;
+  bool isLineChart = true;
 
   @override
   void initState() {
@@ -130,9 +132,9 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
               children: [
                 _buildPerformanceCard(),
                 const SizedBox(height: 20),
-                _buildMetricsSection(),
+                _buildPerformanceSummaryChart(),
                 const SizedBox(height: 20),
-                _buildTradingHistory(),
+                _buildDisclaimer(),
               ],
             ),
           ),
@@ -210,38 +212,27 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
     );
   }
 
-  Widget _buildMetricsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Key Metrics',
-          style: TextStyle(
-            color: notifier.textColor,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        GridView.count(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 2,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 1.5,
-          children: [
-            _buildMetricCard('Volume', widget.volume, Icons.currency_exchange),
-            _buildMetricCard('Strategy Type', widget.strategyType, Icons.analytics),
-            _buildMetricCard('Total Trades', '156', Icons.swap_horiz),
-            _buildMetricCard('Avg. Duration', '2.5h', Icons.timer),
-          ],
-        ),
-      ],
-    );
-  }
+  Widget _buildPerformanceSummaryChart() {
+    final candles = _getHeikinAshiCandles();
+    final chartData = candles.map((candle) => _ChartData(
+      candle.epoch.toDouble(),
+      candle.close,
+    )).toList();
 
-  Widget _buildMetricCard(String title, String value, IconData icon) {
+    // Calculate min and max values for proper zooming
+    final minY = chartData.map((e) => e.y).reduce((a, b) => a < b ? a : b);
+    final maxY = chartData.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+    final minX = chartData.map((e) => e.x).reduce((a, b) => a < b ? a : b);
+    final maxX = chartData.map((e) => e.x).reduce((a, b) => a > b ? a : b);
+
+    // Add padding to the range
+    final yPadding = (maxY - minY) * 0.1;
+    final xPadding = (maxX - minX) * 0.05;
+
+    // Calculate initial visible range (show only last 20% of data)
+    final initialVisibleRange = (maxX - minX) * 0.2;
+    final initialMinX = maxX - initialVisibleRange;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -252,145 +243,184 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: const Color(0xff6B39F4), size: 20),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: TextStyle(
-              color: notifier.textColor.withOpacity(0.7),
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: TextStyle(
-              color: notifier.textColor,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTradingHistory() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Recent Trades',
-          style: TextStyle(
-            color: notifier.textColor,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 16),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return _buildTradeItem();
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTradeItem() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: notifier.container.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: notifier.textColor.withOpacity(0.1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+              Text(
+                'Performance Summary',
+                style: TextStyle(
+                  color: notifier.textColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-                child: const Icon(Icons.trending_up, color: Colors.green, size: 20),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'BTC/USDT',
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => setState(() => isLineChart = true),
+                    child: _buildChartTypeButton('Line', isLineChart),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () => setState(() => isLineChart = false),
+                    child: _buildChartTypeButton('Candle', !isLineChart),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 300,
+            child: SfCartesianChart(
+              plotAreaBorderWidth: 0,
+              margin: const EdgeInsets.all(10),
+              primaryXAxis: NumericAxis(
+                isVisible: true,
+                minimum: initialMinX,
+                maximum: maxX,
+                majorGridLines: MajorGridLines(
+                  width: 0.5,
+                  color: notifier.textColor.withOpacity(0.05),
+                ),
+                minorGridLines: MinorGridLines(
+                  width: 0,
+                  color: Colors.transparent,
+                ),
+                labelStyle: TextStyle(
+                  color: notifier.textColor.withOpacity(0.7),
+                  fontSize: 12,
+                ),
+                axisLine: AxisLine(
+                  width: 1,
+                  color: notifier.textColor.withOpacity(0.1),
+                ),
+                majorTickLines: MajorTickLines(
+                  size: 5,
+                  color: notifier.textColor.withOpacity(0.1),
+                ),
+                interval: initialVisibleRange / 8,
+                desiredIntervals: 8,
+              ),
+              primaryYAxis: NumericAxis(
+                isVisible: true,
+                minimum: minY - yPadding,
+                maximum: maxY + yPadding,
+                majorGridLines: MajorGridLines(
+                  width: 0.5,
+                  color: notifier.textColor.withOpacity(0.05),
+                ),
+                minorGridLines: MinorGridLines(
+                  width: 0,
+                  color: Colors.transparent,
+                ),
+                labelStyle: TextStyle(
+                  color: notifier.textColor.withOpacity(0.7),
+                  fontSize: 12,
+                ),
+                axisLine: AxisLine(
+                  width: 1,
+                  color: notifier.textColor.withOpacity(0.1),
+                ),
+                majorTickLines: MajorTickLines(
+                  size: 5,
+                  color: notifier.textColor.withOpacity(0.1),
+                ),
+                numberFormat: NumberFormat.compactCurrency(
+                  symbol: '\$',
+                  decimalDigits: 0,
+                ),
+                interval: (maxY - minY) / 6,
+                desiredIntervals: 6,
+              ),
+              backgroundColor: notifier.background,
+              palette: const [
+                Color(0xff6B39F4),
+              ],
+              zoomPanBehavior: ZoomPanBehavior(
+                enablePinching: true,
+                enablePanning: true,
+                enableDoubleTapZooming: true,
+                zoomMode: ZoomMode.x,
+                maximumZoomLevel: 0.1,
+                enableSelectionZooming: true,
+                selectionRectBorderColor: const Color(0xff6B39F4),
+                selectionRectBorderWidth: 1,
+                selectionRectColor: const Color(0xff6B39F4).withOpacity(0.1),
+              ),
+              tooltipBehavior: TooltipBehavior(
+                enable: true,
+                format: 'point.x : point.y',
+                builder: (data, point, series, pointIndex, seriesIndex) {
+                  return Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: notifier.container,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: notifier.textColor.withOpacity(0.1),
+                      ),
+                    ),
+                    child: Text(
+                      '\$${point.y?.toStringAsFixed(2) ?? '0.00'}',
                       style: TextStyle(
                         color: notifier.textColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(
-                      'Long',
-                      style: TextStyle(
-                        color: notifier.textColor.withOpacity(0.7),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '+\$1,245.60',
-                    style: const TextStyle(
-                      color: Colors.green,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+              series: <CartesianSeries>[
+                if (isLineChart)
+                  FastLineSeries<_ChartData, double>(
+                    dataSource: chartData,
+                    xValueMapper: (_ChartData data, _) => data.x,
+                    yValueMapper: (_ChartData data, _) => data.y,
+                    width: 3,
+                    markerSettings: MarkerSettings(
+                      isVisible: true,
+                      height: 6,
+                      width: 6,
+                      shape: DataMarkerType.circle,
+                      borderWidth: 2,
+                      borderColor: const Color(0xff6B39F4),
                     ),
-                  ),
-                  Text(
-                    '2 hours ago',
-                    style: TextStyle(
-                      color: notifier.textColor.withOpacity(0.7),
-                      fontSize: 12,
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xff6B39F4).withOpacity(0.2),
+                        const Color(0xff6B39F4).withOpacity(0.0),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
                     ),
+                  )
+                else
+                  CandleSeries<Candle, double>(
+                    dataSource: candles,
+                    xValueMapper: (Candle data, _) => data.epoch.toDouble(),
+                    lowValueMapper: (Candle data, _) => data.low,
+                    highValueMapper: (Candle data, _) => data.high,
+                    openValueMapper: (Candle data, _) => data.open,
+                    closeValueMapper: (Candle data, _) => data.close,
+                    name: 'Heikin Ashi',
+                    bearColor: Colors.red,
+                    bullColor: const Color(0xff6B39F4),
+                    borderWidth: 1,
                   ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(height: 12),
-          const Divider(height: 1),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildTradeDetail('Open Time', '2024-03-20 10:30'),
-              _buildTradeDetail('Close Time', '2024-03-20 12:30'),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildTradeDetail('Open Price', '\$45,250'),
-              _buildTradeDetail('Close Price', '\$46,500'),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildTradeDetail('Take Profit', '\$46,800'),
-              _buildTradeDetail('Stop Loss', '\$44,800'),
+              _buildTimeFrameButton('1H', true),
+              const SizedBox(width: 8),
+              _buildTimeFrameButton('4H', false),
+              const SizedBox(width: 8),
+              _buildTimeFrameButton('1D', false),
             ],
           ),
         ],
@@ -398,27 +428,95 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
     );
   }
 
-  Widget _buildTradeDetail(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: notifier.textColor.withOpacity(0.7),
-            fontSize: 12,
-          ),
+  Widget _buildChartTypeButton(String text, bool isSelected) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: isSelected ? const Color(0xff6B39F4).withOpacity(0.1) : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.1),
         ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            color: notifier.textColor,
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-          ),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.7),
+          fontSize: 12,
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
         ),
-      ],
+      ),
+    );
+  }
+
+  List<Candle> _getHeikinAshiCandles() {
+    final now = DateTime.now();
+    final regularCandles = List.generate(100, (i) {
+      final time = now.subtract(Duration(hours: 100 - i));
+      final basePrice = 45000.0;
+      final random = (i % 3) * 100.0;
+      final open = basePrice + random;
+      final close = open + (i % 2 == 0 ? 200 : -150);
+      final high = [open, close].reduce((a, b) => a > b ? a : b) + 50;
+      final low = [open, close].reduce((a, b) => a < b ? a : b) - 50;
+      return Candle(
+        epoch: time.millisecondsSinceEpoch ~/ 1000,
+        open: open,
+        close: close,
+        high: high,
+        low: low,
+      );
+    });
+
+    // Convert to Heikin Ashi
+    final heikinAshiCandles = <Candle>[];
+    for (int i = 0; i < regularCandles.length; i++) {
+      final current = regularCandles[i];
+      double haClose, haOpen, haHigh, haLow;
+
+      if (i == 0) {
+        haClose = (current.open + current.high + current.low + current.close) / 4;
+        haOpen = (current.open + current.close) / 2;
+        haHigh = current.high;
+        haLow = current.low;
+      } else {
+        final previous = heikinAshiCandles[i - 1];
+        haClose = (current.open + current.high + current.low + current.close) / 4;
+        haOpen = (previous.open + previous.close) / 2;
+        haHigh = [current.high, haOpen, haClose].reduce((a, b) => a > b ? a : b);
+        haLow = [current.low, haOpen, haClose].reduce((a, b) => a < b ? a : b);
+      }
+
+      heikinAshiCandles.add(Candle(
+        epoch: current.epoch,
+        open: haOpen,
+        close: haClose,
+        high: haHigh,
+        low: haLow,
+      ));
+    }
+
+    return heikinAshiCandles;
+  }
+
+  Widget _buildTimeFrameButton(String text, bool isSelected) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: isSelected ? const Color(0xff6B39F4).withOpacity(0.1) : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.1),
+        ),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.7),
+          fontSize: 12,
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+        ),
+      ),
     );
   }
 
@@ -482,6 +580,42 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
   }
 
   Widget _buildTradingChart() {
+    final candles = _getHeikinAshiCandles();
+    final chartData = candles.map((candle) => _ChartData(
+      candle.epoch.toDouble(),
+      candle.close,
+    )).toList();
+
+    // Calculate min and max values for proper zooming
+    final minY = chartData.map((e) => e.y).reduce((a, b) => a < b ? a : b);
+    final maxY = chartData.map((e) => e.y).reduce((a, b) => a > b ? a : b);
+    final minX = chartData.map((e) => e.x).reduce((a, b) => a < b ? a : b);
+    final maxX = chartData.map((e) => e.x).reduce((a, b) => a > b ? a : b);
+
+    // Add padding to the range
+    final yPadding = (maxY - minY) * 0.1;
+    final xPadding = (maxX - minX) * 0.05;
+
+    // Calculate initial visible range (show only last 20% of data)
+    final initialVisibleRange = (maxX - minX) * 0.2;
+    final initialMinX = maxX - initialVisibleRange;
+
+    // Sample trade points (you can replace these with actual trade data)
+    final tradePoints = [
+      TradePoint(
+        x: chartData[chartData.length - 15].x,  // Place open trade near the end
+        y: chartData[chartData.length - 15].y,
+        type: TradeType.open,
+        price: chartData[chartData.length - 15].y,
+      ),
+      TradePoint(
+        x: chartData[chartData.length - 5].x,   // Place close trade near the end
+        y: chartData[chartData.length - 5].y,
+        type: TradeType.close,
+        price: chartData[chartData.length - 5].y,
+      ),
+    ];
+
     return Container(
       height: 300,
       padding: const EdgeInsets.all(16),
@@ -496,212 +630,185 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'BTC/USDT',
-                style: TextStyle(
-                  color: notifier.textColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                child: Text(
+                  'BTC/USDT',
+                  style: TextStyle(
+                    color: notifier.textColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Row(
-                children: [
-                  _buildTimeFrameButton('1H', true),
-                  const SizedBox(width: 8),
-                  _buildTimeFrameButton('4H', false),
-                  const SizedBox(width: 8),
-                  _buildTimeFrameButton('1D', false),
-                ],
+              const SizedBox(width: 8),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildTimeFrameButton('1H', true),
+                    const SizedBox(width: 8),
+                    _buildTimeFrameButton('4H', false),
+                    const SizedBox(width: 8),
+                    _buildTimeFrameButton('1D', false),
+                  ],
+                ),
               ),
             ],
           ),
           const SizedBox(height: 20),
           Expanded(
-            child: LineChart(
-              LineChartData(
-                gridData: FlGridData(
-                  show: true,
-                  drawVerticalLine: true,
-                  horizontalInterval: 1,
-                  verticalInterval: 1,
-                  getDrawingHorizontalLine: (value) {
-                    return FlLine(
-                      color: notifier.textColor.withOpacity(0.1),
-                      strokeWidth: 1,
-                    );
-                  },
-                  getDrawingVerticalLine: (value) {
-                    return FlLine(
-                      color: notifier.textColor.withOpacity(0.1),
-                      strokeWidth: 1,
-                    );
-                  },
+            child: SfCartesianChart(
+              plotAreaBorderWidth: 0,
+              margin: const EdgeInsets.all(10),
+              primaryXAxis: NumericAxis(
+                isVisible: true,
+                minimum: initialMinX,
+                maximum: maxX,
+                majorGridLines: MajorGridLines(
+                  width: 0.5,
+                  color: notifier.textColor.withOpacity(0.05),
                 ),
-                titlesData: FlTitlesData(
-                  show: true,
-                  rightTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  topTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 30,
-                      interval: 1,
-                      getTitlesWidget: (value, meta) {
-                        const style = TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        );
-                        Widget text;
-                        switch (value.toInt()) {
-                          case 0:
-                            text = const Text('00:00', style: style);
-                            break;
-                          case 4:
-                            text = const Text('04:00', style: style);
-                            break;
-                          case 8:
-                            text = const Text('08:00', style: style);
-                            break;
-                          case 12:
-                            text = const Text('12:00', style: style);
-                            break;
-                          case 16:
-                            text = const Text('16:00', style: style);
-                            break;
-                          case 20:
-                            text = const Text('20:00', style: style);
-                            break;
-                          case 24:
-                            text = const Text('24:00', style: style);
-                            break;
-                          default:
-                            text = const Text('');
-                            break;
-                        }
-                        return SideTitleWidget(
-                          axisSide: meta.axisSide,
-                          child: text,
-                        );
-                      },
-                    ),
-                  ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      interval: 1,
-                      getTitlesWidget: (value, meta) {
-                        const style = TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        );
-                        return Text(
-                          '\$${value.toInt()}K',
-                          style: style,
-                        );
-                      },
-                      reservedSize: 42,
-                    ),
-                  ),
+                minorGridLines: MinorGridLines(
+                  width: 0,
+                  color: Colors.transparent,
                 ),
-                borderData: FlBorderData(
-                  show: false,
+                labelStyle: TextStyle(
+                  color: notifier.textColor.withOpacity(0.7),
+                  fontSize: 12,
                 ),
-                minX: 0,
-                maxX: 24,
-                minY: 0,
-                maxY: 6,
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: [
-                      const FlSpot(0, 3),
-                      const FlSpot(2.6, 2),
-                      const FlSpot(4.9, 5),
-                      const FlSpot(6.8, 3.1),
-                      const FlSpot(8, 4),
-                      const FlSpot(9.5, 3),
-                      const FlSpot(11, 4),
-                      const FlSpot(12, 3),
-                      const FlSpot(13, 4),
-                      const FlSpot(14, 3),
-                      const FlSpot(15, 4),
-                      const FlSpot(16, 3),
-                      const FlSpot(17, 4),
-                      const FlSpot(18, 3),
-                      const FlSpot(19, 4),
-                      const FlSpot(20, 3),
-                      const FlSpot(21, 4),
-                      const FlSpot(22, 3),
-                      const FlSpot(23, 4),
-                      const FlSpot(24, 3),
-                    ],
-                    isCurved: true,
-                    color: const Color(0xff6B39F4),
-                    barWidth: 3,
-                    isStrokeCapRound: true,
-                    dotData: FlDotData(
-                      show: true,
-                      getDotPainter: (spot, percent, barData, index) {
-                        // Show dots only at open and close positions
-                        if (index == 4 || index == 16) {
-                          return FlDotCirclePainter(
-                            radius: 6,
-                            color: index == 4 ? Colors.green : Colors.red,
-                            strokeWidth: 2,
-                            strokeColor: Colors.white,
-                          );
-                        }
-                        return FlDotCirclePainter(
-                          radius: 0,
-                          color: Colors.transparent,
-                        );
-                      },
-                    ),
-                    belowBarData: BarAreaData(
-                      show: true,
-                      color: const Color(0xff6B39F4).withOpacity(0.1),
-                    ),
-                  ),
-                ],
-                lineTouchData: LineTouchData(
-                  touchTooltipData: LineTouchTooltipData(
-                    tooltipBgColor: notifier.container,
-                    tooltipRoundedRadius: 8,
-                    getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
-                      return touchedBarSpots.map((barSpot) {
-                        return LineTooltipItem(
-                          '\$${(barSpot.y * 1000).toStringAsFixed(2)}',
-                          TextStyle(
-                            color: notifier.textColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        );
-                      }).toList();
-                    },
-                  ),
+                axisLine: AxisLine(
+                  width: 1,
+                  color: notifier.textColor.withOpacity(0.1),
                 ),
-                extraLinesData: ExtraLinesData(
-                  extraLinesOnTop: true,
-                  horizontalLines: [
-                    HorizontalLine(
-                      y: 4.5,
-                      color: Colors.green.withOpacity(0.5),
-                      strokeWidth: 1,
-                      dashArray: [5, 5],
-                    ),
-                    HorizontalLine(
-                      y: 2.5,
-                      color: Colors.red.withOpacity(0.5),
-                      strokeWidth: 1,
-                      dashArray: [5, 5],
-                    ),
-                  ],
+                majorTickLines: MajorTickLines(
+                  size: 5,
+                  color: notifier.textColor.withOpacity(0.1),
                 ),
+                interval: initialVisibleRange / 8,
+                desiredIntervals: 8,
               ),
+              primaryYAxis: NumericAxis(
+                isVisible: true,
+                minimum: minY - yPadding,
+                maximum: maxY + yPadding,
+                majorGridLines: MajorGridLines(
+                  width: 0.5,
+                  color: notifier.textColor.withOpacity(0.05),
+                ),
+                minorGridLines: MinorGridLines(
+                  width: 0,
+                  color: Colors.transparent,
+                ),
+                labelStyle: TextStyle(
+                  color: notifier.textColor.withOpacity(0.7),
+                  fontSize: 12,
+                ),
+                axisLine: AxisLine(
+                  width: 1,
+                  color: notifier.textColor.withOpacity(0.1),
+                ),
+                majorTickLines: MajorTickLines(
+                  size: 5,
+                  color: notifier.textColor.withOpacity(0.1),
+                ),
+                numberFormat: NumberFormat.compactCurrency(
+                  symbol: '\$',
+                  decimalDigits: 0,
+                ),
+                interval: (maxY - minY) / 6,
+                desiredIntervals: 6,
+              ),
+              backgroundColor: notifier.background,
+              palette: const [
+                Color(0xff6B39F4),
+              ],
+              zoomPanBehavior: ZoomPanBehavior(
+                enablePinching: true,
+                enablePanning: true,
+                enableDoubleTapZooming: true,
+                zoomMode: ZoomMode.x,
+                maximumZoomLevel: 0.1,
+                enableSelectionZooming: true,
+                selectionRectBorderColor: const Color(0xff6B39F4),
+                selectionRectBorderWidth: 1,
+                selectionRectColor: const Color(0xff6B39F4).withOpacity(0.1),
+              ),
+              tooltipBehavior: TooltipBehavior(
+                enable: true,
+                format: 'point.x : point.y',
+                builder: (data, point, series, pointIndex, seriesIndex) {
+                  return Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: notifier.container,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: notifier.textColor.withOpacity(0.1),
+                      ),
+                    ),
+                    child: Text(
+                      '\$${point.y?.toStringAsFixed(2) ?? '0.00'}',
+                      style: TextStyle(
+                        color: notifier.textColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              annotations: [
+                ...tradePoints.map((trade) => CartesianChartAnnotation(
+                  x: trade.x,
+                  y: trade.y,
+                  coordinateUnit: CoordinateUnit.point,
+                  widget: Container(
+                    width: 12,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      color: trade.type == TradeType.open ? Colors.green : Colors.red,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: notifier.background,
+                        width: 2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: (trade.type == TradeType.open ? Colors.green : Colors.red).withOpacity(0.3),
+                          blurRadius: 4,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
+                  ),
+                )).toList(),
+              ],
+              series: <CartesianSeries>[
+                FastLineSeries<_ChartData, double>(
+                  dataSource: chartData,
+                  xValueMapper: (_ChartData data, _) => data.x,
+                  yValueMapper: (_ChartData data, _) => data.y,
+                  width: 2,
+                  markerSettings: MarkerSettings(
+                    isVisible: true,
+                    height: 4,
+                    width: 4,
+                    shape: DataMarkerType.circle,
+                    borderWidth: 2,
+                    borderColor: const Color(0xff6B39F4),
+                  ),
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xff6B39F4).withOpacity(0.2),
+                      const Color(0xff6B39F4).withOpacity(0.0),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 16),
@@ -714,27 +821,6 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTimeFrameButton(String text, bool isSelected) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0xff6B39F4).withOpacity(0.1) : Colors.transparent,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.1),
-        ),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.7),
-          fontSize: 12,
-          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-        ),
       ),
     );
   }
@@ -871,4 +957,93 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
       ],
     );
   }
+
+  Widget _buildDisclaimer() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.orange.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.orange.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'Disclaimer',
+                style: TextStyle(
+                  color: Colors.orange,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Past performance is not indicative of future results. Trading involves significant risk and can result in the loss of your invested capital. You should not invest more than you can afford to lose.',
+            style: TextStyle(
+              color: notifier.textColor,
+              fontSize: 12,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'This strategy is for informational purposes only and should not be considered as financial advice. Always do your own research before making any investment decisions.',
+            style: TextStyle(
+              color: notifier.textColor,
+              fontSize: 12,
+              height: 1.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ChartData {
+  _ChartData(this.x, this.y);
+  final double x;
+  final double y;
+}
+
+class Candle {
+  final int epoch;
+  final double open;
+  final double close;
+  final double high;
+  final double low;
+
+  Candle({
+    required this.epoch,
+    required this.open,
+    required this.close,
+    required this.high,
+    required this.low,
+  });
+}
+
+class TradePoint {
+  final double x;
+  final double y;
+  final TradeType type;
+  final double price;
+
+  TradePoint({
+    required this.x,
+    required this.y,
+    required this.type,
+    required this.price,
+  });
+}
+
+enum TradeType {
+  open,
+  close,
 } 

@@ -725,19 +725,14 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
   ) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PerformanceScreen(
-              strategyName: name,
-              winRate: winRate,
-              price: price,
-              pnlColor: pnlColor,
-              volume: volume,
-              roi: roi,
-              strategyType: strategyType,
-            ),
-          ),
+        _showTradingDetailsBottomSheet(
+          name: name,
+          winRate: winRate,
+          price: price,
+          pnlColor: pnlColor,
+          volume: volume,
+          roi: roi,
+          strategyType: strategyType,
         );
       },
       child: Container(
@@ -1004,6 +999,190 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
               ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showTradingDetailsBottomSheet({
+    required String name,
+    required String winRate,
+    required String price,
+    required Color pnlColor,
+    required String volume,
+    required String roi,
+    required String strategyType,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: notifier.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Drag handle bar
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: notifier.textColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 10),
+                    // Order ID
+                  Text(
+                    "#915765224",
+                    style: TextStyle(
+                      color: notifier.textColor.withOpacity(0.7),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Top section with Pair, Action/Price, PnL, and Close Price
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                name,
+                                style: TextStyle(
+                                  color: notifier.textColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "Buy 0.01 at 3294.554",
+                                style: TextStyle(
+                                  color: notifier.textColor.withOpacity(0.7),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "+\$29.83 USD",
+                            style: TextStyle(
+                              color: Colors.greenAccent,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "3324.381",
+                            style: TextStyle(
+                              color: notifier.textColor.withOpacity(0.7),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Trading details list
+                  _buildDetailRow("Open time", "30 May 2025 10:45:00 pm"),
+                  _buildDetailRow("Close time", "2 Jun 2025 11:15:25 am"),
+                  _buildDetailRow("Open Price", "3294.554"),
+                  _buildDetailRow("Close Price", "3324.381"),
+                  _buildDetailRow("Stop Loss", "-"),
+                  _buildDetailRow("Take Profit", "-"),
+                  const SizedBox(height: 32),
+
+                  // View Chart Button
+                  Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PerformanceScreen(
+                              strategyName: name,
+                              winRate: winRate,
+                              price: price,
+                              pnlColor: pnlColor,
+                              volume: volume,
+                              roi: roi,
+                              strategyType: strategyType,
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff6B39F4),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        "View chart",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: notifier.textColor.withOpacity(0.7),
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              color: notifier.textColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }

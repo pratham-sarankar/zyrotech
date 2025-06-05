@@ -237,18 +237,34 @@ class _BotScreenState extends State<BotScreen> {
 
   Widget _buildBotCard(Bot bot) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: notifier.container.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: notifier.textColor.withOpacity(0.1),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            notifier.container.withOpacity(0.7),
+            notifier.container.withOpacity(0.5),
+          ],
         ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: notifier.textColor.withOpacity(0.15),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: notifier.textColor.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+            spreadRadius: 1,
+          ),
+        ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           onTap: () {
             Navigator.push(
               context,
@@ -266,7 +282,7 @@ class _BotScreenState extends State<BotScreen> {
             );
           },
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -285,47 +301,65 @@ class _BotScreenState extends State<BotScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 2),
                           Text(
                             bot.description,
                             style: TextStyle(
-                              color: notifier.textColor.withOpacity(0.7),
+                              color: notifier.textColor.withOpacity(0.8),
                               fontSize: 12,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          bot.winRate,
-                          style: TextStyle(
-                            color: bot.profitColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: bot.profitColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            bot.winRate,
+                            style: TextStyle(
+                              color: bot.profitColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text(
-                          bot.profit,
-                          style: TextStyle(
-                            color: bot.profitColor,
-                            fontSize: 12,
+                          Text(
+                            bot.profit,
+                            style: TextStyle(
+                              color: bot.profitColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildBotMetric('Pair', bot.pair),
-                    _buildBotMetric('Strategy', bot.strategy),
-                    _buildBotMetric('Risk', bot.riskLevel),
-                  ],
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: notifier.background.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: notifier.textColor.withOpacity(0.1),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildBotMetric('Pair', bot.pair),
+                      _buildBotMetric('Strategy', bot.strategy),
+                      _buildBotMetric('Risk', bot.riskLevel),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -336,26 +370,40 @@ class _BotScreenState extends State<BotScreen> {
   }
 
   Widget _buildBotMetric(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: notifier.textColor.withOpacity(0.7),
-            fontSize: 12,
+    return Container(
+      width: 80,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: notifier.textColor.withOpacity(0.7),
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            color: notifier.textColor,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+          const SizedBox(height: 2),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(
+              color: notifier.container.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              value,
+              style: TextStyle(
+                color: notifier.textColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.left,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 } 

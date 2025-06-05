@@ -672,7 +672,7 @@ class _PortfolioState extends State<Portfolio> {
             ],
             // primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 5),
             tooltipBehavior: _tooltip1,
-            series: <ChartSeries>[
+            series: <CartesianSeries>[
               ColumnSeries<_ChartData1, double>(
                 dataSource: data1,
                 xValueMapper: (_ChartData1 data1, _) => data1.x,

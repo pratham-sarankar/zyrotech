@@ -563,7 +563,7 @@ class _Detail_cryptoState extends State<Detail_crypto> {
              ],
               // primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 5),
               tooltipBehavior: _tooltip1,
-              series: <ChartSeries>[
+              series: <CartesianSeries>[
                 FastLineSeries<_ChartData1, double>(
                     dataSource: data1,
                     xValueMapper: (_ChartData1 data1, _) => data1.x,
