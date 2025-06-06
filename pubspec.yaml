@@ -52,6 +52,7 @@ dependencies:
   k_chart: ^0.7.1
   deriv_chart: ^0.4.1
   syncfusion_flutter_charts: ^29.1.38
+  http: ^1.4.0
 
 
 
