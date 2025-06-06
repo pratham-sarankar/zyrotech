@@ -21,7 +21,8 @@ class _Succcess extends State<Success> {
     return Scaffold(
       backgroundColor: notifier.background,
       body: Padding(
-        padding: const EdgeInsets.only(top: 50, bottom: 20,left: 10,right: 10),
+        padding:
+            const EdgeInsets.only(top: 50, bottom: 20, left: 10, right: 10),
         child: Column(
           children: [
             Row(
@@ -33,14 +34,18 @@ class _Succcess extends State<Success> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.close,color:notifier.textColor,size: 25,)),
+                      child: Icon(
+                        Icons.close,
+                        color: notifier.textColor,
+                        size: 25,
+                      )),
                 ),
               ],
             ),
             AppConstants.Height(90),
             Center(
               child: Container(
-                height: height/3.6,
+                height: height / 3.6,
                 // width: 200,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -50,29 +55,43 @@ class _Succcess extends State<Success> {
               ),
             ),
             AppConstants.Height(20),
-             Text(
+            Text(
               "Thanks for submitting your \n Documents for Verification",
-              style: TextStyle(fontSize: 24, fontFamily: "Manrope-Bold",color: notifier.textColor),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontFamily: "Manrope-Bold",
+                  color: notifier.textColor),
             ),
             AppConstants.Height(10),
             const Text(
               "We are reviewing your Aadhar Card and PAN Card.\n Please wait while we verify your documents.",
               style: TextStyle(
-                fontSize: 14,
-                fontFamily: "Manrope-Regular",
-                color: Color(0xff64748B)
-              ),
+                  fontSize: 14,
+                  fontFamily: "Manrope-Regular",
+                  color: Color(0xff64748B)),
             ),
             const Spacer(),
             GestureDetector(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const BottomBarScreen(),),);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BottomBarScreen(),
+                  ),
+                );
               },
               child: Container(
                 // width: 327,
                 height: 56,
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: const Color(0xff6B39F4)),
-                child: const Center(child: Text("Continue",style: TextStyle(fontFamily: "Manrope-Bold",fontSize: 18,color: Color(0xffFFFFFF)))),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: const Color(0xff6B39F4)),
+                child: const Center(
+                    child: Text("Continue",
+                        style: TextStyle(
+                            fontFamily: "Manrope-Bold",
+                            fontSize: 18,
+                            color: Color(0xffFFFFFF)))),
               ),
             ),
           ],

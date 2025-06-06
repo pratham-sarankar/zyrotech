@@ -1,3 +1,4 @@
+import 'package:crowwn/Home/performance_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Dark mode.dart';
@@ -49,7 +50,8 @@ class MySignals extends StatefulWidget {
   State<MySignals> createState() => _MySignalsState();
 }
 
-class _MySignalsState extends State<MySignals> with SingleTickerProviderStateMixin {
+class _MySignalsState extends State<MySignals>
+    with SingleTickerProviderStateMixin {
   ColorNotifire notifier = ColorNotifire();
   late TabController _tabController;
 
@@ -205,7 +207,8 @@ class _MySignalsState extends State<MySignals> with SingleTickerProviderStateMix
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: const Color(0xff6B39F4).withOpacity(0.1),
-                border: Border.all(color: const Color(0xff6B39F4).withOpacity(0.3)),
+                border:
+                    Border.all(color: const Color(0xff6B39F4).withOpacity(0.3)),
               ),
               labelColor: const Color(0xff6B39F4),
               unselectedLabelColor: notifier.textColor.withOpacity(0.7),
@@ -268,23 +271,34 @@ class _MySignalsState extends State<MySignals> with SingleTickerProviderStateMix
   }
 
   Widget _buildBotCard(Bot bot, bool showClosed) {
-    final filteredSignals = bot.signals.where((signal) => signal.isClosed == showClosed).toList();
+    final filteredSignals =
+        bot.signals.where((signal) => signal.isClosed == showClosed).toList();
     if (filteredSignals.isEmpty) return const SizedBox.shrink();
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: notifier.container.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: notifier.textColor.withOpacity(0.1),
-          width: 1,
+    return GestureDetector(
+      onTap: () {
+        _showTradingDetailsBottomSheet(
+          name: bot.name,
+          winRate: bot.winRate,
+          price: bot.profit,
+          pnlColor: Colors.blue,
+          volume: 'volume',
+          roi: 'roi',
+          strategyType: 'strategyType',
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: notifier.container.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: notifier.textColor.withOpacity(0.1),
+            width: 1,
+          ),
         ),
-      ),
-      child: ExpansionTile(
-        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        childrenPadding: const EdgeInsets.all(16),
-        title: Row(
+        padding: const EdgeInsets.all(16),
+        child: Row(
           children: [
             Expanded(
               child: Column(
@@ -331,11 +345,6 @@ class _MySignalsState extends State<MySignals> with SingleTickerProviderStateMix
             ),
           ],
         ),
-        children: [
-          const Divider(),
-          const SizedBox(height: 8),
-          ...filteredSignals.map((signal) => _buildSignalItem(signal)).toList(),
-        ],
       ),
     );
   }
@@ -441,4 +450,174 @@ class _MySignalsState extends State<MySignals> with SingleTickerProviderStateMix
       ],
     );
   }
-} 
+
+  void _showTradingDetailsBottomSheet({
+    required String name,
+    required String winRate,
+    required String price,
+    required Color pnlColor,
+    required String volume,
+    required String roi,
+    required String strategyType,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: notifier.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Drag handle bar
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: notifier.textColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Order ID
+            Text(
+              "#915765224",
+              style: TextStyle(
+                color: notifier.textColor.withOpacity(0.7),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Top section with Pair, Action/Price, PnL, and Close Price
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                name,
+                                style: TextStyle(
+                                  color: notifier.textColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "Buy 0.01 at 3294.554",
+                                style: TextStyle(
+                                  color: notifier.textColor.withOpacity(0.7),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "+\$29.83 USD",
+                            style: TextStyle(
+                              color: Colors.greenAccent,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "3324.381",
+                            style: TextStyle(
+                              color: notifier.textColor.withOpacity(0.7),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Trading details list
+                  _buildDetailRow("Open time", "30 May 2025 10:45:00 pm"),
+                  _buildDetailRow("Open Price", "3294.554"),
+                  _buildDetailRow("Close time", "2 Jun 2025 11:15:25 am"),
+                  _buildDetailRow("Close Price", "3324.381"),
+                  _buildDetailRow("P&L Price", "--"),
+                  const SizedBox(height: 32),
+
+                  // View Chart Button
+                  Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 204, 47, 47),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        "Close",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: notifier.textColor.withOpacity(0.7),
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              color: notifier.textColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

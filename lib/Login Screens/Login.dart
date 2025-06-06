@@ -1,4 +1,5 @@
 // ignore_for_file: file_names
+import 'package:crowwn/Home/bottom.dart';
 import 'package:crowwn/Login%20Screens/Country%20residence.dart';
 import 'package:crowwn/Onboarding%20screens/kyc_onboarding.dart';
 import 'package:flutter/material.dart';
@@ -40,26 +41,30 @@ class _LoginState extends State<Login> {
               Container(
                   height: 279,
                   width: 450,
-                   color: const Color(0xff0F172A),
+                  color: const Color(0xff0F172A),
                   child: Column(
                     children: [
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 20,left: 10),
-      
-                            child:
-                            GestureDetector(
+                            padding: const EdgeInsets.only(top: 20, left: 10),
+                            child: GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
                                 },
-                                child: Icon(Icons.close,color:notifier.textColor,size: 25,)),
+                                child: Icon(
+                                  Icons.close,
+                                  color: notifier.textColor,
+                                  size: 25,
+                                )),
                           ),
                         ],
                       ),
                       const Spacer(),
-                      Image.asset("assets/images/144.png",color: notifier.isDark ? Colors.white : null,height: height/6),
+                      Image.asset("assets/images/144.png",
+                          color: notifier.isDark ? Colors.white : null,
+                          height: height / 6),
                       const Spacer(),
                       const Text('Welcome Back!',
                           style: TextStyle(
@@ -78,32 +83,49 @@ class _LoginState extends State<Login> {
                   )),
               AppConstants.Height(10),
               Padding(
-                padding: const EdgeInsets.only(left: 10,right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Column(
                   children: [
                     Container(
-                      height: height/13,
-                      decoration: BoxDecoration(color: notifier.textField,borderRadius: BorderRadius.circular(15)),
+                      height: height / 13,
+                      decoration: BoxDecoration(
+                          color: notifier.textField,
+                          borderRadius: BorderRadius.circular(15)),
                       child: TextField(
                         style: TextStyle(color: notifier.textColor),
-                        decoration: InputDecoration(hintText: "Email",border: const OutlineInputBorder(borderSide: BorderSide.none),hintStyle: TextStyle(color: notifier.textFieldHintText)),
+                        decoration: InputDecoration(
+                            hintText: "Email",
+                            border: const OutlineInputBorder(
+                                borderSide: BorderSide.none),
+                            hintStyle:
+                                TextStyle(color: notifier.textFieldHintText)),
                       ),
                     ),
                     AppConstants.Height(20),
                     Container(
-                      height: height/13,
-                      decoration: BoxDecoration(color: notifier.textField,borderRadius: BorderRadius.circular(15)),
+                      height: height / 13,
+                      decoration: BoxDecoration(
+                          color: notifier.textField,
+                          borderRadius: BorderRadius.circular(15)),
                       child: TextField(
                         style: TextStyle(color: notifier.textColor),
                         obscureText: _obsecuretext,
-                        decoration: InputDecoration(hintText: "Password",border: const OutlineInputBorder(borderSide: BorderSide.none),hintStyle: TextStyle(color: notifier.textFieldHintText),suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obsecuretext =! _obsecuretext;
-                              });
-                            },
-                            icon: _obsecuretext?const Icon(Icons.remove_red_eye_outlined) : const Icon(Icons.visibility_off_outlined)
-                        ),),
+                        decoration: InputDecoration(
+                          hintText: "Password",
+                          border: const OutlineInputBorder(
+                              borderSide: BorderSide.none),
+                          hintStyle:
+                              TextStyle(color: notifier.textFieldHintText),
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _obsecuretext = !_obsecuretext;
+                                });
+                              },
+                              icon: _obsecuretext
+                                  ? const Icon(Icons.remove_red_eye_outlined)
+                                  : const Icon(Icons.visibility_off_outlined)),
+                        ),
                       ),
                     ),
                     // AppConstants.Height(10),
@@ -113,11 +135,12 @@ class _LoginState extends State<Login> {
                         children: [
                           Checkbox(
                             // checkColor: Colors.blue,
-                             side: const BorderSide(color: Color(0xff334155)),
+                            side: const BorderSide(color: Color(0xff334155)),
                             activeColor: const Color(0xff6B39F4),
                             checkColor: const Color(0xffFFFFFF),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-      
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+
                             value: value,
                             onChanged: (value) {
                               setState(() {
@@ -125,7 +148,7 @@ class _LoginState extends State<Login> {
                               });
                             },
                           ),
-                           Text("Remember me",
+                          Text("Remember me",
                               style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: "Manrope-Medium",
@@ -133,7 +156,11 @@ class _LoginState extends State<Login> {
                           Expanded(child: AppConstants.Width(60)),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const Forget(),));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Forget(),
+                                  ));
                             },
                             child: const Text(
                               "Forgot Password?",
@@ -152,15 +179,26 @@ class _LoginState extends State<Login> {
                         // TODO: Implement actual login logic
                         // For now, just navigate to Country Selection
                         Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const CountrySelection(),
-                            ));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BottomBarScreen(),
+                          ),
+                        );
                       },
                       child: Container(
-                        height: height/12,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: const Color(0xff6B39F4),),
-                        child: const Center(child: Text("Sign In",style: TextStyle(color: Color(0xffFFFFFF),fontSize: 15,fontFamily: "Manrope-Bold"),)),
+                        height: height / 12,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: const Color(0xff6B39F4),
+                        ),
+                        child: const Center(
+                            child: Text(
+                          "Sign In",
+                          style: TextStyle(
+                              color: Color(0xffFFFFFF),
+                              fontSize: 15,
+                              fontFamily: "Manrope-Bold"),
+                        )),
                       ),
                     ),
                     AppConstants.Height(10),
@@ -178,15 +216,15 @@ class _LoginState extends State<Login> {
                         height: 56,
                         child: OutlinedButton(
                             style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(13),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(13),
+                                  ),
                                 ),
-                              ),
-                              side: MaterialStatePropertyAll(BorderSide(color: notifier.getContainerBorder))
-                            ),
+                                side: MaterialStatePropertyAll(BorderSide(
+                                    color: notifier.getContainerBorder))),
                             onPressed: () {},
-                            child:  Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Image(
@@ -197,7 +235,9 @@ class _LoginState extends State<Login> {
                                 Text(
                                   " Google",
                                   style: TextStyle(
-                                      color: notifier.isDark?Colors.white:Colors.black,
+                                      color: notifier.isDark
+                                          ? Colors.white
+                                          : Colors.black,
                                       fontFamily: "Manrop-SemiBold",
                                       fontSize: 16),
                                 )
@@ -212,11 +252,16 @@ class _LoginState extends State<Login> {
                         const Text(
                           "Don't have an account?",
                           style: TextStyle(
-                              fontFamily: "Manrope-Medium", color: Color(0xff64748B)),
+                              fontFamily: "Manrope-Medium",
+                              color: Color(0xff64748B)),
                         ),
                         GestureDetector(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const Sign(),));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Sign(),
+                                  ));
                             },
                             child: const Text(
                               "Sign Up",
@@ -231,7 +276,6 @@ class _LoginState extends State<Login> {
                 ),
               ),
               AppConstants.Height(20),
-      
             ],
           ),
         ),

@@ -1,9 +1,9 @@
+import 'package:crowwn/Login%20Screens/Login.dart';
 import 'package:crowwn/config/common.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../Dark mode.dart';
-import 'onboarding_1.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -26,7 +26,7 @@ class _SplashState extends State<Splash> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const Onboard1(),
+            builder: (context) => const Login(),
           ),
         );
       },
@@ -57,7 +57,7 @@ class _SplashState extends State<Splash> {
               ),
               AppConstants.Width(width / 19),
               Text(
-                "Zyroteck",
+                "ZyroBot",
                 style: TextStyle(
                   color: notifier.textColor,
                   fontSize: 30,

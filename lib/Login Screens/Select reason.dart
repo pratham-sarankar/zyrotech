@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
+import 'package:crowwn/Login%20Screens/Verify%20success.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -142,7 +143,7 @@ class _ReasonState extends State<Reason> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(15,0,15,20),
+        padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
         child: SizedBox(
           height: 56,
           child: ElevatedButton(
@@ -158,7 +159,7 @@ class _ReasonState extends State<Reason> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Pin(),
+                  builder: (context) => const Success(),
                 ),
               );
             },
@@ -208,10 +209,13 @@ class _ReasonState extends State<Reason> {
               (index) => GestureDetector(
                 onTap: () => onTap(index),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: isSelected(index) ? const Color(0xffF8F5FF) : notifier.textField,
+                    color: isSelected(index)
+                        ? const Color(0xffF8F5FF)
+                        : notifier.textField,
                     border: Border.all(
                       color: isSelected(index)
                           ? const Color(0xff6B39F4)
@@ -224,7 +228,9 @@ class _ReasonState extends State<Reason> {
                     style: TextStyle(
                       fontFamily: "Manrope-SemiBold",
                       fontSize: 13,
-                      color: isSelected(index) ? const Color(0xff6B39F4) : Colors.grey,
+                      color: isSelected(index)
+                          ? const Color(0xff6B39F4)
+                          : Colors.grey,
                     ),
                   ),
                 ),

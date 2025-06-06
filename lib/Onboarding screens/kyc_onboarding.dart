@@ -1,10 +1,10 @@
+import 'package:crowwn/Home/bottom.dart';
 import 'package:crowwn/Login%20Screens/Create%20pin.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Dark mode.dart';
 import '../config/common.dart';
 import '../Login Screens/Login.dart';
-import 'Get started.dart';
 import '../Login Screens/Select reason.dart';
 
 class KYCOnboarding extends StatefulWidget {
@@ -77,7 +77,7 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const Pin(),
+        builder: (context) => const BottomBarScreen(),
       ),
     );
   }
@@ -188,7 +188,8 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
               );
               if (picked != null) {
                 setState(() {
-                  _dobController.text = "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+                  _dobController.text =
+                      "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
                 });
               }
             },
@@ -390,33 +391,21 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
           AppConstants.Height(16),
           _buildQuestionSection(
             "What percentage of your wealth are you investing in crypto?",
-            [
-              "Less than 10%",
-              "10–25%",
-              "More than 25%"
-            ],
+            ["Less than 10%", "10–25%", "More than 25%"],
             _selectedCryptoPercentage,
             (value) => setState(() => _selectedCryptoPercentage = value),
           ),
           AppConstants.Height(16),
           _buildQuestionSection(
             "How would you rate your experience in crypto trading?",
-            [
-              "Beginner",
-              "Intermediate",
-              "Expert"
-            ],
+            ["Beginner", "Intermediate", "Expert"],
             _selectedExperience,
             (value) => setState(() => _selectedExperience = value),
           ),
           AppConstants.Height(16),
           _buildQuestionSection(
             "If your portfolio dropped 30% in one week, what would you do?",
-            [
-              "Panic and exit",
-              "Hold and wait",
-              "Invest more"
-            ],
+            ["Panic and exit", "Hold and wait", "Invest more"],
             _selectedReaction,
             (value) => setState(() => _selectedReaction = value),
           ),
@@ -470,9 +459,10 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
         ),
         AppConstants.Height(12),
         ...options.map((option) => Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: _buildOptionTile(option, selectedValue == option, () => onSelect(option)),
-        )),
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _buildOptionTile(
+                  option, selectedValue == option, () => onSelect(option)),
+            )),
       ],
     );
   }
@@ -517,7 +507,8 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
               child: Text(
                 option,
                 style: TextStyle(
-                  color: isSelected ? const Color(0xff6B39F4) : notifier.textColor,
+                  color:
+                      isSelected ? const Color(0xff6B39F4) : notifier.textColor,
                   fontFamily: "Manrope-Medium",
                 ),
               ),
@@ -548,11 +539,13 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
         Row(
           children: [
             Expanded(
-              child: _buildYesNoOption("Yes", value == true, () => onChanged(true)),
+              child: _buildYesNoOption(
+                  "Yes", value == true, () => onChanged(true)),
             ),
             AppConstants.Width(16),
             Expanded(
-              child: _buildYesNoOption("No", value == false, () => onChanged(false)),
+              child: _buildYesNoOption(
+                  "No", value == false, () => onChanged(false)),
             ),
           ],
         ),
@@ -612,23 +605,14 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
           AppConstants.Height(24),
           _buildQuestionSection(
             "How much capital do you plan to automate initially?",
-            [
-              "\$500–\$1,000",
-              "\$1,001–\$2,000",
-              "\$2,001–\$5,000",
-              "\$5,000+"
-            ],
+            ["\$500–\$1,000", "\$1,001–\$2,000", "\$2,001–\$5,000", "\$5,000+"],
             _selectedInitialCapital,
             (value) => setState(() => _selectedInitialCapital = value),
           ),
           AppConstants.Height(16),
           _buildQuestionSection(
             "Would you prefer small, frequent trades or high-confidence trades with fewer entries?",
-            [
-              "Small frequent",
-              "Moderate",
-              "Rare but high-impact"
-            ],
+            ["Small frequent", "Moderate", "Rare but high-impact"],
             _selectedTradePreference,
             (value) => setState(() => _selectedTradePreference = value),
           ),
@@ -709,4 +693,4 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
       ),
     );
   }
-} 
+}

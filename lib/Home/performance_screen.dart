@@ -28,7 +28,8 @@ class PerformanceScreen extends StatefulWidget {
   _PerformanceScreenState createState() => _PerformanceScreenState();
 }
 
-class _PerformanceScreenState extends State<PerformanceScreen> with SingleTickerProviderStateMixin {
+class _PerformanceScreenState extends State<PerformanceScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   ColorNotifire notifier = ColorNotifire();
   int? selectedSignalIndex;
@@ -81,7 +82,8 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: const Color(0xff6B39F4).withOpacity(0.1),
-                border: Border.all(color: const Color(0xff6B39F4).withOpacity(0.3)),
+                border:
+                    Border.all(color: const Color(0xff6B39F4).withOpacity(0.3)),
               ),
               labelColor: const Color(0xff6B39F4),
               unselectedLabelColor: notifier.textColor.withOpacity(0.7),
@@ -144,8 +146,8 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSignalFilters(),
-                const SizedBox(height: 16),
+                // _buildSignalFilters(),
+                // const SizedBox(height: 16),
                 _buildSignalList(),
               ],
             ),
@@ -178,9 +180,12 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildPerformanceMetric('Total PnL', widget.price, const Color(0xff6B39F4)),
-              _buildPerformanceMetric('Win Rate', widget.winRate, const Color(0xff6B39F4)),
-              _buildPerformanceMetric('ROI', widget.roi, const Color(0xff6B39F4)),
+              _buildPerformanceMetric(
+                  'Total PnL', widget.price, const Color(0xff6B39F4)),
+              _buildPerformanceMetric(
+                  'Win Rate', widget.winRate, const Color(0xff6B39F4)),
+              _buildPerformanceMetric(
+                  'ROI', widget.roi, const Color(0xff6B39F4)),
             ],
           ),
         ],
@@ -214,10 +219,12 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
 
   Widget _buildPerformanceSummaryChart() {
     final candles = _getHeikinAshiCandles();
-    final chartData = candles.map((candle) => _ChartData(
-      candle.epoch.toDouble(),
-      candle.close,
-    )).toList();
+    final chartData = candles
+        .map((candle) => _ChartData(
+              candle.epoch.toDouble(),
+              candle.close,
+            ))
+        .toList();
 
     // Calculate min and max values for proper zooming
     final minY = chartData.map((e) => e.y).reduce((a, b) => a < b ? a : b);
@@ -432,16 +439,22 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: isSelected ? const Color(0xff6B39F4).withOpacity(0.1) : Colors.transparent,
+        color: isSelected
+            ? const Color(0xff6B39F4).withOpacity(0.1)
+            : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.1),
+          color: isSelected
+              ? const Color(0xff6B39F4)
+              : notifier.textColor.withOpacity(0.1),
         ),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.7),
+          color: isSelected
+              ? const Color(0xff6B39F4)
+              : notifier.textColor.withOpacity(0.7),
           fontSize: 12,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
         ),
@@ -475,15 +488,18 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
       double haClose, haOpen, haHigh, haLow;
 
       if (i == 0) {
-        haClose = (current.open + current.high + current.low + current.close) / 4;
+        haClose =
+            (current.open + current.high + current.low + current.close) / 4;
         haOpen = (current.open + current.close) / 2;
         haHigh = current.high;
         haLow = current.low;
       } else {
         final previous = heikinAshiCandles[i - 1];
-        haClose = (current.open + current.high + current.low + current.close) / 4;
+        haClose =
+            (current.open + current.high + current.low + current.close) / 4;
         haOpen = (previous.open + previous.close) / 2;
-        haHigh = [current.high, haOpen, haClose].reduce((a, b) => a > b ? a : b);
+        haHigh =
+            [current.high, haOpen, haClose].reduce((a, b) => a > b ? a : b);
         haLow = [current.low, haOpen, haClose].reduce((a, b) => a < b ? a : b);
       }
 
@@ -503,16 +519,22 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: isSelected ? const Color(0xff6B39F4).withOpacity(0.1) : Colors.transparent,
+        color: isSelected
+            ? const Color(0xff6B39F4).withOpacity(0.1)
+            : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.1),
+          color: isSelected
+              ? const Color(0xff6B39F4)
+              : notifier.textColor.withOpacity(0.1),
         ),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.7),
+          color: isSelected
+              ? const Color(0xff6B39F4)
+              : notifier.textColor.withOpacity(0.7),
           fontSize: 12,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
         ),
@@ -533,7 +555,8 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
             ),
             child: Row(
               children: [
-                Icon(Icons.filter_list, size: 16, color: notifier.textColor.withOpacity(0.7)),
+                Icon(Icons.filter_list,
+                    size: 16, color: notifier.textColor.withOpacity(0.7)),
                 const SizedBox(width: 8),
                 Text(
                   'Filter Signals',
@@ -563,14 +586,14 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
   Widget _buildSignalList() {
     return Column(
       children: [
-        if (selectedSignalIndex != null) ...[
-          _buildTradingChart(),
-          const SizedBox(height: 20),
-        ],
+        // if (selectedSignalIndex != null) ...[
+        //   _buildTradingChart(),
+        //   const SizedBox(height: 20),
+        // ],
         ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: 10,
+          itemCount: 5,
           itemBuilder: (context, index) {
             return _buildSignalItem(index);
           },
@@ -581,10 +604,12 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
 
   Widget _buildTradingChart() {
     final candles = _getHeikinAshiCandles();
-    final chartData = candles.map((candle) => _ChartData(
-      candle.epoch.toDouble(),
-      candle.close,
-    )).toList();
+    final chartData = candles
+        .map((candle) => _ChartData(
+              candle.epoch.toDouble(),
+              candle.close,
+            ))
+        .toList();
 
     // Calculate min and max values for proper zooming
     final minY = chartData.map((e) => e.y).reduce((a, b) => a < b ? a : b);
@@ -603,13 +628,13 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
     // Sample trade points (you can replace these with actual trade data)
     final tradePoints = [
       TradePoint(
-        x: chartData[chartData.length - 15].x,  // Place open trade near the end
+        x: chartData[chartData.length - 15].x, // Place open trade near the end
         y: chartData[chartData.length - 15].y,
         type: TradeType.open,
         price: chartData[chartData.length - 15].y,
       ),
       TradePoint(
-        x: chartData[chartData.length - 5].x,   // Place close trade near the end
+        x: chartData[chartData.length - 5].x, // Place close trade near the end
         y: chartData[chartData.length - 5].y,
         type: TradeType.close,
         price: chartData[chartData.length - 5].y,
@@ -760,30 +785,37 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
                 },
               ),
               annotations: [
-                ...tradePoints.map((trade) => CartesianChartAnnotation(
-                  x: trade.x,
-                  y: trade.y,
-                  coordinateUnit: CoordinateUnit.point,
-                  widget: Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: trade.type == TradeType.open ? Colors.green : Colors.red,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: notifier.background,
-                        width: 2,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: (trade.type == TradeType.open ? Colors.green : Colors.red).withOpacity(0.3),
-                          blurRadius: 4,
-                          spreadRadius: 1,
-                        ),
-                      ],
-                    ),
-                  ),
-                )).toList(),
+                ...tradePoints
+                    .map((trade) => CartesianChartAnnotation(
+                          x: trade.x,
+                          y: trade.y,
+                          coordinateUnit: CoordinateUnit.point,
+                          widget: Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              color: trade.type == TradeType.open
+                                  ? Colors.green
+                                  : Colors.red,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: notifier.background,
+                                width: 2,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: (trade.type == TradeType.open
+                                          ? Colors.green
+                                          : Colors.red)
+                                      .withOpacity(0.3),
+                                  blurRadius: 4,
+                                  spreadRadius: 1,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ))
+                    .toList(),
               ],
               series: <CartesianSeries>[
                 FastLineSeries<_ChartData, double>(
@@ -849,81 +881,70 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
   }
 
   Widget _buildSignalItem(int index) {
-    final isSelected = selectedSignalIndex == index;
     return GestureDetector(
       onTap: () {
-        setState(() {
-          selectedSignalIndex = isSelected ? null : index;
-        });
+        _showTradingDetailsBottomSheet(
+          name: 'name',
+          winRate: 'winRate',
+          price: 'profit',
+          pnlColor: Colors.blue,
+          volume: 'volume',
+          roi: 'roi',
+          strategyType: 'strategyType',
+        );
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: notifier.container.withOpacity(0.5),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? const Color(0xff6B39F4) : notifier.textColor.withOpacity(0.1),
-            width: isSelected ? 2 : 1,
+            color: notifier.textColor.withOpacity(0.1),
+            width: 1,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(16),
+        child: Row(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'BTC/USDT',
-                  style: TextStyle(
-                    color: notifier.textColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'BUY',
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'ZBT Scalper',
                     style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 12,
+                      color: notifier.textColor,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 4),
+                  Text(
+                    'Buy',
+                    style: TextStyle(
+                      color: notifier.textColor.withOpacity(0.7),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildSignalMetric('Entry', '\$45,250'),
-                _buildSignalMetric('Target', '\$46,500'),
-                _buildSignalMetric('Stop Loss', '\$44,800'),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '2 hours ago',
+                  '\$120',
                   style: TextStyle(
-                    color: notifier.textColor.withOpacity(0.7),
-                    fontSize: 12,
+                    color: Colors.green,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
-                  'Risk: Medium',
+                  '--',
                   style: TextStyle(
-                    color: Colors.orange,
+                    color: Colors.green,
                     fontSize: 12,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
@@ -934,27 +955,173 @@ class _PerformanceScreenState extends State<PerformanceScreen> with SingleTicker
     );
   }
 
-  Widget _buildSignalMetric(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: notifier.textColor.withOpacity(0.7),
-            fontSize: 12,
+  void _showTradingDetailsBottomSheet({
+    required String name,
+    required String winRate,
+    required String price,
+    required Color pnlColor,
+    required String volume,
+    required String roi,
+    required String strategyType,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: notifier.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Drag handle bar
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: notifier.textColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Order ID
+            Text(
+              "#915765224",
+              style: TextStyle(
+                color: notifier.textColor.withOpacity(0.7),
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Top section with Pair, Action/Price, PnL, and Close Price
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                name,
+                                style: TextStyle(
+                                  color: notifier.textColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "Buy 0.01 at 3294.554",
+                                style: TextStyle(
+                                  color: notifier.textColor.withOpacity(0.7),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "+\$29.83 USD",
+                            style: TextStyle(
+                              color: Colors.greenAccent,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "3324.381",
+                            style: TextStyle(
+                              color: notifier.textColor.withOpacity(0.7),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Trading details list
+                  _buildDetailRow("Open time", "30 May 2025 10:45:00 pm"),
+                  _buildDetailRow("Open Price", "3294.554"),
+                  _buildDetailRow("Close time", "2 Jun 2025 11:15:25 am"),
+                  _buildDetailRow("Close Price", "3324.381"),
+                  _buildDetailRow("P&L Price", "--"),
+                  const SizedBox(height: 32),
+
+                  // View Chart Button
+                  Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 204, 47, 47),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        "Close",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: notifier.textColor.withOpacity(0.7),
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            color: notifier.textColor,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+          Text(
+            value,
+            style: TextStyle(
+              color: notifier.textColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -1046,4 +1213,4 @@ class TradePoint {
 enum TradeType {
   open,
   close,
-} 
+}
