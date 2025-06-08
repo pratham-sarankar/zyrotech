@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
-import 'Login.dart';
+import 'login.dart';
 
 class Password extends StatefulWidget {
   const Password({super.key});

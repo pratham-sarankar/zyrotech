@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
-import '../Login Screens/Login.dart';
+import '../Login Screens/login.dart';
 import '../Login Screens/Select reason.dart';
 
 class KYCOnboarding extends StatefulWidget {

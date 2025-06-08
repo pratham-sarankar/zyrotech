@@ -1,17 +1,11 @@
-// ignore_for_file: file_names
 import 'package:crowwn/screens/Home/bottom.dart';
-import 'package:crowwn/screens/Login%20Screens/Country%20residence.dart';
-import 'package:crowwn/screens/Onboarding%20screens/kyc_onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
-import 'Face id.dart';
 import 'Forget pass.dart';
 import 'Sign up.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:crowwn/services/auth_service.dart';
 
 class Login extends StatefulWidget {
@@ -27,9 +21,23 @@ class _LoginState extends State<Login> {
   ColorNotifire notifier = ColorNotifire();
   final AuthService _authService = AuthService();
 
-  Future<void> _login(String email, String password) async {
+  // Add controllers
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _login() async {
     try {
-      final response = await _authService.login(email, password);
+      final response = await _authService.login(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
       final message = response['message'];
       final token = response['token'];
       final user = response['user'];
@@ -48,13 +56,23 @@ class _LoginState extends State<Login> {
       );
     } catch (e) {
       print('Error: $e');
+      // Show error message to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login failed: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
-    var height = MediaQuery.of(context).size.height;
+    var size = MediaQuery.sizeOf(context);
+    final height = size.height;
+    final width = size.width;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.white,
@@ -68,8 +86,8 @@ class _LoginState extends State<Login> {
           child: Column(
             children: [
               Container(
-                  height: 279,
-                  width: 450,
+                  height: height / 2.6,
+                  width: width,
                   color: const Color(0xff0F172A),
                   child: Column(
                     children: [
@@ -115,46 +133,48 @@ class _LoginState extends State<Login> {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Column(
                   children: [
+                    AppConstants.Height(10),
                     Container(
-                      height: height / 13,
                       decoration: BoxDecoration(
-                          color: notifier.textField,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: TextField(
-                        style: TextStyle(color: notifier.textColor),
-                        decoration: InputDecoration(
-                            hintText: "Email",
-                            border: const OutlineInputBorder(
-                                borderSide: BorderSide.none),
-                            hintStyle:
-                                TextStyle(color: notifier.textFieldHintText)),
+                        color: notifier.textField,
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                    ),
-                    AppConstants.Height(20),
-                    Container(
-                      height: height / 13,
-                      decoration: BoxDecoration(
-                          color: notifier.textField,
-                          borderRadius: BorderRadius.circular(15)),
                       child: TextField(
+                        controller: _emailController,
                         style: TextStyle(color: notifier.textColor),
-                        obscureText: _obsecuretext,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: "Password",
+                          hintText: "Email",
+                          fillColor: notifier.textField,
+                          filled: true,
                           border: const OutlineInputBorder(
                               borderSide: BorderSide.none),
                           hintStyle:
                               TextStyle(color: notifier.textFieldHintText),
-                          suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _obsecuretext = !_obsecuretext;
-                                });
-                              },
-                              icon: _obsecuretext
-                                  ? const Icon(Icons.remove_red_eye_outlined)
-                                  : const Icon(Icons.visibility_off_outlined)),
                         ),
+                      ),
+                    ),
+                    AppConstants.Height(15),
+                    TextField(
+                      controller: _passwordController,
+                      style: TextStyle(color: notifier.textColor),
+                      obscureText: _obsecuretext,
+                      decoration: InputDecoration(
+                        hintText: "Password",
+                        fillColor: notifier.textField,
+                        filled: true,
+                        border: const OutlineInputBorder(
+                            borderSide: BorderSide.none),
+                        hintStyle: TextStyle(color: notifier.textFieldHintText),
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _obsecuretext = !_obsecuretext;
+                              });
+                            },
+                            icon: _obsecuretext
+                                ? const Icon(Icons.remove_red_eye_outlined)
+                                : const Icon(Icons.visibility_off_outlined)),
                       ),
                     ),
                     // AppConstants.Height(10),
@@ -169,7 +189,6 @@ class _LoginState extends State<Login> {
                             checkColor: const Color(0xffFFFFFF),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5)),
-
                             value: value,
                             onChanged: (value) {
                               setState(() {
@@ -203,26 +222,27 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     // AppConstants.Height(5),
-                    GestureDetector(
-                      onTap: () {
-                        // Call the login function with email and password
-                        _login('john1.doe1@yopmail.com', 'Password1231!');
-                      },
-                      child: Container(
-                        height: height / 12,
-                        decoration: BoxDecoration(
+                    TextButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff6B39F4),
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
-                          color: const Color(0xff6B39F4),
                         ),
-                        child: const Center(
-                            child: Text(
-                          "Sign In",
-                          style: TextStyle(
-                              color: Color(0xffFFFFFF),
-                              fontSize: 15,
-                              fontFamily: "Manrope-Bold"),
-                        )),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 15,
+                        ),
                       ),
+                      child: const Center(
+                          child: Text(
+                        "Sign In",
+                        style: TextStyle(
+                          color: Color(0xffFFFFFF),
+                          fontSize: 15,
+                          fontFamily: "Manrope-Bold",
+                        ),
+                      )),
                     ),
                     AppConstants.Height(10),
                     const Text(
@@ -232,44 +252,40 @@ class _LoginState extends State<Login> {
                           color: Color(0xff64748B),
                           fontFamily: "Manrope-Medium"),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: OutlinedButton(
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(13),
-                                  ),
-                                ),
-                                side: MaterialStatePropertyAll(BorderSide(
-                                    color: notifier.getContainerBorder))),
-                            onPressed: () {
-                              _authService.loginWithGoogle();
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Image(
-                                  image: AssetImage("assets/images/google.png"),
-                                  height: 19,
-                                  width: 16,
-                                ),
-                                Text(
-                                  " Google",
-                                  style: TextStyle(
-                                      color: notifier.isDark
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontFamily: "Manrop-SemiBold",
-                                      fontSize: 16),
-                                )
-                              ],
-                            )),
-                      ),
-                    ),
+                    AppConstants.Height(10),
+                    OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(13),
+                          ),
+                          side: BorderSide(color: notifier.getContainerBorder),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 16,
+                          ),
+                        ),
+                        onPressed: () {
+                          _authService.loginWithGoogle();
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Image(
+                              image: AssetImage("assets/images/google.png"),
+                              height: 19,
+                              width: 16,
+                            ),
+                            Text(
+                              " Google",
+                              style: TextStyle(
+                                  color: notifier.isDark
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontFamily: "Manrop-SemiBold",
+                                  fontSize: 16),
+                            )
+                          ],
+                        )),
                     AppConstants.Height(20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
