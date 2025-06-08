@@ -10,6 +10,9 @@ import '../config/common.dart';
 import 'Face id.dart';
 import 'Forget pass.dart';
 import 'Sign up.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:crowwn/services/auth_services.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -22,6 +25,32 @@ class _LoginState extends State<Login> {
   bool value = false;
   bool _obsecuretext = true;
   ColorNotifire notifier = ColorNotifire();
+  final AuthService _authService = AuthService();
+
+  Future<void> _login(String email, String password) async {
+    try {
+      final response = await _authService.login(email, password);
+      final message = response['message'];
+      final token = response['token'];
+      final user = response['user'];
+
+      // Handle successful login
+      print('Login successful: $message');
+      print('Token: $token');
+      print('User: $user');
+
+      // Navigate to the next screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const BottomBarScreen(),
+        ),
+      );
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
@@ -176,14 +205,8 @@ class _LoginState extends State<Login> {
                     // AppConstants.Height(5),
                     GestureDetector(
                       onTap: () {
-                        // TODO: Implement actual login logic
-                        // For now, just navigate to Country Selection
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const BottomBarScreen(),
-                          ),
-                        );
+                        // Call the login function with email and password
+                        _login('john1.doe1@yopmail.com', 'Password1231!');
                       },
                       child: Container(
                         height: height / 12,
