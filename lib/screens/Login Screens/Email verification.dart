@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Sign phone.dart';
-import '../../services/auth_services.dart';
+import '../../services/auth_service.dart';
 
 class EmailVerification extends StatefulWidget {
   final String email;

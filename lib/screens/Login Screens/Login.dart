@@ -12,7 +12,7 @@ import 'Forget pass.dart';
 import 'Sign up.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:crowwn/services/auth_services.dart';
+import 'package:crowwn/services/auth_service.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -246,7 +246,9 @@ class _LoginState extends State<Login> {
                                 ),
                                 side: MaterialStatePropertyAll(BorderSide(
                                     color: notifier.getContainerBorder))),
-                            onPressed: () {},
+                            onPressed: () {
+                              _authService.loginWithGoogle();
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

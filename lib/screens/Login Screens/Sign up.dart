@@ -7,7 +7,7 @@ import 'Login.dart';
 import 'Email verification.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../services/auth_services.dart';
+import '../../services/auth_service.dart';
 
 class Sign extends StatefulWidget {
   const Sign({super.key});
@@ -156,7 +156,8 @@ class _SignState extends State<Sign> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => EmailVerification(email: _emailController.text),
+                      builder: (context) =>
+                          EmailVerification(email: _emailController.text),
                     ),
                   );
                 },

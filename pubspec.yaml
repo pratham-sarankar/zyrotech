@@ -53,6 +53,8 @@ dependencies:
   deriv_chart: ^0.4.1
   syncfusion_flutter_charts: ^29.1.38
   http: ^1.4.0
+  firebase_core: ^3.13.1
+  google_sign_in: ^6.3.0
 
 
 

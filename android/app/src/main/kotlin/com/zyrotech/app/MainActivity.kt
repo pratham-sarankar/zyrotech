@@ -1,4 +1,4 @@
-package com.example.untitled1
+package com.zyrotech.app
 
 import io.flutter.embedding.android.FlutterActivity
 
