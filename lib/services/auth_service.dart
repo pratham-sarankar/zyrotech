@@ -72,26 +72,32 @@ class AuthService {
   }
 
   Future<Map<String, dynamic>> loginWithGoogle() async {
-    GoogleSignIn googleSignIn = GoogleSignIn(
-      scopes: [
-        'email',
-        'profile',
-      ],
-    );
-    await googleSignIn.signOut();
-    final GoogleSignInAccount? googleSignInAccount =
-        await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount!.authentication;
-    final response = await http.post(
-      Uri.parse('$baseUrl/api/auth/google'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'idToken': googleSignInAuthentication.idToken}),
-    );
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to login with Google: ${response.body}');
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: [
+          'email',
+          'profile',
+        ],
+      );
+      await googleSignIn.signOut();
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+      if (googleSignInAccount == null) throw "Signin Cancelled";
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/auth/google'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'idToken': googleSignInAuthentication.idToken}),
+      );
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to login with Google: ${response.body}');
+      }
+    } catch (e) {
+      if (e is String) throw Exception(e);
+      throw Exception('Failed to login with Google');
     }
   }
 }

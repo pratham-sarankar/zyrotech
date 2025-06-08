@@ -18,6 +18,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool value = false;
   bool _obsecuretext = true;
+  bool _isLoading = false;
   ColorNotifire notifier = ColorNotifire();
   final AuthService _authService = AuthService();
 
@@ -33,6 +34,10 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> _login() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       final response = await _authService.login(
         _emailController.text.trim(),
@@ -59,10 +64,38 @@ class _LoginState extends State<Login> {
       // Show error message to user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Login failed: ${e.toString()}'),
-          backgroundColor: Colors.red,
+          content: Text(e.toString()),
+          backgroundColor: Colors.red.shade600,
         ),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _loginWithGoogle() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      await _authService.loginWithGoogle();
+    } on Exception catch (e) {
+      print('Error: $e');
+      // Show error message to user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.red.shade600,
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -81,170 +114,184 @@ class _LoginState extends State<Login> {
       child: Scaffold(
         backgroundColor: notifier.background,
         resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Container(
-                  height: height / 2.6,
-                  width: width,
-                  color: const Color(0xff0F172A),
-                  child: Column(
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 20, left: 10),
-                            child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Icon(
-                                  Icons.close,
-                                  color: notifier.textColor,
-                                  size: 25,
-                                )),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Image.asset("assets/images/144.png",
-                          color: notifier.isDark ? Colors.white : null,
-                          height: height / 6),
-                      const Spacer(),
-                      const Text('Welcome Back!',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontFamily: "Manrope-Bold")),
-                      const Text('Sign in to your account',
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 18,
-                              fontFamily: "Manrope-Medium")),
-                      const SizedBox(
-                        height: 20,
-                      )
-                    ],
-                  )),
-              AppConstants.Height(10),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 child: Column(
                   children: [
-                    AppConstants.Height(10),
                     Container(
-                      decoration: BoxDecoration(
-                        color: notifier.textField,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: TextField(
-                        controller: _emailController,
-                        style: TextStyle(color: notifier.textColor),
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: "Email",
-                          fillColor: notifier.textField,
-                          filled: true,
-                          border: const OutlineInputBorder(
-                              borderSide: BorderSide.none),
-                          hintStyle:
-                              TextStyle(color: notifier.textFieldHintText),
-                        ),
-                      ),
-                    ),
-                    AppConstants.Height(15),
-                    TextField(
-                      controller: _passwordController,
-                      style: TextStyle(color: notifier.textColor),
-                      obscureText: _obsecuretext,
-                      decoration: InputDecoration(
-                        hintText: "Password",
-                        fillColor: notifier.textField,
-                        filled: true,
-                        border: const OutlineInputBorder(
-                            borderSide: BorderSide.none),
-                        hintStyle: TextStyle(color: notifier.textFieldHintText),
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obsecuretext = !_obsecuretext;
-                              });
-                            },
-                            icon: _obsecuretext
-                                ? const Icon(Icons.remove_red_eye_outlined)
-                                : const Icon(Icons.visibility_off_outlined)),
-                      ),
-                    ),
-                    // AppConstants.Height(10),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            // checkColor: Colors.blue,
-                            side: const BorderSide(color: Color(0xff334155)),
-                            activeColor: const Color(0xff6B39F4),
-                            checkColor: const Color(0xffFFFFFF),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5)),
-                            value: value,
-                            onChanged: (value) {
-                              setState(() {
-                                this.value = value!;
-                              });
-                            },
-                          ),
-                          Text("Remember me",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: "Manrope-Medium",
-                                  color: notifier.textColor)),
-                          Expanded(child: AppConstants.Width(60)),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const Forget(),
-                                  ));
-                            },
-                            child: const Text(
-                              "Forgot Password?",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xff6B39F4),
-                                  fontFamily: "Manrope-Bold"),
+                        height: height / 2.6,
+                        width: width,
+                        color: const Color(0xff0F172A),
+                        child: Column(
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 20, left: 10),
+                                  child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Icon(
+                                        Icons.close,
+                                        color: notifier.textColor,
+                                        size: 25,
+                                      )),
+                                ),
+                              ],
                             ),
-                          )
+                            const Spacer(),
+                            Image.asset("assets/images/144.png",
+                                color: notifier.isDark ? Colors.white : null,
+                                height: height / 6),
+                            const Spacer(),
+                            const Text('Welcome Back!',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontFamily: "Manrope-Bold")),
+                            const Text('Sign in to your account',
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 18,
+                                    fontFamily: "Manrope-Medium")),
+                            const SizedBox(
+                              height: 20,
+                            )
+                          ],
+                        )),
+                    AppConstants.Height(10),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Column(
+                        children: [
+                          AppConstants.Height(10),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: notifier.textField,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: TextField(
+                              controller: _emailController,
+                              style: TextStyle(color: notifier.textColor),
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                hintText: "Email",
+                                fillColor: notifier.textField,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                hintStyle: TextStyle(
+                                    color: notifier.textFieldHintText),
+                              ),
+                            ),
+                          ),
+                          AppConstants.Height(15),
+                          TextField(
+                            controller: _passwordController,
+                            style: TextStyle(color: notifier.textColor),
+                            obscureText: _obsecuretext,
+                            decoration: InputDecoration(
+                              hintText: "Password",
+                              fillColor: notifier.textField,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              hintStyle:
+                                  TextStyle(color: notifier.textFieldHintText),
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _obsecuretext = !_obsecuretext;
+                                  });
+                                },
+                                icon: _obsecuretext
+                                    ? const Icon(Icons.remove_red_eye_outlined)
+                                    : const Icon(Icons.visibility_off_outlined),
+                              ),
+                            ),
+                          ),
+                          // AppConstants.Height(10),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  // checkColor: Colors.blue,
+                                  side: const BorderSide(
+                                      color: Color(0xff334155)),
+                                  activeColor: const Color(0xff6B39F4),
+                                  checkColor: const Color(0xffFFFFFF),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5)),
+                                  value: value,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      this.value = value!;
+                                    });
+                                  },
+                                ),
+                                Text("Remember me",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "Manrope-Medium",
+                                        color: notifier.textColor)),
+                                Expanded(child: AppConstants.Width(60)),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const Forget(),
+                                        ));
+                                  },
+                                  child: const Text(
+                                    "Forgot Password?",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Color(0xff6B39F4),
+                                        fontFamily: "Manrope-Bold"),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          // AppConstants.Height(5),
+                          TextButton(
+                            onPressed: _login,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff6B39F4),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 15,
+                              ),
+                            ),
+                            child: const Center(
+                                child: Text(
+                              "Sign In",
+                              style: TextStyle(
+                                color: Color(0xffFFFFFF),
+                                fontSize: 15,
+                                fontFamily: "Manrope-Bold",
+                              ),
+                            )),
+                          ),
                         ],
                       ),
                     ),
-                    // AppConstants.Height(5),
-                    TextButton(
-                      onPressed: _login,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff6B39F4),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 15,
-                        ),
-                      ),
-                      child: const Center(
-                          child: Text(
-                        "Sign In",
-                        style: TextStyle(
-                          color: Color(0xffFFFFFF),
-                          fontSize: 15,
-                          fontFamily: "Manrope-Bold",
-                        ),
-                      )),
-                    ),
-                    AppConstants.Height(10),
+                    AppConstants.Height(20),
                     const Text(
                       "--------------- Or sign in with ---------------",
                       style: TextStyle(
@@ -264,9 +311,7 @@ class _LoginState extends State<Login> {
                             vertical: 16,
                           ),
                         ),
-                        onPressed: () {
-                          _authService.loginWithGoogle();
-                        },
+                        onPressed: _loginWithGoogle,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -316,9 +361,48 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-              AppConstants.Height(20),
-            ],
-          ),
+            ),
+            // Loading Overlay
+            if (_isLoading)
+              Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color(0xff6B39F4),
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          'Signing in...',
+                          style: TextStyle(
+                            color: notifier.textColor,
+                            fontSize: 16,
+                            fontFamily: "Manrope-Medium",
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
