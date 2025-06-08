@@ -7,9 +7,11 @@ import 'package:provider/provider.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Sign phone.dart';
+import '../../services/auth_services.dart';
 
 class EmailVerification extends StatefulWidget {
-  const EmailVerification({super.key});
+  final String email;
+  const EmailVerification({super.key, required this.email});
 
   @override
   State<EmailVerification> createState() => _EmailVerificationState();
@@ -18,6 +20,34 @@ class EmailVerification extends StatefulWidget {
 class _EmailVerificationState extends State<EmailVerification> {
   ColorNotifire notifier = ColorNotifire();
   final TextEditingController textEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _sendEmailOtp();
+  }
+
+  void _sendEmailOtp() async {
+    try {
+      final authService = AuthService();
+      final response = await authService.sendEmailOtp(widget.email);
+      print(response['message']);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void _verifyOtp(String otp) async {
+    try {
+      final authService = AuthService();
+      final response = await authService.verifyEmailOtp(widget.email, otp);
+      print(response['message']);
+      // Handle successful verification, e.g., navigate to the next screen
+    } catch (e) {
+      print(e.toString());
+      // Handle verification failure
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +103,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                   // Handle OTP change
                 },
                 onCompleted: (pin) {
-                  // Handle OTP completion
+                  _verifyOtp(pin);
                 }),
             AppConstants.Height(20),
             Padding(

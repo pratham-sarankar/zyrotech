@@ -5,6 +5,9 @@ import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Login.dart';
 import 'Email verification.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../../services/auth_services.dart';
 
 class Sign extends StatefulWidget {
   const Sign({super.key});
@@ -17,6 +20,22 @@ class _SignState extends State<Sign> {
   bool value = false;
   bool _obsecuretext1 = true;
   ColorNotifire notifier = ColorNotifire();
+
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  // Function to handle sign-up
+  Future<void> signUp(String fullName, String email, String password) async {
+    try {
+      final authService = AuthService();
+      final response = await authService.signUp(fullName, email, password);
+      print(response['message']);
+      // Navigate to email verification or show a success message
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +88,7 @@ class _SignState extends State<Sign> {
                     color: notifier.textField,
                     borderRadius: BorderRadius.circular(15)),
                 child: TextField(
+                  controller: _fullNameController,
                   style: TextStyle(color: notifier.textColor),
                   decoration: InputDecoration(
                       hintText: "Full Name",
@@ -85,6 +105,7 @@ class _SignState extends State<Sign> {
                     color: notifier.textField,
                     borderRadius: BorderRadius.circular(15)),
                 child: TextField(
+                  controller: _emailController,
                   style: TextStyle(color: notifier.textColor),
                   decoration: InputDecoration(
                       hintText: "Email",
@@ -100,6 +121,7 @@ class _SignState extends State<Sign> {
                     color: notifier.textField,
                     borderRadius: BorderRadius.circular(15)),
                 child: TextField(
+                  controller: _passwordController,
                   style: TextStyle(color: notifier.textColor),
                   obscureText: _obsecuretext1,
                   decoration: InputDecoration(
@@ -125,11 +147,18 @@ class _SignState extends State<Sign> {
               AppConstants.Height(20),
               GestureDetector(
                 onTap: () {
+                  // Call the signUp function with user input
+                  signUp(
+                    _fullNameController.text,
+                    _emailController.text,
+                    _passwordController.text,
+                  );
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EmailVerification(),
-                      ));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EmailVerification(email: _emailController.text),
+                    ),
+                  );
                 },
                 child: Container(
                   height: height / 12,
