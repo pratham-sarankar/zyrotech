@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../Account&setting/About App.dart';
 import '../Account&setting/Bank Account.dart';
@@ -21,6 +23,7 @@ import '../Message & Notification/Notifications.dart';
 import '../config/common.dart';
 import 'bottom.dart';
 import '../Account&setting/API_Connection.dart';
+import '../Login Screens/Login.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -31,6 +34,84 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   ColorNotifire notifier = ColorNotifire();
+
+  Future<void> _logout() async {
+    try {
+      // Clear SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      // Sign out from Google
+      GoogleSignIn googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
+
+      // Navigate to login screen or show a logout success message
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Login(),
+        ),
+      );
+    } catch (e) {
+      print('Error logging out: $e');
+    }
+  }
+
+  Future<void> _showLogoutConfirmationDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap a button
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Row(
+            children: [
+              Icon(Icons.warning, color: Colors.red, size: 28),
+              const SizedBox(width: 10),
+              const Text(
+                'Confirm Logout',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: const Text(
+            'Are you sure you want to log out? This will end your current session.',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.grey,
+                textStyle: const TextStyle(fontSize: 16),
+              ),
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                textStyle: const TextStyle(fontSize: 16),
+              ),
+              child: const Text('Logout'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _logout();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -798,6 +879,43 @@ class _ProfileState extends State<Profile> {
                         },
                       ),
                     ),
+                    GestureDetector(
+                      onTap: _showLogoutConfirmationDialog,
+                      child: Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: notifier.background,
+                          border: Border.all(color: notifier.getContainerBorder),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(Icons.logout, color: notifier.textColor, size: 24),
+                              const SizedBox(width: 15),
+                              Text(
+                                "Logout",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: "Manrope-Bold",
+                                  fontSize: 16,
+                                  color: notifier.textColor,
+                                ),
+                              ),
+                              const Spacer(),
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: notifier.tabBarText2,
+                                size: 18,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    AppConstants.Height(10),
                   ],
                 ),
               ),

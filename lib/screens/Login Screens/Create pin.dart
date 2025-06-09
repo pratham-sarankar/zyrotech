@@ -6,10 +6,12 @@ import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Proof residency.dart';
+import '../../services/auth_service.dart';
 
 class Pin extends StatefulWidget {
   const Pin({super.key});
@@ -21,6 +23,26 @@ class Pin extends StatefulWidget {
 class _PinState extends State<Pin> {
   ColorNotifire notifier = ColorNotifire();
   OtpFieldController otpController = OtpFieldController();
+
+  void _createPin(String pin) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      final authService = AuthService();
+      final response = await authService.createPin(pin, token);
+      print(response['message']);
+      // Navigate to the next screen or show a success message
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CountrySelection(),
+        ),
+      );
+    } catch (e) {
+      print(e.toString());
+      // Handle error
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,56 +98,32 @@ class _PinState extends State<Pin> {
               ],
             ),
             AppConstants.Height(20),
-            // StatefulBuilder(
-            //   builder: (context, setState)  {
-            //     return OTPTextField(
-            //         length: 5,
-            //         width: width,
-            //         textFieldAlignment: MainAxisAlignment.spaceAround,
-            //         fieldWidth: 45,
-            //         fieldStyle: FieldStyle.box,
-            //         outlineBorderRadius: 15,
-            //         obscureText: false,
-            //         keyboardType: TextInputType.number,
-            //         otpFieldStyle: OtpFieldStyle(backgroundColor: notifier.isDark?const Color(0xff1E293B):Color(0xffFFFFFF)),
-            //         style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold,color: Colors.red),
-            //         onChanged: (pin) {
-            //           print("Changed: " + pin);
-            //         },
-            //         onCompleted: (pin) {
-            //           print("Completed: " + pin);
-            //         },
-            //     );
-            //   }
-            // ),
             Center(
               child: Consumer<ColorNotifire>(
                 builder: (context, value, child) {
                   return OTPTextField(
                       otpFieldStyle: OtpFieldStyle(
-                        // borderColor: notifier.textField1,
-
                         backgroundColor: Colors.grey.withOpacity(0.3),
                       ),
                       controller: otpController,
-                      length: 5,
+                      length: 6,
                       width: MediaQuery.of(context).size.width,
                       textFieldAlignment: MainAxisAlignment.spaceAround,
                       fieldWidth: 45,
-                      // fieldStyle: FieldStyle.box,
                       fieldStyle: FieldStyle.box,
                       outlineBorderRadius: 5,
                       contentPadding: const EdgeInsets.all(15),
                       style: TextStyle(fontSize: 17, color: notifier.textColor),
                       onChanged: (pin) {},
-                      onCompleted: (pin) {});
+                      onCompleted: (pin) {
+                        _createPin(pin);
+                      });
                 },
               ),
             ),
             AppConstants.Height(60),
             GestureDetector(
               onTap: () {
-                // TODO: Implement actual login logic
                 // For now, just navigate to Country Selection
                 Navigator.pushReplacement(
                   context,
@@ -165,7 +163,6 @@ class _PinState extends State<Pin> {
               },
               child: Container(
                 height: height / 14,
-                // width: 327,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: Colors.grey.withOpacity(0.2),

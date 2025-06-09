@@ -1,7 +1,9 @@
-import 'package:crowwn/screens/Login%20Screens/Login.dart';
+import 'package:crowwn/screens/Login%20Screens/login.dart';
 import 'package:crowwn/screens/config/common.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:crowwn/screens/Home/bottom.dart';
 
 import '../../Dark mode.dart';
 
@@ -19,14 +21,17 @@ class _SplashState extends State<Splash> {
     super.initState();
   }
 
-  init() {
+  void init() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
     Future.delayed(
       const Duration(seconds: 2),
       () {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const Login(),
+            builder: (context) => isLoggedIn ? const BottomBarScreen() : const Login(),
           ),
         );
       },

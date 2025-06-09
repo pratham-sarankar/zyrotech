@@ -7,8 +7,9 @@ import 'package:provider/provider.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Sign phone.dart';
-import '../../services/auth_services.dart';
+import '../../services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Home/bottom.dart';
 
 class EmailVerification extends StatefulWidget {
   final String email;
@@ -22,6 +23,7 @@ class EmailVerification extends StatefulWidget {
 class _EmailVerificationState extends State<EmailVerification> {
   ColorNotifire notifier = ColorNotifire();
   final TextEditingController textEditingController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -40,26 +42,39 @@ class _EmailVerificationState extends State<EmailVerification> {
   }
 
   void _verifyOtp(String otp) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       final authService = AuthService();
       final response = await authService.verifyEmailOtp(widget.email, otp);
       print(response['message']);
-      if (response['message'] == 'OTP verified successfully') {
-        // Call login API
+      if (response['message'] == 'Email verified successfully') {
+        print('Email OTP verified successfully.');
         final loginResponse = await authService.login(widget.email, widget.password);
-        print(loginResponse['message']);
-        // Store login data in shared preferences
+        print('Login API called.');
+        print('Login Response: ' + loginResponse.toString());
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', loginResponse['token']);
+        print('Token saved: ' + loginResponse['token']);
         await prefs.setString('userId', loginResponse['user']['id']);
         await prefs.setString('fullName', loginResponse['user']['fullName']);
         await prefs.setString('email', loginResponse['user']['email']);
         await prefs.setBool('isEmailVerified', loginResponse['user']['isEmailVerified']);
-        // Navigate to the next screen or show a success message
+        await prefs.setBool('isLoggedIn', true);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const BottomBarScreen(),
+          ),
+        );
       }
     } catch (e) {
       print(e.toString());
-      // Handle verification failure
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -117,7 +132,9 @@ class _EmailVerificationState extends State<EmailVerification> {
                   // Handle OTP change
                 },
                 onCompleted: (pin) {
-                  _verifyOtp(pin);
+                  if (!_isLoading) {
+                    _verifyOtp(pin);
+                  }
                 }),
             AppConstants.Height(20),
             Padding(

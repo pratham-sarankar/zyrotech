@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
-import 'Login.dart';
+import 'login.dart';
 import 'Email verification.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../services/auth_services.dart';
+import '../../services/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../Home/bottom.dart';
 
 class Sign extends StatefulWidget {
   const Sign({super.key});
@@ -20,6 +22,7 @@ class _SignState extends State<Sign> {
   bool value = false;
   bool _obsecuretext1 = true;
   ColorNotifire notifier = ColorNotifire();
+  bool _isLoading = false;
 
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -27,13 +30,31 @@ class _SignState extends State<Sign> {
 
   // Function to handle sign-up
   Future<void> signUp(String fullName, String email, String password) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       final authService = AuthService();
       final response = await authService.signUp(fullName, email, password);
       print(response['message']);
-      // Navigate to email verification or show a success message
+      // After successful sign-up, send email OTP
+      if (response['message'] == 'Account created. Please verify your email.') {
+        final emailOtpResponse = await authService.sendEmailOtp(email);
+        print(emailOtpResponse['message']);
+        // Navigate to email verification or show a success message
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EmailVerification(email: email, password: password),
+          ),
+        );
+      }
     } catch (e) {
       print(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -147,18 +168,13 @@ class _SignState extends State<Sign> {
               AppConstants.Height(20),
               GestureDetector(
                 onTap: () {
-                  // Call the signUp function with user input
-                  signUp(
-                    _fullNameController.text,
-                    _emailController.text,
-                    _passwordController.text,
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EmailVerification(email: _emailController.text, password: _passwordController.text),
-                    ),
-                  );
+                  if (!_isLoading) {
+                    signUp(
+                      _fullNameController.text,
+                      _emailController.text,
+                      _passwordController.text,
+                    );
+                  }
                 },
                 child: Container(
                   height: height / 12,
@@ -166,14 +182,17 @@ class _SignState extends State<Sign> {
                     borderRadius: BorderRadius.circular(15),
                     color: const Color(0xff6B39F4),
                   ),
-                  child: const Center(
-                      child: Text(
-                    "Sign Up",
-                    style: TextStyle(
-                        color: Color(0xffFFFFFF),
-                        fontSize: 15,
-                        fontFamily: "Manrope-Bold"),
-                  )),
+                  child: Center(
+                    child: _isLoading
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : const Text(
+                            "Sign Up",
+                            style: TextStyle(
+                                color: Color(0xffFFFFFF),
+                                fontSize: 15,
+                                fontFamily: "Manrope-Bold"),
+                          ),
+                  ),
                 ),
               ),
               AppConstants.Height(10),

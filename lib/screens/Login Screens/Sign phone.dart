@@ -7,6 +7,8 @@ import 'package:crowwn/screens/Login%20Screens/verification%20code.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/auth_service.dart';
 
 class phone extends StatefulWidget {
   const phone({super.key});
@@ -19,6 +21,22 @@ class _phoneState extends State<phone> {
   ColorNotifire notifier = ColorNotifire();
   String selectedCountryCode = '+91'; // Default to India
   String selectedCountryFlag = '🇮🇳';
+  final TextEditingController _phoneController = TextEditingController();
+
+  void _sendOtp() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+      print('Token retrieved for sending OTP: ' + (token ?? 'No token found'));
+      final authService = AuthService();
+      final response = await authService.sendPhoneOtp(_phoneController.text, token);
+      print(response['message']);
+      // Navigate to the OTP screen
+      // builder: (context) => PhoneOtpScreen(phoneNumber: _phoneController.text),
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +125,7 @@ class _phoneState extends State<phone> {
                     color: notifier.textField,
                   ),
                   child: TextField(
+                    controller: _phoneController,
                     style: TextStyle(color: notifier.textColor),
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -122,24 +141,39 @@ class _phoneState extends State<phone> {
             ),
             AppConstants.Height(30),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Pin(),
-                    ));
-              },
+              onTap: _sendOtp,
               child: Container(
                 height: height / 11,
                 decoration: BoxDecoration(
                     color: const Color(0xff6B39F4),
                     borderRadius: BorderRadius.circular(15)),
                 child: const Center(
-                    child: Text("Continue",
+                    child: Text("Send OTP",
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,
                             fontFamily: "Manrope-Bold"))),
+              ),
+            ),
+            AppConstants.Height(20),
+            GestureDetector(
+              onTap: () {
+                // Handle skip action, e.g., navigate to the next screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Pin(), // Assuming CreatePin is the next screen
+                  ),
+                );
+              },
+              child: const Center(
+                child: Text(
+                  "Skip",
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff6B39F4),
+                      fontFamily: "Manrope-Bold"),
+                ),
               ),
             ),
           ],
