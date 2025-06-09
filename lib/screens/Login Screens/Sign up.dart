@@ -1,11 +1,13 @@
 // ignore_for_file: file_names
 
 // Dart imports:
+import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 // Project imports:
@@ -40,7 +42,8 @@ class _SignState extends State<Sign> {
     try {
       final authService = AuthService();
       final response = await authService.signUp(fullName, email, password);
-      final responseData = response; // Use response directly as it's already a map
+      final responseData =
+          response; // Use response directly as it's already a map
       print(responseData['message']);
       // Check if the user already exists
       if (responseData['status'] == 'fail') {
@@ -53,14 +56,16 @@ class _SignState extends State<Sign> {
         return; // Exit the function early
       }
       // After successful sign-up, send email OTP
-      if (responseData['message'] == 'Account created. Please verify your email.') {
+      if (responseData['message'] ==
+          'Account created. Please verify your email.') {
         final emailOtpResponse = await authService.sendEmailOtp(email);
         print(emailOtpResponse['message']);
         // Navigate to email verification or show a success message
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => EmailVerification(email: email, password: password),
+            builder: (context) =>
+                EmailVerification(email: email, password: password),
           ),
         );
       }
@@ -75,7 +80,8 @@ class _SignState extends State<Sign> {
         }
       } else if (e is Exception) {
         // Attempt to parse the message from the exception if possible
-        final messageMatch = RegExp(r'message":"(.*?)"').firstMatch(e.toString());
+        final messageMatch =
+            RegExp(r'message":"(.*?)"').firstMatch(e.toString());
         if (messageMatch != null) {
           errorMessage = messageMatch.group(1) ?? errorMessage;
         }
@@ -276,34 +282,34 @@ class _SignState extends State<Sign> {
                   width: double.infinity,
                   height: 56,
                   child: OutlinedButton(
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(13),
-                            ),
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(13),
                           ),
-                          side: MaterialStatePropertyAll(
-                              BorderSide(color: notifier.getContainerBorder))),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Image(
-                            image: AssetImage("assets/images/google.png"),
-                            height: 19,
-                            width: 16,
-                          ),
-                          Text(
-                            " Google",
-                            style: TextStyle(
-                                color: notifier.isDark
-                                    ? Colors.white
-                                    : Colors.black,
-                                fontFamily: "Manrop-SemiBold",
-                                fontSize: 16),
-                          )
-                        ],
-                      ),),
+                        ),
+                        side: MaterialStatePropertyAll(
+                            BorderSide(color: notifier.getContainerBorder))),
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Image(
+                          image: AssetImage("assets/images/google.png"),
+                          height: 19,
+                          width: 16,
+                        ),
+                        Text(
+                          " Google",
+                          style: TextStyle(
+                              color:
+                                  notifier.isDark ? Colors.white : Colors.black,
+                              fontFamily: "Manrop-SemiBold",
+                              fontSize: 16),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
               AppConstants.Height(20),
