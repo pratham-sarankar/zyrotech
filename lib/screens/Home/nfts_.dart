@@ -1,19 +1,35 @@
 // ignore_for_file: camel_case_types
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
 
-// import 'package:Crowwn/NFT/Statics.dart';
-
+// Project imports:
+import 'package:crowwn/NFT/Statics.dart';
 import '../../Dark mode.dart';
+import '../Dark mode.dart';
+import '../NFT/Collections.dart';
 import '../NFT/Collections.dart';
 import '../NFT/Hot bids see all.dart';
+import '../NFT/Hot bids see all.dart';
+import '../NFT/Hot colletion see all.dart';
 import '../NFT/Hot colletion see all.dart';
 import '../NFT/Nemus Genesis.dart';
+import '../NFT/Nemus Genesis.dart';
+import '../NFT/Spacybox.dart';
 import '../NFT/Spacybox.dart';
 import '../NFT/Statics.dart';
 import '../NFT/Top collections see all.dart';
+import '../NFT/Top collections see all.dart';
 import '../config/common.dart';
+import '../config/common.dart';
+
+// import 'package:Crowwn/NFT/Statics.dart';
+
 
 class nfts_ extends StatefulWidget {
   const nfts_({super.key});
@@ -877,18 +893,7 @@ class _nfts_State extends State<nfts_> {
 /*
 // ignore_for_file: camel_case_types
 
-import 'package:crowwn/NFT/Statics.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../Dark mode.dart';
-import '../NFT/Collections.dart';
-import '../NFT/Hot bids see all.dart';
-import '../NFT/Hot colletion see all.dart';
-import '../NFT/Nemus Genesis.dart';
-import '../NFT/Spacybox.dart';
-import '../NFT/Top collections see all.dart';
-import '../config/common.dart';
 
 class nfts_ extends StatefulWidget {
   const nfts_({super.key});

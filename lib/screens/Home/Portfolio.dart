@@ -1,11 +1,16 @@
 // ignore_for_file: file_names
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+// Project imports:
+import '../../Dark mode.dart';
 import '../Activity&History/Transaction Chart.dart';
 import '../Activity&History/Transaction History.dart';
-import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'bottom.dart';
 

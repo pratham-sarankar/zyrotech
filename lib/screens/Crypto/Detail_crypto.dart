@@ -1,8 +1,13 @@
 // ignore_for_file: file_names, camel_case_types
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+// Project imports:
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Portfolio_crypto.dart';

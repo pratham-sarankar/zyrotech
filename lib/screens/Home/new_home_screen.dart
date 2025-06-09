@@ -1,9 +1,15 @@
-import 'package:crowwn/screens/Message%20&%20Notification/Notifications.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
-import '../../Dark mode.dart'; // Assuming Dark mode.dart is needed for theme colors
+
+// Project imports:
+import 'package:crowwn/screens/Message%20&%20Notification/Notifications.dart';
 import 'performance/performance_screen.dart';
+
+import '../../Dark mode.dart'; // Assuming Dark mode.dart is needed for theme colors
 
 // Custom painter for the line chart
 class LineChartPainter extends CustomPainter {

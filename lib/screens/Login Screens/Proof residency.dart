@@ -1,10 +1,17 @@
 // ignore_for_file: file_names
-import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart';
+
+// Dart imports:
 import 'dart:io';
 
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
 import '../../Dark mode.dart';
 import '../config/Liner_indicator.dart';
 import '../config/common.dart';

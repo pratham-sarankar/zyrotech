@@ -1,14 +1,19 @@
 // ignore_for_file: file_names, camel_case_types
 
-import 'package:crowwn/screens/Login%20Screens/Create%20pin.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:country_picker/country_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
+import 'package:crowwn/screens/Login%20Screens/Create%20pin.dart';
 import 'package:crowwn/screens/Login%20Screens/verification%20code.dart';
 import '../../Dark mode.dart';
-import '../config/common.dart';
-import 'package:country_picker/country_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/auth_service.dart';
+import '../config/common.dart';
 
 class phone extends StatefulWidget {
   const phone({super.key});

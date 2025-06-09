@@ -1,13 +1,18 @@
-import 'package:crowwn/screens/Home/bottom.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
+import 'package:crowwn/screens/Home/bottom.dart';
+import 'package:crowwn/services/auth_service.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Forget pass.dart';
 import 'Sign up.dart';
-import 'package:crowwn/services/auth_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -282,7 +287,8 @@ class _LoginState extends State<Login> {
                             ),
                             child: Center(
                               child: _isLoading
-                                  ? CircularProgressIndicator(color: Colors.white)
+                                  ? CircularProgressIndicator(
+                                      color: Colors.white)
                                   : const Text(
                                       "Sign In",
                                       style: TextStyle(
@@ -328,7 +334,9 @@ class _LoginState extends State<Login> {
                             Text(
                               "Google",
                               style: TextStyle(
-                                color: notifier.isDark ? Colors.white : Colors.black,
+                                color: notifier.isDark
+                                    ? Colors.white
+                                    : Colors.black,
                                 fontFamily: "Manrope-SemiBold",
                                 fontSize: 16,
                               ),

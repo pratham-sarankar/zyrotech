@@ -1,17 +1,22 @@
 // ignore_for_file: file_names
-import 'package:crowwn/screens/Login%20Screens/Country%20residence.dart';
-import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Project imports:
+import 'package:crowwn/screens/Login%20Screens/Country%20residence.dart';
+import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
 import '../../Dark mode.dart';
+import '../../services/auth_service.dart';
 import '../config/common.dart';
 import 'Proof residency.dart';
-import '../../services/auth_service.dart';
 
 class Pin extends StatefulWidget {
   const Pin({super.key});

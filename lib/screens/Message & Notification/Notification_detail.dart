@@ -1,6 +1,10 @@
 // ignore_for_file: file_names, camel_case_types
-import 'package:crowwn/screens/config/common.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
+import 'package:crowwn/screens/config/common.dart';
 
 class Notification_detail extends StatefulWidget {
   final String image;

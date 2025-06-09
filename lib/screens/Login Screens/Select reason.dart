@@ -1,9 +1,13 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
-import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
+// Project imports:
+import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Create pin.dart';

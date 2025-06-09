@@ -1,9 +1,13 @@
 // ignore_for_file: file_names
 
-import 'package:crowwn/screens/config/common.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
+// Project imports:
+import 'package:crowwn/screens/config/common.dart';
 import '../../Dark mode.dart';
 
 class Category extends StatefulWidget {

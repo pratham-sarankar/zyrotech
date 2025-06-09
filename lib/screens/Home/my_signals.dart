@@ -1,8 +1,13 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:crowwn/models/bot.dart';
 import 'package:crowwn/models/signal.dart';
 import 'package:crowwn/screens/Home/performance/performance_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../Dark mode.dart';
 
 class MySignals extends StatefulWidget {

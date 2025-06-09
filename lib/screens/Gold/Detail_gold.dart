@@ -1,11 +1,15 @@
 // ignore_for_file: file_names, camel_case_types
 
-import 'package:crowwn/screens/Gold/sell_buy_gold.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:crowwn/screens/config/common.dart';
 
+// Project imports:
+import 'package:crowwn/screens/Gold/sell_buy_gold.dart';
+import 'package:crowwn/screens/config/common.dart';
 import '../../Dark mode.dart';
 import 'Auto invest.dart';
 import 'Loan_gold.dart';

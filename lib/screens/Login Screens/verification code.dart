@@ -1,13 +1,18 @@
 // ignore_for_file: file_names
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
 
+// Project imports:
 import '../../Dark mode.dart';
-import 'Password update.dart';
 import '../config/common.dart';
+import 'Password update.dart';
 
 class Verification extends StatefulWidget {
   const Verification({super.key});

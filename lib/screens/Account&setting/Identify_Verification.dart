@@ -1,8 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
+
+// Project imports:
 import '../../Dark mode.dart';
-import '../config/common.dart';
 import '../Onboarding screens/kyc_onboarding.dart';
+import '../config/common.dart';
 
 enum VerificationStatus { incomplete, pending, rejected, completed }
 

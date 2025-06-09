@@ -1,14 +1,18 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:crowwn/screens/Home/Market.dart';
 import 'package:crowwn/screens/Home/Portfolio.dart';
 import 'package:crowwn/screens/Home/Profile.dart';
+import 'package:crowwn/screens/Home/bot.dart';
 import 'package:crowwn/screens/Home/home.dart';
 import 'package:crowwn/screens/Home/my_signals.dart';
-import 'package:crowwn/screens/Home/waiting_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:crowwn/screens/Home/new_home_screen.dart';
-import 'package:crowwn/screens/Home/bot.dart';
-
+import 'package:crowwn/screens/Home/waiting_screen.dart';
 import '../../Dark mode.dart';
 import '../Wallet/My wallet.dart';
 

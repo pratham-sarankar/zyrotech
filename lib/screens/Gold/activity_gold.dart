@@ -1,10 +1,15 @@
 // ignore_for_file: camel_case_types
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:crowwn/screens/config/common.dart';
-import '../Activity&History/See All Transaction History.dart';
 import '../../Dark mode.dart';
+import '../Activity&History/See All Transaction History.dart';
 
 class Activity_gold extends StatefulWidget {
   const Activity_gold({super.key});

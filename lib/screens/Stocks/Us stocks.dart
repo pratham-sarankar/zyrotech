@@ -1,11 +1,15 @@
 // ignore_for_file: file_names
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
+// Project imports:
+import '../../Dark mode.dart';
 import '../Account&setting/Refferal Code.dart';
 import '../Crypto/Latest News.dart';
-import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Category_stock.dart';
 import 'Detail_stock.dart';

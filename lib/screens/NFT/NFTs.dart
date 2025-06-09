@@ -1,12 +1,16 @@
 // ignore_for_file: file_names, camel_case_types
 
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:crowwn/screens/NFT/Collections.dart';
 import 'package:crowwn/screens/NFT/Spacybox.dart';
 import 'package:crowwn/screens/NFT/Statics.dart';
 import 'package:crowwn/screens/config/common.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../../Dark mode.dart';
 import 'Hot bids see all.dart';
 import 'Hot colletion see all.dart';

@@ -1,6 +1,9 @@
 // ignore_for_file: file_names, camel_case_types
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import '../config/common.dart';
 import 'Activity.dart';
 import 'Items.dart';

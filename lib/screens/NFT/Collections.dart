@@ -1,7 +1,15 @@
 // ignore_for_file: file_names
+
+// Dart imports:
 import 'dart:ui';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
+
+// Project imports:
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Collection_item_detail.dart';

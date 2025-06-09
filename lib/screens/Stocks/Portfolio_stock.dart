@@ -1,7 +1,12 @@
 // ignore_for_file: file_names, camel_case_types, use_full_hex_values_for_flutter_colors
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
+// Project imports:
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Buy Stock.dart';

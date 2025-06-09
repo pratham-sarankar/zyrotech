@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "120628086177-4v32crqeu5us0t944ccppu5m7mm3gtg2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zyrotech.app",
+            "certificate_hash": "31b24d1feea1db6f95b444baf599e81a2335bd43"
+          }
+        },
+        {
           "client_id": "120628086177-92i5saks0ji1hder26v7ebv7mpa0d0m3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

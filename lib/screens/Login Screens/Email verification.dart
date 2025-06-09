@@ -1,15 +1,21 @@
 // ignore_for_file: file_names
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
 import '../../Dark mode.dart';
+import '../../services/auth_service.dart';
+import '../Home/bottom.dart';
 import '../config/common.dart';
 import 'Sign phone.dart';
-import '../../services/auth_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../Home/bottom.dart';
 
 class EmailVerification extends StatefulWidget {
   final String email;

@@ -1,10 +1,14 @@
 // ignore_for_file: file_names, camel_case_types
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
-import 'package:crowwn/screens/config/common.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+// Project imports:
+import 'package:crowwn/screens/config/common.dart';
 import '../../Dark mode.dart';
 import 'History Report.dart';
 

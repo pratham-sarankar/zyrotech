@@ -1,10 +1,15 @@
 // ignore_for_file: file_names
-import 'package:crowwn/screens/Home/bottom.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
-import '../Crypto/Latest News.dart';
+// Project imports:
+import 'package:crowwn/screens/Home/bottom.dart';
 import '../../Dark mode.dart';
+import '../Crypto/Latest News.dart';
 import '../Stocks/Category_stock.dart';
 import '../Stocks/Detail_stock.dart';
 import '../Stocks/Top Gainers see all.dart';

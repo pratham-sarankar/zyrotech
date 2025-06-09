@@ -1,10 +1,14 @@
 // ignore_for_file: file_names, camel_case_types
 
-import 'package:crowwn/screens/config/common.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:country_picker/country_picker.dart';
 
+// Package imports:
+import 'package:country_picker/country_picker.dart';
+import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:crowwn/screens/config/common.dart';
 import '../../Dark mode.dart';
 
 class Personal_data extends StatefulWidget {

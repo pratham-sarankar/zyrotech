@@ -1,6 +1,11 @@
-import 'package:crowwn/models/bot.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:crowwn/models/bot.dart';
 import '../../Dark mode.dart';
 import 'performance/performance_screen.dart';
 

@@ -1,10 +1,14 @@
-import 'package:crowwn/screens/Login%20Screens/login.dart';
-import 'package:crowwn/screens/config/common.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:crowwn/screens/Home/bottom.dart';
 
+// Project imports:
+import 'package:crowwn/screens/Home/bottom.dart';
+import 'package:crowwn/screens/Login%20Screens/login.dart';
+import 'package:crowwn/screens/config/common.dart';
 import '../../Dark mode.dart';
 
 class Splash extends StatefulWidget {

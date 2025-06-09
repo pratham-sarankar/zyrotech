@@ -1,10 +1,14 @@
 // ignore_for_file: file_names, camel_case_types
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
-import '../Crypto/Latest News.dart';
+// Project imports:
 import '../../Dark mode.dart';
+import '../Crypto/Latest News.dart';
 import '../config/common.dart';
 import 'Detail_gold.dart';
 import 'buy gold in.dart';

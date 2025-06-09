@@ -1,8 +1,13 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:intl/intl.dart';
+
+// Project imports:
 import 'package:crowwn/Dark%20mode.dart';
 import 'package:crowwn/models/signal.dart';
 import 'package:crowwn/repositories/signal_repository.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class SignalsScreen extends StatefulWidget {
   const SignalsScreen({super.key});

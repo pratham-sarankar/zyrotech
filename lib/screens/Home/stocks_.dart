@@ -1,11 +1,15 @@
 // ignore_for_file: camel_case_types
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
+// Project imports:
+import '../../Dark mode.dart';
 import '../Account&setting/Refferal Code.dart';
 import '../Crypto/Latest News.dart';
-import '../../Dark mode.dart';
 import '../Stocks/Category_stock.dart';
 import '../Stocks/Detail_stock.dart';
 import '../Stocks/Top Gainers see all.dart';

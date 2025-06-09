@@ -1,9 +1,13 @@
 // ignore_for_file: file_names, camel_case_types
 
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:crowwn/screens/config/Latest_News_model.dart';
 
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:crowwn/screens/config/Latest_News_model.dart';
 import '../../Dark mode.dart';
 import '../Gold/Detail_gold.dart';
 import '../config/common.dart';

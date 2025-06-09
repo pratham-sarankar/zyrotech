@@ -1,29 +1,30 @@
 // ignore_for_file: file_names
 // import 'package:Crowwn/Home/bottom.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
+// Project imports:
+import '../../Dark mode.dart';
+import '../Account&setting/API_Connection.dart';
 import '../Account&setting/About App.dart';
-import '../Account&setting/Bank Account.dart';
 import '../Account&setting/Help Center.dart';
 import '../Account&setting/Identify_Verification.dart';
 import '../Account&setting/Personal data.dart';
 import '../Account&setting/Privacy&Policy.dart';
 import '../Account&setting/Push Notification.dart';
 import '../Account&setting/Refferal Code.dart';
-import '../Account&setting/Select Language.dart';
-import '../Account&setting/Social Media Link.dart';
 import '../Account&setting/Terms&conditions.dart';
-import '../Activity&History/Transaction History.dart';
-import '../../Dark mode.dart';
+import '../Login Screens/login.dart';
 import '../Message & Notification/Notifications.dart';
 import '../config/common.dart';
 import 'bottom.dart';
-import '../Account&setting/API_Connection.dart';
-import '../Login Screens/Login.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -886,14 +887,16 @@ class _ProfileState extends State<Profile> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: notifier.background,
-                          border: Border.all(color: notifier.getContainerBorder),
+                          border:
+                              Border.all(color: notifier.getContainerBorder),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Icon(Icons.logout, color: notifier.textColor, size: 24),
+                              Icon(Icons.logout,
+                                  color: notifier.textColor, size: 24),
                               const SizedBox(width: 15),
                               Text(
                                 "Logout",

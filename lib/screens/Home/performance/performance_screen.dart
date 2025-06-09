@@ -1,9 +1,14 @@
-import 'package:crowwn/screens/Home/performance/signals_screen.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
-import '../../../Dark mode.dart';
+
+// Package imports:
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:intl/intl.dart';
+
+// Project imports:
+import 'package:crowwn/screens/Home/performance/signals_screen.dart';
+import '../../../Dark mode.dart';
 
 class PerformanceScreen extends StatefulWidget {
   final String strategyName;

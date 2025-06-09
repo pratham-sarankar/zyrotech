@@ -1,9 +1,14 @@
 // ignore_for_file: file_names
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:crowwn/screens/config/activity_model.dart';
 import 'package:crowwn/screens/config/common.dart';
-
 import '../../Dark mode.dart';
 import 'Notification_detail.dart';
 

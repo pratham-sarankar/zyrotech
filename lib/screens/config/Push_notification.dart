@@ -1,9 +1,14 @@
 // ignore_for_file: file_names
+
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:crowwn/screens/config/common.dart';
 
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:crowwn/screens/config/common.dart';
 import '../../Dark mode.dart';
 
 class PushNotification extends StatefulWidget {

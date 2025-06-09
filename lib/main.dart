@@ -1,10 +1,15 @@
-import 'package:crowwn/screens/Onboarding%20screens/splash_screen.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:crowwn/Dark%20mode.dart';
+
+// Package imports:
 import 'package:deriv_chart/generated/l10n.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:crowwn/Dark%20mode.dart';
+import 'package:crowwn/screens/Onboarding%20screens/splash_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {

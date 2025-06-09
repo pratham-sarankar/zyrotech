@@ -1,8 +1,12 @@
+// Dart imports:
 import 'dart:convert';
 
+// Package imports:
+import 'package:http/http.dart' as http;
+
+// Project imports:
 import 'package:crowwn/models/signal.dart';
 import 'package:crowwn/repositories/repository.dart';
-import 'package:http/http.dart' as http;
 
 class SignalRepository extends Repository {
   Future<List<Signal>> getSignalsByBotId(String id) async {
