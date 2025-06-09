@@ -89,7 +89,16 @@ class _LoginState extends State<Login> {
       setState(() {
         _isLoading = true;
       });
-      await _authService.loginWithGoogle();
+      final response = await _authService.loginWithGoogle();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('token', response['token']);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const BottomBarScreen(),
+        ),
+      );
     } on Exception catch (e) {
       print('Error: $e');
       // Show error message to user

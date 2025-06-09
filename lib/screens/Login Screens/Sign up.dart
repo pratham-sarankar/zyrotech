@@ -44,9 +44,20 @@ class _SignState extends State<Sign> {
     try {
       final authService = AuthService();
       final response = await authService.signUp(fullName, email, password);
-      print(response['message']);
+      final responseData = response; // Use response directly as it's already a map
+      print(responseData['message']);
+      // Check if the user already exists
+      if (responseData['status'] == 'fail') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(responseData['message']),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return; // Exit the function early
+      }
       // After successful sign-up, send email OTP
-      if (response['message'] == 'Account created. Please verify your email.') {
+      if (responseData['message'] == 'Account created. Please verify your email.') {
         final emailOtpResponse = await authService.sendEmailOtp(email);
         print(emailOtpResponse['message']);
         // Navigate to email verification or show a success message
@@ -58,7 +69,27 @@ class _SignState extends State<Sign> {
         );
       }
     } catch (e) {
-      print(e.toString());
+      String errorMessage = 'An error occurred';
+      if (e is http.Response) {
+        try {
+          final responseData = json.decode(e.body);
+          errorMessage = responseData['message'] ?? errorMessage;
+        } catch (decodeError) {
+          // If decoding fails, use the default error message
+        }
+      } else if (e is Exception) {
+        // Attempt to parse the message from the exception if possible
+        final messageMatch = RegExp(r'message":"(.*?)"').firstMatch(e.toString());
+        if (messageMatch != null) {
+          errorMessage = messageMatch.group(1) ?? errorMessage;
+        }
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+        ),
+      );
     } finally {
       setState(() {
         _isLoading = false;
@@ -249,34 +280,65 @@ class _SignState extends State<Sign> {
                   width: double.infinity,
                   height: 56,
                   child: OutlinedButton(
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(13),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                      ),
+                      side: MaterialStatePropertyAll(
+                        BorderSide(color: notifier.getContainerBorder),
+                      ),
+                    ),
+                    onPressed: () async {
+                      if (!_isLoading) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        try {
+                          final response = await AuthService().loginWithGoogle();
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool('isLoggedIn', true);
+                          await prefs.setString('token', response['token']);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const BottomBarScreen(),
                             ),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(e.toString()),
+                              backgroundColor: Colors.red.shade600,
+                            ),
+                          );
+                        } finally {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                        }
+                      }
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Image(
+                          image: AssetImage("assets/images/google.png"),
+                          height: 19,
+                          width: 16,
+                        ),
+                        Text(
+                          " Google",
+                          style: TextStyle(
+                            color: notifier.isDark ? Colors.white : Colors.black,
+                            fontFamily: "Manrope-SemiBold",
+                            fontSize: 16,
                           ),
-                          side: MaterialStatePropertyAll(
-                              BorderSide(color: notifier.getContainerBorder))),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Image(
-                            image: AssetImage("assets/images/google.png"),
-                            height: 19,
-                            width: 16,
-                          ),
-                          Text(
-                            " Google",
-                            style: TextStyle(
-                                color: notifier.isDark
-                                    ? Colors.white
-                                    : Colors.black,
-                                fontFamily: "Manrop-SemiBold",
-                                fontSize: 16),
-                          )
-                        ],
-                      )),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               AppConstants.Height(20),
