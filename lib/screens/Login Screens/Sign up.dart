@@ -156,7 +156,7 @@ class _SignState extends State<Sign> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => EmailVerification(email: _emailController.text),
+                      builder: (context) => EmailVerification(email: _emailController.text, password: _passwordController.text),
                     ),
                   );
                 },

@@ -8,10 +8,12 @@ import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Sign phone.dart';
 import '../../services/auth_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EmailVerification extends StatefulWidget {
   final String email;
-  const EmailVerification({super.key, required this.email});
+  final String password;
+  const EmailVerification({super.key, required this.email, required this.password});
 
   @override
   State<EmailVerification> createState() => _EmailVerificationState();
@@ -42,7 +44,19 @@ class _EmailVerificationState extends State<EmailVerification> {
       final authService = AuthService();
       final response = await authService.verifyEmailOtp(widget.email, otp);
       print(response['message']);
-      // Handle successful verification, e.g., navigate to the next screen
+      if (response['message'] == 'OTP verified successfully') {
+        // Call login API
+        final loginResponse = await authService.login(widget.email, widget.password);
+        print(loginResponse['message']);
+        // Store login data in shared preferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', loginResponse['token']);
+        await prefs.setString('userId', loginResponse['user']['id']);
+        await prefs.setString('fullName', loginResponse['user']['fullName']);
+        await prefs.setString('email', loginResponse['user']['email']);
+        await prefs.setBool('isEmailVerified', loginResponse['user']['isEmailVerified']);
+        // Navigate to the next screen or show a success message
+      }
     } catch (e) {
       print(e.toString());
       // Handle verification failure
