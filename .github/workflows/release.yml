@@ -1,4 +1,4 @@
-name: Release APK and App Bundle
+name: Release APK
 
 on:
   push:
@@ -57,11 +57,15 @@ jobs:
           VERSION=$(grep 'version:' pubspec.yaml | sed 's/version: //' | tr -d "'")
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+      - name: Rename APK
+        run: |
+          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/zyrotech-v${{ env.VERSION }}.apk
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/flutter-apk/zyrotech-v${{ env.VERSION }}.apk
           tag_name: v${{ env.VERSION }}
           name: Release v${{ env.VERSION }}
         env:
