@@ -191,7 +191,7 @@ class _FaqState extends State<Faq> {
                       height: 56,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: Colors.grey.withOpacity(0.1)),
+                          color: Colors.grey.withValues(alpha: 0.1)),
                       child: ListTile(
                         leading: Image.asset(
                             "assets/images/question-circle-outlined.png",
@@ -216,7 +216,7 @@ class _FaqState extends State<Faq> {
                       height: 56,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: Colors.grey.withOpacity(0.1)),
+                          color: Colors.grey.withValues(alpha: 0.1)),
                       child: ListTile(
                         leading: Image.asset("assets/images/Person.png",
                             scale: 3, color: const Color(0xff6B39F4)),

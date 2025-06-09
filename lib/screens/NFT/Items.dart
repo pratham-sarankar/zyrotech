@@ -347,7 +347,8 @@ class _ItemsState extends State<Items> {
                                         border: Border.all(
                                           color: selectIndex == 0
                                               ? const Color(0xff6B39F4)
-                                              : Colors.black.withOpacity(0.1),
+                                              : Colors.black
+                                                  .withValues(alpha: 0.1),
                                         ),
                                       ),
                                       child: Center(
@@ -383,7 +384,8 @@ class _ItemsState extends State<Items> {
                                         border: Border.all(
                                           color: selectIndex == 1
                                               ? const Color(0xff6B39F4)
-                                              : Colors.black.withOpacity(0.1),
+                                              : Colors.black
+                                                  .withValues(alpha: 0.1),
                                         ),
                                       ),
                                       child: Center(
@@ -417,7 +419,8 @@ class _ItemsState extends State<Items> {
                                         border: Border.all(
                                           color: selectIndex == 2
                                               ? const Color(0xff6B39F4)
-                                              : Colors.black.withOpacity(0.1),
+                                              : Colors.black
+                                                  .withValues(alpha: 0.1),
                                         ),
                                       ),
                                       child: Center(
@@ -457,7 +460,8 @@ class _ItemsState extends State<Items> {
                                         border: Border.all(
                                           color: selectIndex == 4
                                               ? const Color(0xff6B39F4)
-                                              : Colors.black.withOpacity(0.1),
+                                              : Colors.black
+                                                  .withValues(alpha: 0.1),
                                         ),
                                       ),
                                       child: Center(
@@ -493,7 +497,8 @@ class _ItemsState extends State<Items> {
                                         border: Border.all(
                                           color: selectIndex == 5
                                               ? const Color(0xff6B39F4)
-                                              : Colors.black.withOpacity(0.1),
+                                              : Colors.black
+                                                  .withValues(alpha: 0.1),
                                         ),
                                       ),
                                       child: Center(
@@ -544,7 +549,8 @@ class _ItemsState extends State<Items> {
                                         border: Border.all(
                                           color: SelectIndex == 0
                                               ? const Color(0xff6B39F4)
-                                              : Colors.black.withOpacity(0.1),
+                                              : Colors.black
+                                                  .withValues(alpha: 0.1),
                                         ),
                                       ),
                                       child: Center(
@@ -581,7 +587,7 @@ class _ItemsState extends State<Items> {
                                               color: SelectIndex == 1
                                                   ? const Color(0xff6B39F4)
                                                   : Colors.black
-                                                      .withOpacity(0.1))),
+                                                      .withValues(alpha: 0.1))),
                                       child: Center(
                                         child: Text(
                                           "Single Editions",

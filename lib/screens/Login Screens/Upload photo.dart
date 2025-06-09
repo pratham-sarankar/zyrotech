@@ -163,8 +163,8 @@ class _UploadState extends State<Upload> {
                                           child: ElevatedButton(
                                             style: ButtonStyle(
                                               elevation:
-                                                  MaterialStateProperty.all(0),
-                                              shape: MaterialStateProperty.all(
+                                                  WidgetStateProperty.all(0),
+                                              shape: WidgetStateProperty.all(
                                                 RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(20),

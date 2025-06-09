@@ -165,7 +165,7 @@ class _sell_buyState extends State<sell_buy> {
                       borderRadius: BorderRadius.circular(10),
                       color: index6 == 0
                           ? const Color(0xff6B39F4)
-                          : Colors.blue.withOpacity(0.1),
+                          : Colors.blue.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("0.10g",
@@ -189,7 +189,7 @@ class _sell_buyState extends State<sell_buy> {
                       borderRadius: BorderRadius.circular(10),
                       color: index6 == 1
                           ? const Color(0xff6B39F4)
-                          : Colors.blue.withOpacity(0.1),
+                          : Colors.blue.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("0.50g",
@@ -213,7 +213,7 @@ class _sell_buyState extends State<sell_buy> {
                       borderRadius: BorderRadius.circular(10),
                       color: index6 == 2
                           ? const Color(0xff6B39F4)
-                          : Colors.blue.withOpacity(0.1),
+                          : Colors.blue.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("5.00g",
@@ -237,7 +237,7 @@ class _sell_buyState extends State<sell_buy> {
                       borderRadius: BorderRadius.circular(10),
                       color: index6 == 3
                           ? const Color(0xff6B39F4)
-                          : Colors.blue.withOpacity(0.1),
+                          : Colors.blue.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("10.00g",

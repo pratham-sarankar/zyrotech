@@ -78,7 +78,7 @@ class _VerificationState extends State<Verification> {
                 outlineBorderRadius: 10,
                 obscureText: true,
                 otpFieldStyle: OtpFieldStyle(
-                    backgroundColor: Colors.grey.withOpacity(0.3)),
+                    backgroundColor: Colors.grey.withValues(alpha: 0.3)),
                 style:
                     const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
                 onChanged: (pin) {},

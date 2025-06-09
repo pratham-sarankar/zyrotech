@@ -15,7 +15,6 @@ import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
 import '../../Dark mode.dart';
 import '../config/Liner_indicator.dart';
 import '../config/common.dart';
-import 'Verify identi.dart';
 
 class Proof extends StatefulWidget {
   const Proof({super.key});
@@ -128,7 +127,7 @@ class _ProofState extends State<Proof> {
                           fontFamily: "Manrope-Bold",
                           color: notifier.textColor)),
                   trailing: Radio(
-                    fillColor: MaterialStateColor.resolveWith(
+                    fillColor: WidgetStateColor.resolveWith(
                         (states) => const Color(0xff6B39F4)),
                     value: 0,
                     groupValue: selectedFilter,
@@ -185,7 +184,7 @@ class _ProofState extends State<Proof> {
                     ),
                   ),
                   trailing: Radio(
-                    fillColor: MaterialStateColor.resolveWith(
+                    fillColor: WidgetStateColor.resolveWith(
                       (states) => const Color(0xff6B39F4),
                     ),
                     value: 1,
@@ -224,7 +223,7 @@ class _ProofState extends State<Proof> {
                                   width: 100,
                                   decoration: BoxDecoration(
                                     color: const Color(0xff6B39F4)
-                                        .withOpacity(0.1),
+                                        .withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   child: const Icon(
@@ -249,7 +248,8 @@ class _ProofState extends State<Proof> {
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: "Manrope-Regular",
-                                    color: notifier.textColor.withOpacity(0.6),
+                                    color: notifier.textColor
+                                        .withValues(alpha: 0.6),
                                   ),
                                 ),
                               ],
@@ -268,7 +268,7 @@ class _ProofState extends State<Proof> {
                               child: Container(
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Colors.red.withOpacity(0.1),
+                                  color: Colors.red.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Icon(
@@ -291,8 +291,8 @@ class _ProofState extends State<Proof> {
                                 height: 100,
                                 width: 100,
                                 decoration: BoxDecoration(
-                                  color:
-                                      const Color(0xff6B39F4).withOpacity(0.1),
+                                  color: const Color(0xff6B39F4)
+                                      .withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: const Icon(
@@ -316,7 +316,8 @@ class _ProofState extends State<Proof> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: "Manrope-Regular",
-                                  color: notifier.textColor.withOpacity(0.6),
+                                  color:
+                                      notifier.textColor.withValues(alpha: 0.6),
                                 ),
                               ),
                             ],

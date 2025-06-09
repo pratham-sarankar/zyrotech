@@ -20,7 +20,8 @@ import 'Sign phone.dart';
 class EmailVerification extends StatefulWidget {
   final String email;
   final String password;
-  const EmailVerification({super.key, required this.email, required this.password});
+  const EmailVerification(
+      {super.key, required this.email, required this.password});
 
   @override
   State<EmailVerification> createState() => _EmailVerificationState();
@@ -57,7 +58,8 @@ class _EmailVerificationState extends State<EmailVerification> {
       print(response['message']);
       if (response['message'] == 'Email verified successfully') {
         print('Email OTP verified successfully.');
-        final loginResponse = await authService.login(widget.email, widget.password);
+        final loginResponse =
+            await authService.login(widget.email, widget.password);
         print('Login API called.');
         print('Login Response: ' + loginResponse.toString());
         final prefs = await SharedPreferences.getInstance();
@@ -66,7 +68,8 @@ class _EmailVerificationState extends State<EmailVerification> {
         await prefs.setString('userId', loginResponse['user']['id']);
         await prefs.setString('fullName', loginResponse['user']['fullName']);
         await prefs.setString('email', loginResponse['user']['email']);
-        await prefs.setBool('isEmailVerified', loginResponse['user']['isEmailVerified']);
+        await prefs.setBool(
+            'isEmailVerified', loginResponse['user']['isEmailVerified']);
         await prefs.setBool('isLoggedIn', true);
         Navigator.pushReplacement(
           context,
@@ -131,7 +134,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                 fieldStyle: FieldStyle.box,
                 outlineBorderRadius: 10,
                 otpFieldStyle: OtpFieldStyle(
-                    backgroundColor: Colors.grey.withOpacity(0.3)),
+                    backgroundColor: Colors.grey.withValues(alpha: 0.3)),
                 style:
                     const TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
                 onChanged: (pin) {

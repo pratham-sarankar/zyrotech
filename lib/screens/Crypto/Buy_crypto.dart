@@ -160,7 +160,7 @@ class _Buy_cryptoState extends State<Buy_crypto> {
                       borderRadius: BorderRadius.circular(10),
                       color: index2 == 0
                           ? const Color(0xff6B39F4)
-                          : Colors.grey.withOpacity(0.1),
+                          : Colors.grey.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("25%",
@@ -184,7 +184,7 @@ class _Buy_cryptoState extends State<Buy_crypto> {
                       borderRadius: BorderRadius.circular(10),
                       color: index2 == 1
                           ? const Color(0xff6B39F4)
-                          : Colors.grey.withOpacity(0.1),
+                          : Colors.grey.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("50%",
@@ -208,7 +208,7 @@ class _Buy_cryptoState extends State<Buy_crypto> {
                       borderRadius: BorderRadius.circular(10),
                       color: index2 == 2
                           ? const Color(0xff6B39F4)
-                          : Colors.grey.withOpacity(0.1),
+                          : Colors.grey.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("75%",
@@ -232,7 +232,7 @@ class _Buy_cryptoState extends State<Buy_crypto> {
                       borderRadius: BorderRadius.circular(10),
                       color: index2 == 3
                           ? const Color(0xff6B39F4)
-                          : Colors.grey.withOpacity(0.1),
+                          : Colors.grey.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("100%",

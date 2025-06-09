@@ -237,7 +237,7 @@ class _Order_crypState extends State<Order_cryp> {
                     height: 180,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: Colors.grey.withOpacity(0.1)),
+                        color: Colors.grey.withValues(alpha: 0.1)),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: Column(

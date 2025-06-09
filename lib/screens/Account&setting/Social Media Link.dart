@@ -121,7 +121,7 @@ class _Social_mediaState extends State<Social_media> {
                                             borderRadius:
                                                 BorderRadius.circular(6),
                                             color: Colors.purpleAccent
-                                                .withOpacity(0.1)),
+                                                .withValues(alpha: 0.1)),
                                         child: const Center(
                                             child: Text("Connect",
                                                 style: TextStyle(

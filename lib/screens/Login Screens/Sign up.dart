@@ -1,20 +1,16 @@
 // ignore_for_file: file_names
 
 // Dart imports:
-import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import '../../Dark mode.dart';
 import '../../services/auth_service.dart';
-import '../Home/bottom.dart';
 import '../config/common.dart';
 import 'Email verification.dart';
 import 'login.dart';
@@ -250,12 +246,12 @@ class _SignState extends State<Sign> {
                   height: 56,
                   child: OutlinedButton(
                       style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
+                          shape: WidgetStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(13),
                             ),
                           ),
-                          side: MaterialStatePropertyAll(
+                          side: WidgetStatePropertyAll(
                               BorderSide(color: notifier.getContainerBorder))),
                       onPressed: () {},
                       child: Row(

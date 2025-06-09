@@ -63,8 +63,9 @@ class _Bank_listState extends State<Bank_list> {
                 // width: MediaQuery.of(context).size.width / 1,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: Colors.grey.withOpacity(
-                      0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
+                  color: Colors.grey.withValues(
+                      alpha:
+                          0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
                 ),
                 child: Center(
                   child: TextField(

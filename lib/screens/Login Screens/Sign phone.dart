@@ -10,7 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Login%20Screens/Create%20pin.dart';
-import 'package:crowwn/screens/Login%20Screens/verification%20code.dart';
 import '../../Dark mode.dart';
 import '../../services/auth_service.dart';
 import '../config/common.dart';

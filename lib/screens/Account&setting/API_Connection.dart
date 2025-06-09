@@ -62,20 +62,21 @@ class _API_ConnectionState extends State<API_Connection>
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: notifier.container.withOpacity(0.5),
+              color: notifier.container.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+              border:
+                  Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
             ),
             child: TabBar(
               controller: _tabController,
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: const Color(0xff6B39F4).withOpacity(0.1),
-                border:
-                    Border.all(color: const Color(0xff6B39F4).withOpacity(0.3)),
+                color: const Color(0xff6B39F4).withValues(alpha: 0.1),
+                border: Border.all(
+                    color: const Color(0xff6B39F4).withValues(alpha: 0.3)),
               ),
               labelColor: const Color(0xff6B39F4),
-              unselectedLabelColor: notifier.textColor.withOpacity(0.7),
+              unselectedLabelColor: notifier.textColor.withValues(alpha: 0.7),
               labelStyle: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -132,7 +133,7 @@ class _API_ConnectionState extends State<API_Connection>
                               Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.1),
+                                  color: Colors.white.withValues(alpha: 0.1),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Image.asset(
@@ -155,7 +156,8 @@ class _API_ConnectionState extends State<API_Connection>
                                 'Enter your Binance API credentials to connect your account',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: notifier.textColor.withOpacity(0.7),
+                                  color:
+                                      notifier.textColor.withValues(alpha: 0.7),
                                   fontSize: 14,
                                   fontFamily: "Manrope-Regular",
                                 ),
@@ -261,7 +263,7 @@ class _API_ConnectionState extends State<API_Connection>
                               Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.1),
+                                  color: Colors.white.withValues(alpha: 0.1),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Image.asset(
@@ -284,7 +286,8 @@ class _API_ConnectionState extends State<API_Connection>
                                 'Enter your Delta Exchange API credentials to connect your account',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: notifier.textColor.withOpacity(0.7),
+                                  color:
+                                      notifier.textColor.withValues(alpha: 0.7),
                                   fontSize: 14,
                                   fontFamily: "Manrope-Regular",
                                 ),

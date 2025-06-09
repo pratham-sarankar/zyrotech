@@ -42,7 +42,6 @@ class _Personal_dataState extends State<Personal_data> {
   @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
-    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: notifier.background,
@@ -100,7 +99,7 @@ class _Personal_dataState extends State<Personal_data> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 10,
                             spreadRadius: 2,
                           ),
@@ -125,7 +124,7 @@ class _Personal_dataState extends State<Personal_data> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.1),
                             blurRadius: 5,
                             spreadRadius: 1,
                           ),
@@ -148,7 +147,7 @@ class _Personal_dataState extends State<Personal_data> {
                 style: TextStyle(
                   fontFamily: "Manrope-Bold",
                   fontSize: 16,
-                  color: notifier.textColor.withOpacity(0.7),
+                  color: notifier.textColor.withValues(alpha: 0.7),
                 ),
               ),
               AppConstants.Height(10),
@@ -157,10 +156,10 @@ class _Personal_dataState extends State<Personal_data> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: notifier.isDark
-                      ? Colors.grey.withOpacity(0.1)
-                      : Colors.grey.withOpacity(0.05),
+                      ? Colors.grey.withValues(alpha: 0.1)
+                      : Colors.grey.withValues(alpha: 0.05),
                   border: Border.all(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: Colors.grey.withValues(alpha: 0.2),
                   ),
                 ),
                 child: TextField(
@@ -172,7 +171,7 @@ class _Personal_dataState extends State<Personal_data> {
                   decoration: InputDecoration(
                     hintText: "Enter your full name",
                     hintStyle: TextStyle(
-                      color: notifier.textColor.withOpacity(0.5),
+                      color: notifier.textColor.withValues(alpha: 0.5),
                       fontSize: 14,
                     ),
                     border: OutlineInputBorder(
@@ -189,7 +188,7 @@ class _Personal_dataState extends State<Personal_data> {
                 style: TextStyle(
                   fontFamily: "Manrope-Bold",
                   fontSize: 16,
-                  color: notifier.textColor.withOpacity(0.7),
+                  color: notifier.textColor.withValues(alpha: 0.7),
                 ),
               ),
               AppConstants.Height(10),
@@ -212,8 +211,8 @@ class _Personal_dataState extends State<Personal_data> {
                             ),
                             filled: true,
                             fillColor: notifier.isDark
-                                ? Colors.grey.withOpacity(0.1)
-                                : Colors.grey.withOpacity(0.05),
+                                ? Colors.grey.withValues(alpha: 0.1)
+                                : Colors.grey.withValues(alpha: 0.05),
                           ),
                           backgroundColor: notifier.background,
                           textStyle: TextStyle(color: notifier.textColor),
@@ -231,10 +230,10 @@ class _Personal_dataState extends State<Personal_data> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         color: notifier.isDark
-                            ? Colors.grey.withOpacity(0.1)
-                            : Colors.grey.withOpacity(0.05),
+                            ? Colors.grey.withValues(alpha: 0.1)
+                            : Colors.grey.withValues(alpha: 0.05),
                         border: Border.all(
-                          color: Colors.grey.withOpacity(0.2),
+                          color: Colors.grey.withValues(alpha: 0.2),
                         ),
                       ),
                       child: Center(
@@ -276,10 +275,10 @@ class _Personal_dataState extends State<Personal_data> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
                         color: notifier.isDark
-                            ? Colors.grey.withOpacity(0.1)
-                            : Colors.grey.withOpacity(0.05),
+                            ? Colors.grey.withValues(alpha: 0.1)
+                            : Colors.grey.withValues(alpha: 0.05),
                         border: Border.all(
-                          color: Colors.grey.withOpacity(0.2),
+                          color: Colors.grey.withValues(alpha: 0.2),
                         ),
                       ),
                       child: TextField(
@@ -292,7 +291,7 @@ class _Personal_dataState extends State<Personal_data> {
                         decoration: InputDecoration(
                           hintText: "Phone Number",
                           hintStyle: TextStyle(
-                            color: notifier.textColor.withOpacity(0.5),
+                            color: notifier.textColor.withValues(alpha: 0.5),
                             fontSize: 14,
                           ),
                           border: OutlineInputBorder(
@@ -313,7 +312,7 @@ class _Personal_dataState extends State<Personal_data> {
                 style: TextStyle(
                   fontFamily: "Manrope-Bold",
                   fontSize: 16,
-                  color: notifier.textColor.withOpacity(0.7),
+                  color: notifier.textColor.withValues(alpha: 0.7),
                 ),
               ),
               AppConstants.Height(10),
@@ -322,10 +321,10 @@ class _Personal_dataState extends State<Personal_data> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: notifier.isDark
-                      ? Colors.grey.withOpacity(0.1)
-                      : Colors.grey.withOpacity(0.05),
+                      ? Colors.grey.withValues(alpha: 0.1)
+                      : Colors.grey.withValues(alpha: 0.05),
                   border: Border.all(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: Colors.grey.withValues(alpha: 0.2),
                   ),
                 ),
                 child: TextField(
@@ -338,7 +337,7 @@ class _Personal_dataState extends State<Personal_data> {
                   decoration: InputDecoration(
                     hintText: "Enter your email",
                     hintStyle: TextStyle(
-                      color: notifier.textColor.withOpacity(0.5),
+                      color: notifier.textColor.withValues(alpha: 0.5),
                       fontSize: 14,
                     ),
                     border: OutlineInputBorder(
@@ -363,7 +362,7 @@ class _Personal_dataState extends State<Personal_data> {
             color: const Color(0xff6B39F4),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xff6B39F4).withOpacity(0.3),
+                color: const Color(0xff6B39F4).withValues(alpha: 0.3),
                 blurRadius: 10,
                 spreadRadius: 0,
                 offset: const Offset(0, 5),

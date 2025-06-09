@@ -155,7 +155,7 @@ class _Bank_detailState extends State<Bank_detail> {
                 // width: 200,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withValues(alpha: 0.1),
                 ),
                 child: TextField(
                   style: TextStyle(color: notifier.textColor),
@@ -188,8 +188,9 @@ class _Bank_detailState extends State<Bank_detail> {
                         width: MediaQuery.of(context).size.width / 2.5,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: Colors.grey.withOpacity(
-                              0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
+                          color: Colors.grey.withValues(
+                              alpha:
+                                  0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
                         ),
                         child: TextField(
                           style: TextStyle(color: notifier.textColor),
@@ -224,8 +225,9 @@ class _Bank_detailState extends State<Bank_detail> {
                         width: MediaQuery.of(context).size.width / 2.5,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          color: Colors.grey.withOpacity(
-                              0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
+                          color: Colors.grey.withValues(
+                              alpha:
+                                  0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
                         ),
                         child: TextField(
                           style: TextStyle(color: notifier.textColor),
@@ -259,8 +261,9 @@ class _Bank_detailState extends State<Bank_detail> {
                 // width: 200,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: Colors.grey.withOpacity(
-                      0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
+                  color: Colors.grey.withValues(
+                      alpha:
+                          0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
                 ),
                 child: TextField(
                   style: TextStyle(color: notifier.textColor),

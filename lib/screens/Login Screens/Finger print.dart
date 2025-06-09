@@ -90,7 +90,7 @@
 //               child: Container(
 //                 height: MediaQuery.of(context).size.height / 12,
 //                 width: double.infinity,
-//                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Colors.blue.withOpacity(0.1),),
+//                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Colors.blue.withValues(alpha:0.1),),
 //                 child: const Center(
 //                   child: Text(
 //                     "Skip for Now",

@@ -175,7 +175,7 @@ class _ReedemState extends State<Reedem> {
                       borderRadius: BorderRadius.circular(10),
                       color: index5 == 0
                           ? const Color(0xff6B39F4)
-                          : Colors.blue.withOpacity(0.1),
+                          : Colors.blue.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("0.10g",
@@ -199,7 +199,7 @@ class _ReedemState extends State<Reedem> {
                       borderRadius: BorderRadius.circular(10),
                       color: index5 == 1
                           ? const Color(0xff6B39F4)
-                          : Colors.blue.withOpacity(0.1),
+                          : Colors.blue.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("0.50g",
@@ -223,7 +223,7 @@ class _ReedemState extends State<Reedem> {
                       borderRadius: BorderRadius.circular(10),
                       color: index5 == 2
                           ? const Color(0xff6B39F4)
-                          : Colors.blue.withOpacity(0.1),
+                          : Colors.blue.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("5.00g",
@@ -247,7 +247,7 @@ class _ReedemState extends State<Reedem> {
                       borderRadius: BorderRadius.circular(10),
                       color: index5 == 3
                           ? const Color(0xff6B39F4)
-                          : Colors.blue.withOpacity(0.1),
+                          : Colors.blue.withValues(alpha: 0.1),
                     ),
                     child: Center(
                         child: Text("10.00g",
@@ -271,7 +271,7 @@ class _ReedemState extends State<Reedem> {
           //         width: 70,
           //         decoration: BoxDecoration(
           //             borderRadius: BorderRadius.circular(10),
-          //             color: Colors.blue.withOpacity(0.1)),
+          //             color: Colors.blue.withValues(alpha:0.1)),
           //         child: Center(
           //             child: Text("0.10g",
           //                 style: TextStyle(
@@ -282,7 +282,7 @@ class _ReedemState extends State<Reedem> {
           //         width: 70,
           //         decoration: BoxDecoration(
           //             borderRadius: BorderRadius.circular(10),
-          //             color: Colors.blue.withOpacity(0.1)),
+          //             color: Colors.blue.withValues(alpha:0.1)),
           //         child: Center(
           //             child: Text("0.50g",
           //                 style: TextStyle(
@@ -293,7 +293,7 @@ class _ReedemState extends State<Reedem> {
           //         width: 70,
           //         decoration: BoxDecoration(
           //             borderRadius: BorderRadius.circular(10),
-          //             color: Colors.blue.withOpacity(0.1)),
+          //             color: Colors.blue.withValues(alpha:0.1)),
           //         child: Center(
           //             child: Text("5.00g",
           //                 style: TextStyle(
@@ -304,7 +304,7 @@ class _ReedemState extends State<Reedem> {
           //         width: 70,
           //         decoration: BoxDecoration(
           //             borderRadius: BorderRadius.circular(10),
-          //             color: Colors.blue.withOpacity(0.1)),
+          //             color: Colors.blue.withValues(alpha:0.1)),
           //         child: Center(
           //             child: Text("10.00g",
           //                 style: TextStyle(

@@ -120,7 +120,7 @@ class _Payment_methodState extends State<Payment_method> {
                             Column(
                               children: [
                                 Radio(
-                                  fillColor: MaterialStateColor.resolveWith(
+                                  fillColor: WidgetStateColor.resolveWith(
                                       (states) => const Color(0xff6B39F4)),
                                   activeColor: const Color(0xff6B39F4),
                                   value: 0,
@@ -198,7 +198,7 @@ class _Payment_methodState extends State<Payment_method> {
                               child: Column(
                                 children: [
                                   Radio(
-                                    fillColor: MaterialStateColor.resolveWith(
+                                    fillColor: WidgetStateColor.resolveWith(
                                         (states) => const Color(0xff6B39F4)),
                                     activeColor: const Color(0xff6B39F4),
                                     value: 1,
@@ -279,7 +279,7 @@ class _Payment_methodState extends State<Payment_method> {
                               child: Column(
                                 children: [
                                   Radio(
-                                    fillColor: MaterialStateColor.resolveWith(
+                                    fillColor: WidgetStateColor.resolveWith(
                                         (states) => const Color(0xff6B39F4)),
                                     activeColor: const Color(0xff6B39F4),
                                     value: 2,
@@ -368,7 +368,7 @@ class _Payment_methodState extends State<Payment_method> {
                               child: Column(
                                 children: [
                                   Radio(
-                                    fillColor: MaterialStateColor.resolveWith(
+                                    fillColor: WidgetStateColor.resolveWith(
                                         (states) => const Color(0xff6B39F4)),
                                     activeColor: const Color(0xff6B39F4),
                                     value: 3,
@@ -450,7 +450,7 @@ class _Payment_methodState extends State<Payment_method> {
                               child: Column(
                                 children: [
                                   Radio(
-                                    fillColor: MaterialStateColor.resolveWith(
+                                    fillColor: WidgetStateColor.resolveWith(
                                         (states) => const Color(0xff6B39F4)),
                                     activeColor: const Color(0xff6B39F4),
                                     value: 4,

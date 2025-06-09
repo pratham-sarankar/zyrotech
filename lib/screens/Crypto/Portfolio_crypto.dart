@@ -199,8 +199,8 @@ class _Portfolio_cryptoState extends State<Portfolio_crypto> {
                                 width: 56,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(28),
-                                    color:
-                                        Colors.purpleAccent.withOpacity(0.3)),
+                                    color: Colors.purpleAccent
+                                        .withValues(alpha: 0.3)),
                                 child: Center(
                                     child: Image.asset("assets/images/Send.png",
                                         scale: 2.5)),
@@ -232,8 +232,8 @@ class _Portfolio_cryptoState extends State<Portfolio_crypto> {
                                 width: 56,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(28),
-                                    color:
-                                        Colors.purpleAccent.withOpacity(0.3)),
+                                    color: Colors.purpleAccent
+                                        .withValues(alpha: 0.3)),
                                 child: Center(
                                     child: Image.asset(
                                         "assets/images/Recieve.png",
@@ -265,7 +265,8 @@ class _Portfolio_cryptoState extends State<Portfolio_crypto> {
                                 width: 56,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(28),
-                                  color: Colors.purpleAccent.withOpacity(0.3),
+                                  color: Colors.purpleAccent
+                                      .withValues(alpha: 0.3),
                                 ),
                                 child: Center(
                                   child: Image.asset(
@@ -302,7 +303,8 @@ class _Portfolio_cryptoState extends State<Portfolio_crypto> {
                                 width: 56,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(28),
-                                  color: Colors.purpleAccent.withOpacity(0.3),
+                                  color: Colors.purpleAccent
+                                      .withValues(alpha: 0.3),
                                 ),
                                 child: Center(
                                   child: Image.asset(

@@ -190,8 +190,8 @@ class _PortfolioState extends State<Portfolio> {
                                 width: 56,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(28),
-                                    color:
-                                        Colors.purpleAccent.withOpacity(0.3)),
+                                    color: Colors.purpleAccent
+                                        .withValues(alpha: 0.3)),
                                 child: Center(
                                     child: Image.asset("assets/images/Send.png",
                                         scale: 2.5)),
@@ -223,8 +223,8 @@ class _PortfolioState extends State<Portfolio> {
                                 width: 56,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(28),
-                                    color:
-                                        Colors.purpleAccent.withOpacity(0.3)),
+                                    color: Colors.purpleAccent
+                                        .withValues(alpha: 0.3)),
                                 child: Center(
                                     child: Image.asset(
                                   "assets/images/Recieve.png",
@@ -259,8 +259,8 @@ class _PortfolioState extends State<Portfolio> {
                                 width: 56,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(28),
-                                    color:
-                                        Colors.purpleAccent.withOpacity(0.3)),
+                                    color: Colors.purpleAccent
+                                        .withValues(alpha: 0.3)),
                                 child: Center(
                                   child: Image.asset(
                                     "assets/images/buy_sell.png",
@@ -297,8 +297,8 @@ class _PortfolioState extends State<Portfolio> {
                                 width: 56,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(28),
-                                    color:
-                                        Colors.purpleAccent.withOpacity(0.3)),
+                                    color: Colors.purpleAccent
+                                        .withValues(alpha: 0.3)),
                                 child: Center(
                                   child: Image.asset(
                                     "assets/images/exchange.png",
