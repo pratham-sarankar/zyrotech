@@ -2,6 +2,7 @@
 
 // Dart imports:
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 // Flutter imports:
 import 'package:flutter/material.dart';

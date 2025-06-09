@@ -138,4 +138,19 @@ class AuthService {
       throw Exception('Failed to create PIN: \\${response.body}');
     }
   }
+
+  Future<Map<String, dynamic>> forgotPassword(String email) async {
+    final url = Uri.parse('$baseUrl/api/auth/forgot-password');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email}),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to send reset link: ${response.body}');
+    }
+  }
 }
