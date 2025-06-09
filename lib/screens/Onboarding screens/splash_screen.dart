@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Home/bottom.dart';
-import 'package:crowwn/screens/Login%20Screens/login.dart';
+import 'package:crowwn/screens/Login Screens/login.dart';
 import 'package:crowwn/screens/config/common.dart';
 import '../../Dark mode.dart';
 
@@ -35,7 +35,8 @@ class _SplashState extends State<Splash> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => isLoggedIn ? const BottomBarScreen() : const Login(),
+            builder: (context) =>
+                isLoggedIn ? const BottomBarScreen() : const Login(),
           ),
         );
       },

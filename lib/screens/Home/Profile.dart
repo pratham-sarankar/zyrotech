@@ -2,6 +2,7 @@
 // import 'package:Crowwn/Home/bottom.dart';
 
 // Flutter imports:
+import 'package:crowwn/screens/Login%20Screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -21,7 +22,6 @@ import '../Account&setting/Privacy&Policy.dart';
 import '../Account&setting/Push Notification.dart';
 import '../Account&setting/Refferal Code.dart';
 import '../Account&setting/Terms&conditions.dart';
-import '../Login Screens/login.dart';
 import '../Message & Notification/Notifications.dart';
 import '../config/common.dart';
 import 'bottom.dart';
