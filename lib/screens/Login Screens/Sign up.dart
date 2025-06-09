@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 // Project imports:
@@ -16,7 +15,7 @@ import '../../Dark mode.dart';
 import '../../services/auth_service.dart';
 import '../config/common.dart';
 import 'Email verification.dart';
-import 'login.dart';
+import 'login screen.dart';
 
 class Sign extends StatefulWidget {
   const Sign({super.key});
