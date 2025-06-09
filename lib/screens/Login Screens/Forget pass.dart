@@ -2,6 +2,8 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 // Package imports:
 import 'package:provider/provider.dart';
@@ -9,6 +11,7 @@ import 'package:provider/provider.dart';
 // Project imports:
 import '../../Dark mode.dart';
 import 'Password update.dart';
+import '../../services/auth_service.dart';
 
 class Forget extends StatefulWidget {
   const Forget({super.key});
@@ -19,113 +22,43 @@ class Forget extends StatefulWidget {
 
 class _ForgetState extends State<Forget> {
   ColorNotifire notifier = ColorNotifire();
-  bool _obscureNewPassword = true;
-  bool _obscureConfirmPassword = true;
   bool _isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
-  final _newPasswordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _confirmPasswordFocusNode = FocusNode();
+  final _emailController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _confirmPasswordFocusNode.addListener(_handleConfirmPasswordFocusChange);
-  }
+  final AuthService _authService = AuthService();
 
-  void _handleConfirmPasswordFocusChange() {
-    if (!_confirmPasswordFocusNode.hasFocus) {
-      if (_confirmPasswordController.text.isNotEmpty &&
-          _newPasswordController.text.isNotEmpty &&
-          _confirmPasswordController.text == _newPasswordController.text) {
-        FocusScope.of(context).unfocus();
-      }
-    }
-  }
-
-  void _checkAndDismissKeyboard(String value) {
-    if (value.isNotEmpty &&
-        _newPasswordController.text.isNotEmpty &&
-        value == _newPasswordController.text) {
-      FocusScope.of(context).unfocus();
-    }
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Password is required';
-    }
-    if (value.length < 8) {
-      return 'Password must be at least 8 characters';
-    }
-    if (!value.contains(RegExp(r'[A-Z]'))) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!value.contains(RegExp(r'[0-9]'))) {
-      return 'Password must contain at least one number';
-    }
-    if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-      return 'Password must contain at least one special character';
-    }
-    return null;
-  }
-
-  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please confirm your password';
-    }
-    if (value != _newPasswordController.text) {
-      return 'Passwords do not match';
-    }
-    return null;
-  }
-
-  Future<void> _resetPassword() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
+  Future<void> _sendForgotPasswordRequest(String email) async {
     setState(() {
       _isLoading = true;
     });
 
     try {
-      // TODO: Implement actual password reset logic here
-      await Future.delayed(const Duration(seconds: 2)); // Simulated API call
-
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Password(),
-          ),
-        );
-      }
+      final response = await _authService.forgotPassword(email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response['message']),
+          backgroundColor: Colors.green,
+        ),
+      );
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error resetting password: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to send reset link: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
     } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   @override
   void dispose() {
-    _newPasswordController.dispose();
-    _confirmPasswordController.dispose();
-    _confirmPasswordFocusNode.removeListener(_handleConfirmPasswordFocusChange);
-    _confirmPasswordFocusNode.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -155,7 +88,7 @@ class _ForgetState extends State<Forget> {
               children: [
                 SizedBox(height: height * 0.05),
                 Text(
-                  "Create New Password",
+                  "Forgot Password",
                   style: TextStyle(
                     fontSize: 27,
                     fontFamily: "Manrope-SemiBold",
@@ -164,7 +97,7 @@ class _ForgetState extends State<Forget> {
                 ),
                 SizedBox(height: height * 0.02),
                 Text(
-                  "Your new password must be different from \nprevious password.",
+                  "Enter your email to receive a password reset link.",
                   style: const TextStyle(
                     fontSize: 16,
                     color: Color(0xff64748B),
@@ -172,76 +105,32 @@ class _ForgetState extends State<Forget> {
                   ),
                 ),
                 SizedBox(height: height * 0.02),
-                Container(
-                  height: height / 13,
-                  decoration: BoxDecoration(
-                    color: notifier.textField,
-                    borderRadius: BorderRadius.circular(15),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    hintText: "Email",
+                    border: const OutlineInputBorder(borderSide: BorderSide.none),
+                    hintStyle: TextStyle(color: notifier.textFieldHintText),
                   ),
-                  child: TextFormField(
-                    controller: _newPasswordController,
-                    style: TextStyle(color: notifier.textColor),
-                    obscureText: _obscureNewPassword,
-                    validator: _validatePassword,
-                    decoration: InputDecoration(
-                      hintText: "New Password",
-                      border:
-                          const OutlineInputBorder(borderSide: BorderSide.none),
-                      hintStyle: TextStyle(color: notifier.textFieldHintText),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _obscureNewPassword = !_obscureNewPassword;
-                          });
-                        },
-                        icon: Icon(
-                          _obscureNewPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: notifier.textColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: height * 0.01),
-                Container(
-                  height: height / 13,
-                  decoration: BoxDecoration(
-                    color: notifier.textField,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: TextFormField(
-                    controller: _confirmPasswordController,
-                    focusNode: _confirmPasswordFocusNode,
-                    style: TextStyle(color: notifier.textColor),
-                    obscureText: _obscureConfirmPassword,
-                    validator: _validateConfirmPassword,
-                    onChanged: _checkAndDismissKeyboard,
-                    decoration: InputDecoration(
-                      hintText: "Confirm Password",
-                      border:
-                          const OutlineInputBorder(borderSide: BorderSide.none),
-                      hintStyle: TextStyle(color: notifier.textFieldHintText),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _obscureConfirmPassword = !_obscureConfirmPassword;
-                          });
-                        },
-                        icon: Icon(
-                          _obscureConfirmPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: notifier.textColor,
-                        ),
-                      ),
-                    ),
-                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Email is required';
+                    }
+                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      return 'Enter a valid email';
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(height: height * 0.02),
                 GestureDetector(
-                  onTap: _isLoading ? null : _resetPassword,
+                  onTap: _isLoading
+                      ? null
+                      : () {
+                          if (_formKey.currentState!.validate()) {
+                            _sendForgotPasswordRequest(_emailController.text);
+                          }
+                        },
                   child: Container(
                     height: height / 12,
                     decoration: BoxDecoration(
@@ -252,7 +141,7 @@ class _ForgetState extends State<Forget> {
                       child: _isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
-                              "Reset Password",
+                              "Send Reset Link",
                               style: TextStyle(
                                 color: Color(0xffFFFFFF),
                                 fontSize: 15,
