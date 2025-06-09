@@ -161,7 +161,7 @@ class _PushNotificationState extends State<PushNotification> {
               ),
               const Spacer(),
               CupertinoSwitch(
-                activeColor: const Color(0xff6B39F4),
+                activeTrackColor: const Color(0xff6B39F4),
                 thumbColor: Colors.white,
                 value: isSwitch,
                 onChanged: (value) {

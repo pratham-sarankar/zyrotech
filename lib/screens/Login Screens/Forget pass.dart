@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import '../../Dark mode.dart';
-import '../config/common.dart';
 import 'Password update.dart';
 
 class Forget extends StatefulWidget {

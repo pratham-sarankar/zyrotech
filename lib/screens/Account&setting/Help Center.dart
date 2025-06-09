@@ -108,7 +108,7 @@ class _Help_CenterState extends State<Help_Center> {
                   Container(
                     height: height / 8,
                     decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(15)),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 15, top: 30),
@@ -185,7 +185,7 @@ class _Help_CenterState extends State<Help_Center> {
                                 width: 40,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: Colors.blue.withOpacity(0.1)),
+                                    color: Colors.blue.withValues(alpha: 0.1)),
                                 child: const Image(
                                     image:
                                         AssetImage("assets/images/Discord.png"),
@@ -255,7 +255,7 @@ class _Help_CenterState extends State<Help_Center> {
                                 width: 40,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: Colors.blue.withOpacity(0.1)),
+                                    color: Colors.blue.withValues(alpha: 0.1)),
                                 child: const Image(
                                     image: AssetImage(
                                         "assets/images/Telegram.png"),

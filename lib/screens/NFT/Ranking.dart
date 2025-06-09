@@ -207,12 +207,12 @@ class _rankingsState extends State<rankings> {
                                               const Spacer(),
                                               Checkbox(
                                                 fillColor:
-                                                    const MaterialStatePropertyAll(
+                                                    const WidgetStatePropertyAll(
                                                   Colors.transparent,
                                                 ),
                                                 checkColor:
                                                     const Color(0xff6B39F4),
-                                                side: MaterialStateBorderSide
+                                                side: WidgetStateBorderSide
                                                     .resolveWith(
                                                   (states) => const BorderSide(
                                                     width: 1.0,
@@ -251,11 +251,11 @@ class _rankingsState extends State<rankings> {
                                               const Spacer(),
                                               Checkbox(
                                                 fillColor:
-                                                    const MaterialStatePropertyAll(
+                                                    const WidgetStatePropertyAll(
                                                         Colors.transparent),
                                                 checkColor:
                                                     const Color(0xff6B39F4),
-                                                side: MaterialStateBorderSide
+                                                side: WidgetStateBorderSide
                                                     .resolveWith(
                                                   (states) => const BorderSide(
                                                     width: 1.0,
@@ -292,12 +292,12 @@ class _rankingsState extends State<rankings> {
                                               const Spacer(),
                                               Checkbox(
                                                 fillColor:
-                                                    const MaterialStatePropertyAll(
+                                                    const WidgetStatePropertyAll(
                                                   Colors.transparent,
                                                 ),
                                                 checkColor:
                                                     const Color(0xff6B39F4),
-                                                side: MaterialStateBorderSide
+                                                side: WidgetStateBorderSide
                                                     .resolveWith(
                                                   (states) => const BorderSide(
                                                     width: 1.0,
@@ -334,12 +334,12 @@ class _rankingsState extends State<rankings> {
                                               const Spacer(),
                                               Checkbox(
                                                 fillColor:
-                                                    const MaterialStatePropertyAll(
+                                                    const WidgetStatePropertyAll(
                                                   Colors.transparent,
                                                 ),
                                                 checkColor:
                                                     const Color(0xff6B39F4),
-                                                side: MaterialStateBorderSide
+                                                side: WidgetStateBorderSide
                                                     .resolveWith(
                                                   (states) => const BorderSide(
                                                     width: 1.0,
@@ -376,12 +376,12 @@ class _rankingsState extends State<rankings> {
                                               const Spacer(),
                                               Checkbox(
                                                 fillColor:
-                                                    const MaterialStatePropertyAll(
+                                                    const WidgetStatePropertyAll(
                                                   Colors.transparent,
                                                 ),
                                                 checkColor:
                                                     const Color(0xff6B39F4),
-                                                side: MaterialStateBorderSide
+                                                side: WidgetStateBorderSide
                                                     .resolveWith(
                                                   (states) => const BorderSide(
                                                     width: 1.0,
@@ -418,12 +418,12 @@ class _rankingsState extends State<rankings> {
                                               const Spacer(),
                                               Checkbox(
                                                 fillColor:
-                                                    const MaterialStatePropertyAll(
+                                                    const WidgetStatePropertyAll(
                                                   Colors.transparent,
                                                 ),
                                                 checkColor:
                                                     const Color(0xff6B39F4),
-                                                side: MaterialStateBorderSide
+                                                side: WidgetStateBorderSide
                                                     .resolveWith(
                                                   (states) => const BorderSide(
                                                     width: 1.0,
@@ -459,11 +459,11 @@ class _rankingsState extends State<rankings> {
                                               const Spacer(),
                                               Checkbox(
                                                 fillColor:
-                                                    const MaterialStatePropertyAll(
+                                                    const WidgetStatePropertyAll(
                                                         Colors.transparent),
                                                 checkColor:
                                                     const Color(0xff6B39F4),
-                                                side: MaterialStateBorderSide
+                                                side: WidgetStateBorderSide
                                                     .resolveWith(
                                                   (states) => const BorderSide(
                                                       width: 1.0,
@@ -499,11 +499,11 @@ class _rankingsState extends State<rankings> {
                                               const Spacer(),
                                               Checkbox(
                                                 fillColor:
-                                                    const MaterialStatePropertyAll(
+                                                    const WidgetStatePropertyAll(
                                                         Colors.transparent),
                                                 checkColor:
                                                     const Color(0xff6B39F4),
-                                                side: MaterialStateBorderSide
+                                                side: WidgetStateBorderSide
                                                     .resolveWith(
                                                   (states) => const BorderSide(
                                                       width: 1.0,

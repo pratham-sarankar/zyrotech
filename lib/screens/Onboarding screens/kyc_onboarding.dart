@@ -9,7 +9,6 @@ import 'package:crowwn/screens/Home/bottom.dart';
 import 'package:crowwn/screens/Login%20Screens/Create%20pin.dart';
 import '../../Dark mode.dart';
 import '../Login Screens/Select reason.dart';
-import '../Login Screens/login.dart';
 import '../config/common.dart';
 
 class KYCOnboarding extends StatefulWidget {
@@ -101,10 +100,10 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
             child: OutlinedButton(
               onPressed: _skipKYC,
               style: ButtonStyle(
-                side: MaterialStatePropertyAll(
+                side: WidgetStatePropertyAll(
                   BorderSide(color: notifier.outlinedButtonColor),
                 ),
-                padding: const MaterialStatePropertyAll(
+                padding: const WidgetStatePropertyAll(
                   EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 ),
               ),
@@ -338,7 +337,7 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
           color: const Color(0xff6B39F4),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xff6B39F4).withOpacity(0.3),
+              color: const Color(0xff6B39F4).withValues(alpha: 0.3),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -679,7 +678,7 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
           color: const Color(0xff6B39F4),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xff6B39F4).withOpacity(0.3),
+              color: const Color(0xff6B39F4).withValues(alpha: 0.3),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),

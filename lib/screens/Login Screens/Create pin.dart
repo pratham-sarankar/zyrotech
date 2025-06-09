@@ -16,7 +16,6 @@ import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
 import '../../Dark mode.dart';
 import '../../services/auth_service.dart';
 import '../config/common.dart';
-import 'Proof residency.dart';
 
 class Pin extends StatefulWidget {
   const Pin({super.key});
@@ -108,7 +107,7 @@ class _PinState extends State<Pin> {
                 builder: (context, value, child) {
                   return OTPTextField(
                       otpFieldStyle: OtpFieldStyle(
-                        backgroundColor: Colors.grey.withOpacity(0.3),
+                        backgroundColor: Colors.grey.withValues(alpha: 0.3),
                       ),
                       controller: otpController,
                       length: 6,
@@ -170,7 +169,7 @@ class _PinState extends State<Pin> {
                 height: height / 14,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.grey.withValues(alpha: 0.2),
                 ),
                 child: const Center(
                   child: Text(

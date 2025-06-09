@@ -159,7 +159,7 @@ class _LoanState extends State<Loan> {
                             border: Border.all(
                                 color: selectIndex == 0
                                     ? const Color(0xff6b39f4)
-                                    : Colors.blue.withOpacity(0.1))),
+                                    : Colors.blue.withValues(alpha: 0.1))),
                         child: Center(
                             child: Text("3 months",
                                 style: TextStyle(
@@ -188,7 +188,7 @@ class _LoanState extends State<Loan> {
                             border: Border.all(
                                 color: selectIndex == 1
                                     ? const Color(0xff6b39f4)
-                                    : Colors.blue.withOpacity(0.1))),
+                                    : Colors.blue.withValues(alpha: 0.1))),
                         child: Center(
                             child: Text("6 months",
                                 style: TextStyle(
@@ -217,7 +217,7 @@ class _LoanState extends State<Loan> {
                             border: Border.all(
                                 color: selectIndex == 2
                                     ? const Color(0xff6b39f4)
-                                    : Colors.blue.withOpacity(0.1))),
+                                    : Colors.blue.withValues(alpha: 0.1))),
                         child: Center(
                             child: Text("9 months",
                                 style: TextStyle(
@@ -246,7 +246,7 @@ class _LoanState extends State<Loan> {
                             border: Border.all(
                                 color: selectIndex == 3
                                     ? const Color(0xff6b39f4)
-                                    : Colors.blue.withOpacity(0.1))),
+                                    : Colors.blue.withValues(alpha: 0.1))),
                         child: Center(
                             child: Text("12 months",
                                 style: TextStyle(
@@ -275,7 +275,7 @@ class _LoanState extends State<Loan> {
                             border: Border.all(
                                 color: selectIndex == 4
                                     ? const Color(0xff6b39f4)
-                                    : Colors.blue.withOpacity(0.1))),
+                                    : Colors.blue.withValues(alpha: 0.1))),
                         child: Center(
                             child: Text("16 months",
                                 style: TextStyle(
@@ -304,7 +304,7 @@ class _LoanState extends State<Loan> {
                             border: Border.all(
                                 color: selectIndex == 5
                                     ? const Color(0xff6b39f4)
-                                    : Colors.blue.withOpacity(0.1))),
+                                    : Colors.blue.withValues(alpha: 0.1))),
                         child: Center(
                             child: Text("24 months",
                                 style: TextStyle(

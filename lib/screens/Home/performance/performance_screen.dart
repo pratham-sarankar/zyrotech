@@ -79,20 +79,21 @@ class _PerformanceScreenState extends State<PerformanceScreen>
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: notifier.container.withOpacity(0.5),
+              color: notifier.container.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+              border:
+                  Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
             ),
             child: TabBar(
               controller: _tabController,
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: const Color(0xff6B39F4).withOpacity(0.1),
-                border:
-                    Border.all(color: const Color(0xff6B39F4).withOpacity(0.3)),
+                color: const Color(0xff6B39F4).withValues(alpha: 0.1),
+                border: Border.all(
+                    color: const Color(0xff6B39F4).withValues(alpha: 0.3)),
               ),
               labelColor: const Color(0xff6B39F4),
-              unselectedLabelColor: notifier.textColor.withOpacity(0.7),
+              unselectedLabelColor: notifier.textColor.withValues(alpha: 0.7),
               labelStyle: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -157,9 +158,9 @@ class _PerformanceScreenState extends State<PerformanceScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: notifier.container.withOpacity(0.5),
+        color: notifier.container.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+        border: Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,7 +197,7 @@ class _PerformanceScreenState extends State<PerformanceScreen>
         Text(
           label,
           style: TextStyle(
-            color: notifier.textColor.withOpacity(0.7),
+            color: notifier.textColor.withValues(alpha: 0.7),
             fontSize: 12,
           ),
         ),
@@ -239,9 +240,9 @@ class _PerformanceScreenState extends State<PerformanceScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: notifier.container.withOpacity(0.5),
+        color: notifier.container.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+        border: Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,23 +285,23 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                 maximum: maxX,
                 majorGridLines: MajorGridLines(
                   width: 0.5,
-                  color: notifier.textColor.withOpacity(0.05),
+                  color: notifier.textColor.withValues(alpha: 0.05),
                 ),
                 minorGridLines: MinorGridLines(
                   width: 0,
                   color: Colors.transparent,
                 ),
                 labelStyle: TextStyle(
-                  color: notifier.textColor.withOpacity(0.7),
+                  color: notifier.textColor.withValues(alpha: 0.7),
                   fontSize: 12,
                 ),
                 axisLine: AxisLine(
                   width: 1,
-                  color: notifier.textColor.withOpacity(0.1),
+                  color: notifier.textColor.withValues(alpha: 0.1),
                 ),
                 majorTickLines: MajorTickLines(
                   size: 5,
-                  color: notifier.textColor.withOpacity(0.1),
+                  color: notifier.textColor.withValues(alpha: 0.1),
                 ),
                 interval: initialVisibleRange / 8,
                 desiredIntervals: 8,
@@ -311,23 +312,23 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                 maximum: maxY + yPadding,
                 majorGridLines: MajorGridLines(
                   width: 0.5,
-                  color: notifier.textColor.withOpacity(0.05),
+                  color: notifier.textColor.withValues(alpha: 0.05),
                 ),
                 minorGridLines: MinorGridLines(
                   width: 0,
                   color: Colors.transparent,
                 ),
                 labelStyle: TextStyle(
-                  color: notifier.textColor.withOpacity(0.7),
+                  color: notifier.textColor.withValues(alpha: 0.7),
                   fontSize: 12,
                 ),
                 axisLine: AxisLine(
                   width: 1,
-                  color: notifier.textColor.withOpacity(0.1),
+                  color: notifier.textColor.withValues(alpha: 0.1),
                 ),
                 majorTickLines: MajorTickLines(
                   size: 5,
-                  color: notifier.textColor.withOpacity(0.1),
+                  color: notifier.textColor.withValues(alpha: 0.1),
                 ),
                 numberFormat: NumberFormat.compactCurrency(
                   symbol: '\$',
@@ -349,7 +350,8 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                 enableSelectionZooming: true,
                 selectionRectBorderColor: const Color(0xff6B39F4),
                 selectionRectBorderWidth: 1,
-                selectionRectColor: const Color(0xff6B39F4).withOpacity(0.1),
+                selectionRectColor:
+                    const Color(0xff6B39F4).withValues(alpha: 0.1),
               ),
               tooltipBehavior: TooltipBehavior(
                 enable: true,
@@ -361,7 +363,7 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                       color: notifier.container,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: notifier.textColor.withOpacity(0.1),
+                        color: notifier.textColor.withValues(alpha: 0.1),
                       ),
                     ),
                     child: Text(
@@ -392,8 +394,8 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                     ),
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xff6B39F4).withOpacity(0.2),
-                        const Color(0xff6B39F4).withOpacity(0.0),
+                        const Color(0xff6B39F4).withValues(alpha: 0.2),
+                        const Color(0xff6B39F4).withValues(alpha: 0.0),
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -436,13 +438,13 @@ class _PerformanceScreenState extends State<PerformanceScreen>
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: isSelected
-            ? const Color(0xff6B39F4).withOpacity(0.1)
+            ? const Color(0xff6B39F4).withValues(alpha: 0.1)
             : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isSelected
               ? const Color(0xff6B39F4)
-              : notifier.textColor.withOpacity(0.1),
+              : notifier.textColor.withValues(alpha: 0.1),
         ),
       ),
       child: Text(
@@ -450,7 +452,7 @@ class _PerformanceScreenState extends State<PerformanceScreen>
         style: TextStyle(
           color: isSelected
               ? const Color(0xff6B39F4)
-              : notifier.textColor.withOpacity(0.7),
+              : notifier.textColor.withValues(alpha: 0.7),
           fontSize: 12,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
         ),
@@ -516,13 +518,13 @@ class _PerformanceScreenState extends State<PerformanceScreen>
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: isSelected
-            ? const Color(0xff6B39F4).withOpacity(0.1)
+            ? const Color(0xff6B39F4).withValues(alpha: 0.1)
             : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isSelected
               ? const Color(0xff6B39F4)
-              : notifier.textColor.withOpacity(0.1),
+              : notifier.textColor.withValues(alpha: 0.1),
         ),
       ),
       child: Text(
@@ -530,7 +532,7 @@ class _PerformanceScreenState extends State<PerformanceScreen>
         style: TextStyle(
           color: isSelected
               ? const Color(0xff6B39F4)
-              : notifier.textColor.withOpacity(0.7),
+              : notifier.textColor.withValues(alpha: 0.7),
           fontSize: 12,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
         ),
@@ -545,19 +547,20 @@ class _PerformanceScreenState extends State<PerformanceScreen>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: notifier.container.withOpacity(0.5),
+              color: notifier.container.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+              border:
+                  Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
             ),
             child: Row(
               children: [
                 Icon(Icons.filter_list,
-                    size: 16, color: notifier.textColor.withOpacity(0.7)),
+                    size: 16, color: notifier.textColor.withValues(alpha: 0.7)),
                 const SizedBox(width: 8),
                 Text(
                   'Filter Signals',
                   style: TextStyle(
-                    color: notifier.textColor.withOpacity(0.7),
+                    color: notifier.textColor.withValues(alpha: 0.7),
                     fontSize: 12,
                   ),
                 ),
@@ -569,11 +572,13 @@ class _PerformanceScreenState extends State<PerformanceScreen>
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: notifier.container.withOpacity(0.5),
+            color: notifier.container.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+            border:
+                Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
           ),
-          child: Icon(Icons.sort, color: notifier.textColor.withOpacity(0.7)),
+          child: Icon(Icons.sort,
+              color: notifier.textColor.withValues(alpha: 0.7)),
         ),
       ],
     );
@@ -622,9 +627,9 @@ class _PerformanceScreenState extends State<PerformanceScreen>
       height: 300,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: notifier.container.withOpacity(0.5),
+        color: notifier.container.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+        border: Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -670,23 +675,23 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                 maximum: maxX,
                 majorGridLines: MajorGridLines(
                   width: 0.5,
-                  color: notifier.textColor.withOpacity(0.05),
+                  color: notifier.textColor.withValues(alpha: 0.05),
                 ),
                 minorGridLines: MinorGridLines(
                   width: 0,
                   color: Colors.transparent,
                 ),
                 labelStyle: TextStyle(
-                  color: notifier.textColor.withOpacity(0.7),
+                  color: notifier.textColor.withValues(alpha: 0.7),
                   fontSize: 12,
                 ),
                 axisLine: AxisLine(
                   width: 1,
-                  color: notifier.textColor.withOpacity(0.1),
+                  color: notifier.textColor.withValues(alpha: 0.1),
                 ),
                 majorTickLines: MajorTickLines(
                   size: 5,
-                  color: notifier.textColor.withOpacity(0.1),
+                  color: notifier.textColor.withValues(alpha: 0.1),
                 ),
                 interval: initialVisibleRange / 8,
                 desiredIntervals: 8,
@@ -697,23 +702,23 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                 maximum: maxY + yPadding,
                 majorGridLines: MajorGridLines(
                   width: 0.5,
-                  color: notifier.textColor.withOpacity(0.05),
+                  color: notifier.textColor.withValues(alpha: 0.05),
                 ),
                 minorGridLines: MinorGridLines(
                   width: 0,
                   color: Colors.transparent,
                 ),
                 labelStyle: TextStyle(
-                  color: notifier.textColor.withOpacity(0.7),
+                  color: notifier.textColor.withValues(alpha: 0.7),
                   fontSize: 12,
                 ),
                 axisLine: AxisLine(
                   width: 1,
-                  color: notifier.textColor.withOpacity(0.1),
+                  color: notifier.textColor.withValues(alpha: 0.1),
                 ),
                 majorTickLines: MajorTickLines(
                   size: 5,
-                  color: notifier.textColor.withOpacity(0.1),
+                  color: notifier.textColor.withValues(alpha: 0.1),
                 ),
                 numberFormat: NumberFormat.compactCurrency(
                   symbol: '\$',
@@ -735,7 +740,8 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                 enableSelectionZooming: true,
                 selectionRectBorderColor: const Color(0xff6B39F4),
                 selectionRectBorderWidth: 1,
-                selectionRectColor: const Color(0xff6B39F4).withOpacity(0.1),
+                selectionRectColor:
+                    const Color(0xff6B39F4).withValues(alpha: 0.1),
               ),
               tooltipBehavior: TooltipBehavior(
                 enable: true,
@@ -747,7 +753,7 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                       color: notifier.container,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: notifier.textColor.withOpacity(0.1),
+                        color: notifier.textColor.withValues(alpha: 0.1),
                       ),
                     ),
                     child: Text(
@@ -784,7 +790,7 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                                   color: (trade.type == TradeType.open
                                           ? Colors.green
                                           : Colors.red)
-                                      .withOpacity(0.3),
+                                      .withValues(alpha: 0.3),
                                   blurRadius: 4,
                                   spreadRadius: 1,
                                 ),
@@ -810,8 +816,8 @@ class _PerformanceScreenState extends State<PerformanceScreen>
                   ),
                   gradient: LinearGradient(
                     colors: [
-                      const Color(0xff6B39F4).withOpacity(0.2),
-                      const Color(0xff6B39F4).withOpacity(0.0),
+                      const Color(0xff6B39F4).withValues(alpha: 0.2),
+                      const Color(0xff6B39F4).withValues(alpha: 0.0),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -840,7 +846,7 @@ class _PerformanceScreenState extends State<PerformanceScreen>
         Container(
           padding: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Icon(icon, color: color, size: 16),
@@ -849,7 +855,7 @@ class _PerformanceScreenState extends State<PerformanceScreen>
         Text(
           label,
           style: TextStyle(
-            color: notifier.textColor.withOpacity(0.7),
+            color: notifier.textColor.withValues(alpha: 0.7),
             fontSize: 12,
           ),
         ),
@@ -861,9 +867,9 @@ class _PerformanceScreenState extends State<PerformanceScreen>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.orange.withOpacity(0.1),
+        color: Colors.orange.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.orange.withOpacity(0.3)),
+        border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

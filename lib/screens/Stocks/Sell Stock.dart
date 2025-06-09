@@ -175,7 +175,7 @@ class _Sell_stockState extends State<Sell_stock> {
                       borderRadius: BorderRadius.circular(10),
                       color: index4 == 0
                           ? const Color(0xff6B39F4)
-                          : Colors.grey.withOpacity(0.1),
+                          : Colors.grey.withValues(alpha: 0.1),
                     ),
                     child: Center(
                       child: Text(
@@ -203,7 +203,7 @@ class _Sell_stockState extends State<Sell_stock> {
                       borderRadius: BorderRadius.circular(10),
                       color: index4 == 1
                           ? const Color(0xff6B39F4)
-                          : Colors.grey.withOpacity(0.1),
+                          : Colors.grey.withValues(alpha: 0.1),
                     ),
                     child: Center(
                       child: Text(
@@ -231,7 +231,7 @@ class _Sell_stockState extends State<Sell_stock> {
                       borderRadius: BorderRadius.circular(10),
                       color: index4 == 2
                           ? const Color(0xff6B39F4)
-                          : Colors.grey.withOpacity(0.1),
+                          : Colors.grey.withValues(alpha: 0.1),
                     ),
                     child: Center(
                       child: Text(
@@ -259,7 +259,7 @@ class _Sell_stockState extends State<Sell_stock> {
                       borderRadius: BorderRadius.circular(10),
                       color: index4 == 3
                           ? const Color(0xff6B39F4)
-                          : Colors.grey.withOpacity(0.1),
+                          : Colors.grey.withValues(alpha: 0.1),
                     ),
                     child: Center(
                       child: Text(

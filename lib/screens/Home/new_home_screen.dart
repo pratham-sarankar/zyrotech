@@ -27,7 +27,7 @@ class LineChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final fillPaint = Paint()
-      ..color = color.withOpacity(0.1)
+      ..color = color.withValues(alpha: 0.1)
       ..style = PaintingStyle.fill;
 
     final path = Path();
@@ -201,7 +201,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                              color: notifier.textColor.withOpacity(0.1),
+                              color: notifier.textColor.withValues(alpha: 0.1),
                               width: 2),
                         ),
                         child: Image.asset("assets/images/144.png",
@@ -237,9 +237,9 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                   //     Container(
                   //       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   //       decoration: BoxDecoration(
-                  //         color: notifier.container.withOpacity(0.5),
+                  //         color: notifier.container.withValues(alpha:0.5),
                   //         borderRadius: BorderRadius.circular(12),
-                  //         border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+                  //         border: Border.all(color: notifier.textColor.withValues(alpha:0.1)),
                   //       ),
                   //       child: GestureDetector(
                   //         onTap: _showExchangeBottomSheet,
@@ -249,13 +249,13 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                   //             Icon(
                   //               Icons.account_balance,
                   //               size: 16,
-                  //               color: notifier.textColor.withOpacity(0.7),
+                  //               color: notifier.textColor.withValues(alpha:0.7),
                   //             ),
                   //             const SizedBox(width: 8),
                   //             Text(
                   //               "Exchange: $selectedExchange",
                   //               style: TextStyle(
-                  //                 color: notifier.textColor.withOpacity(0.7),
+                  //                 color: notifier.textColor.withValues(alpha:0.7),
                   //                 fontSize: 13,
                   //                 fontWeight: FontWeight.w500,
                   //                 height: 1.2,
@@ -265,7 +265,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                   //             Icon(
                   //               Icons.keyboard_arrow_down,
                   //               size: 16,
-                  //               color: notifier.textColor.withOpacity(0.7),
+                  //               color: notifier.textColor.withValues(alpha:0.7),
                   //             ),
                   //           ],
                   //         ),
@@ -297,7 +297,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                   //       child: Text(
                   //         "Today's PnL",
                   //         style: TextStyle(
-                  //           color: notifier.textColor.withOpacity(0.7),
+                  //           color: notifier.textColor.withValues(alpha:0.7),
                   //           fontSize: 14,
                   //           fontWeight: FontWeight.w500,
                   //         ),
@@ -311,17 +311,17 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                   // Container(
                   //   padding: const EdgeInsets.all(16),
                   //   decoration: BoxDecoration(
-                  //     color: notifier.container.withOpacity(0.5),
+                  //     color: notifier.container.withValues(alpha:0.5),
                   //     borderRadius: BorderRadius.circular(16),
                   //     border: Border.all(
-                  //         color: notifier.textColor.withOpacity(0.1)),
+                  //         color: notifier.textColor.withValues(alpha:0.1)),
                   //   ),
                   //   child: Row(
                   //     children: [
                   //       Container(
                   //         padding: const EdgeInsets.all(8),
                   //         decoration: BoxDecoration(
-                  //           color: notifier.textColor.withOpacity(0.1),
+                  //           color: notifier.textColor.withValues(alpha:0.1),
                   //           borderRadius: BorderRadius.circular(12),
                   //         ),
                   //         child: Icon(Icons.account_balance,
@@ -345,7 +345,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                   //             Text(
                   //               "Connected Broker",
                   //               style: TextStyle(
-                  //                 color: notifier.textColor.withOpacity(0.7),
+                  //                 color: notifier.textColor.withValues(alpha:0.7),
                   //                 fontSize: 12,
                   //               ),
                   //             ),
@@ -356,7 +356,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                   //         padding: const EdgeInsets.symmetric(
                   //             horizontal: 12, vertical: 6),
                   //         decoration: BoxDecoration(
-                  //           color: Colors.green.withOpacity(0.1),
+                  //           color: Colors.green.withValues(alpha:0.1),
                   //           borderRadius: BorderRadius.circular(20),
                   //         ),
                   //         child: Row(
@@ -462,10 +462,11 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 4, vertical: 4),
                           decoration: BoxDecoration(
-                            color: notifier.container.withOpacity(0.3),
+                            color: notifier.container.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                                color: notifier.textColor.withOpacity(0.1)),
+                                color:
+                                    notifier.textColor.withValues(alpha: 0.1)),
                           ),
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -540,10 +541,10 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: notifier.container.withOpacity(0.5),
+          color: notifier.container.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: notifier.textColor.withOpacity(0.1),
+            color: notifier.textColor.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -564,11 +565,12 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xff6B39F4).withOpacity(0.1)
+              ? const Color(0xff6B39F4).withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: isSelected
-              ? Border.all(color: const Color(0xff6B39F4).withOpacity(0.3))
+              ? Border.all(
+                  color: const Color(0xff6B39F4).withValues(alpha: 0.3))
               : null,
         ),
         child: Row(
@@ -579,7 +581,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
               size: 14,
               color: isSelected
                   ? const Color(0xff6B39F4)
-                  : notifier.textColor.withOpacity(0.7),
+                  : notifier.textColor.withValues(alpha: 0.7),
             ),
             const SizedBox(width: 6),
             Text(
@@ -587,7 +589,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
               style: TextStyle(
                 color: isSelected
                     ? const Color(0xff6B39F4)
-                    : notifier.textColor.withOpacity(0.7),
+                    : notifier.textColor.withValues(alpha: 0.7),
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               ),
@@ -624,7 +626,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -646,7 +648,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.1),
+                        color: color.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child:
@@ -669,7 +671,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                           Text(
                             ticker,
                             style: TextStyle(
-                              color: notifier.textColor.withOpacity(0.7),
+                              color: notifier.textColor.withValues(alpha: 0.7),
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                             ),
@@ -685,7 +687,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                 Container(
                   height: 60,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.05),
+                    color: color.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: CustomPaint(
@@ -725,7 +727,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                           color: (change.startsWith('▲')
                                   ? Colors.green
                                   : Colors.red)
-                              .withOpacity(0.1),
+                              .withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Row(
@@ -799,10 +801,10 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
         decoration: BoxDecoration(
           color: notifier.container,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+          border: Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 5,
               offset: const Offset(0, 4),
             ),
@@ -819,7 +821,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: notifier.textColor.withOpacity(0.1),
+                      color: notifier.textColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(Icons.show_chart,
@@ -848,13 +850,15 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 4, vertical: 2),
                               decoration: BoxDecoration(
-                                color: notifier.textColor.withOpacity(0.1),
+                                color:
+                                    notifier.textColor.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
                                 strategyType,
                                 style: TextStyle(
-                                  color: notifier.textColor.withOpacity(0.7),
+                                  color:
+                                      notifier.textColor.withValues(alpha: 0.7),
                                   fontSize: 9,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -866,7 +870,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                         Text(
                           winRate,
                           style: TextStyle(
-                            color: notifier.textColor.withOpacity(0.7),
+                            color: notifier.textColor.withValues(alpha: 0.7),
                             fontSize: 12,
                           ),
                         ),
@@ -878,7 +882,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                     decoration: BoxDecoration(
-                      color: pnlColor.withOpacity(0.1),
+                      color: pnlColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -903,7 +907,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: pnlColor.withOpacity(0.1),
+                      color: pnlColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -941,18 +945,19 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: notifier.textColor.withOpacity(0.05),
+        color: notifier.textColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: notifier.textColor.withOpacity(0.7)),
+          Icon(icon,
+              size: 14, color: notifier.textColor.withValues(alpha: 0.7)),
           const SizedBox(width: 4),
           Text(
             text,
             style: TextStyle(
-              color: notifier.textColor.withOpacity(0.7),
+              color: notifier.textColor.withValues(alpha: 0.7),
               fontSize: 11,
               fontWeight: FontWeight.w500,
             ),
@@ -966,18 +971,19 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: notifier.textColor.withOpacity(0.05),
+        color: notifier.textColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: notifier.textColor.withOpacity(0.7)),
+          Icon(icon,
+              size: 14, color: notifier.textColor.withValues(alpha: 0.7)),
           const SizedBox(width: 4),
           Text(
             text,
             style: TextStyle(
-              color: notifier.textColor.withOpacity(0.7),
+              color: notifier.textColor.withValues(alpha: 0.7),
               fontSize: 11,
               fontWeight: FontWeight.w500,
             ),
@@ -1034,13 +1040,13 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: isSelected
-              ? const Color(0xff6B39F4).withOpacity(0.1)
-              : notifier.container.withOpacity(0.5),
+              ? const Color(0xff6B39F4).withValues(alpha: 0.1)
+              : notifier.container.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
-                ? const Color(0xff6B39F4).withOpacity(0.3)
-                : notifier.textColor.withOpacity(0.1),
+                ? const Color(0xff6B39F4).withValues(alpha: 0.3)
+                : notifier.textColor.withValues(alpha: 0.1),
           ),
         ),
         child: Row(
@@ -1050,7 +1056,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
               size: 20,
               color: isSelected
                   ? const Color(0xff6B39F4)
-                  : notifier.textColor.withOpacity(0.7),
+                  : notifier.textColor.withValues(alpha: 0.7),
             ),
             const SizedBox(width: 12),
             Text(

@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:crowwn/models/bot.dart';
 import 'package:crowwn/models/signal.dart';
-import 'package:crowwn/screens/Home/performance/performance_screen.dart';
 import '../../Dark mode.dart';
 
 class MySignals extends StatefulWidget {
@@ -51,7 +50,7 @@ class _MySignalsState extends State<MySignals>
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                notifier.container.withOpacity(0.8),
+                notifier.container.withValues(alpha: 0.8),
                 notifier.background,
               ],
             ),
@@ -72,7 +71,7 @@ class _MySignalsState extends State<MySignals>
             Text(
               '${bots.length} Active Bots',
               style: TextStyle(
-                color: notifier.textColor.withOpacity(0.7),
+                color: notifier.textColor.withValues(alpha: 0.7),
                 fontSize: 14,
                 fontFamily: 'Manrope',
               ),
@@ -85,20 +84,21 @@ class _MySignalsState extends State<MySignals>
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
             decoration: BoxDecoration(
-              color: notifier.container.withOpacity(0.5),
+              color: notifier.container.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+              border:
+                  Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
             ),
             child: TabBar(
               controller: _tabController,
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: const Color(0xff6B39F4).withOpacity(0.1),
-                border:
-                    Border.all(color: const Color(0xff6B39F4).withOpacity(0.3)),
+                color: const Color(0xff6B39F4).withValues(alpha: 0.1),
+                border: Border.all(
+                    color: const Color(0xff6B39F4).withValues(alpha: 0.3)),
               ),
               labelColor: const Color(0xff6B39F4),
-              unselectedLabelColor: notifier.textColor.withOpacity(0.7),
+              unselectedLabelColor: notifier.textColor.withValues(alpha: 0.7),
               labelStyle: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -177,10 +177,10 @@ class _MySignalsState extends State<MySignals>
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: notifier.container.withOpacity(0.5),
+          color: notifier.container.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: notifier.textColor.withOpacity(0.1),
+            color: notifier.textColor.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -203,7 +203,7 @@ class _MySignalsState extends State<MySignals>
                   Text(
                     bot.description,
                     style: TextStyle(
-                      color: notifier.textColor.withOpacity(0.7),
+                      color: notifier.textColor.withValues(alpha: 0.7),
                       fontSize: 12,
                     ),
                   ),
@@ -246,7 +246,7 @@ class _MySignalsState extends State<MySignals>
     //     color: notifier.background,
     //     borderRadius: BorderRadius.circular(12),
     //     border: Border.all(
-    //       color: notifier.textColor.withOpacity(0.1),
+    //       color: notifier.textColor.withValues(alpha:0.1),
     //       width: 1,
     //     ),
     //   ),
@@ -267,7 +267,7 @@ class _MySignalsState extends State<MySignals>
     //           Container(
     //             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     //             decoration: BoxDecoration(
-    //               color: signal.typeColor.withOpacity(0.1),
+    //               color: signal.typeColor.withValues(alpha:0.1),
     //               borderRadius: BorderRadius.circular(12),
     //             ),
     //             child: Text(
@@ -297,7 +297,7 @@ class _MySignalsState extends State<MySignals>
     //           Text(
     //             signal.timeAgo,
     //             style: TextStyle(
-    //               color: notifier.textColor.withOpacity(0.7),
+    //               color: notifier.textColor.withValues(alpha:0.7),
     //               fontSize: 12,
     //             ),
     //           ),
@@ -323,7 +323,7 @@ class _MySignalsState extends State<MySignals>
         Text(
           label,
           style: TextStyle(
-            color: notifier.textColor.withOpacity(0.7),
+            color: notifier.textColor.withValues(alpha: 0.7),
             fontSize: 12,
           ),
         ),
@@ -365,7 +365,7 @@ class _MySignalsState extends State<MySignals>
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: notifier.textColor.withOpacity(0.2),
+                color: notifier.textColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -374,7 +374,7 @@ class _MySignalsState extends State<MySignals>
             Text(
               "#915765224",
               style: TextStyle(
-                color: notifier.textColor.withOpacity(0.7),
+                color: notifier.textColor.withValues(alpha: 0.7),
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
@@ -407,7 +407,8 @@ class _MySignalsState extends State<MySignals>
                               Text(
                                 "Buy 0.01 at 3294.554",
                                 style: TextStyle(
-                                  color: notifier.textColor.withOpacity(0.7),
+                                  color:
+                                      notifier.textColor.withValues(alpha: 0.7),
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -431,7 +432,7 @@ class _MySignalsState extends State<MySignals>
                           Text(
                             "3324.381",
                             style: TextStyle(
-                              color: notifier.textColor.withOpacity(0.7),
+                              color: notifier.textColor.withValues(alpha: 0.7),
                               fontSize: 14,
                             ),
                           ),
@@ -492,7 +493,7 @@ class _MySignalsState extends State<MySignals>
           Text(
             label,
             style: TextStyle(
-              color: notifier.textColor.withOpacity(0.7),
+              color: notifier.textColor.withValues(alpha: 0.7),
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),

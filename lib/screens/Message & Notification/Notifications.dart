@@ -145,7 +145,7 @@ class _NotificationsState extends State<Notifications>
                                       const Spacer(),
                                       Radio(
                                         fillColor:
-                                            MaterialStateColor.resolveWith(
+                                            WidgetStateColor.resolveWith(
                                                 (states) =>
                                                     const Color(0xff6B39F4)),
                                         // activeColor: const Color(0xff0056D2),
@@ -196,7 +196,7 @@ class _NotificationsState extends State<Notifications>
                                       const Spacer(),
                                       Radio(
                                         fillColor:
-                                            MaterialStateColor.resolveWith(
+                                            WidgetStateColor.resolveWith(
                                                 (states) =>
                                                     const Color(0xff6B39F4)),
                                         // activeColor: const Color(0xff0056D2),
@@ -247,7 +247,7 @@ class _NotificationsState extends State<Notifications>
                                       const Spacer(),
                                       Radio(
                                         fillColor:
-                                            MaterialStateColor.resolveWith(
+                                            WidgetStateColor.resolveWith(
                                                 (states) =>
                                                     const Color(0xff6B39F4)),
                                         // activeColor: const Color(0xff0056D2),

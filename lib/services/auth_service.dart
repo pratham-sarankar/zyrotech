@@ -1,6 +1,5 @@
 // Dart imports:
 import 'dart:convert';
-import 'dart:io';
 
 // Package imports:
 import 'package:google_sign_in/google_sign_in.dart';

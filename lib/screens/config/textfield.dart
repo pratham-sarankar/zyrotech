@@ -1,5 +1,3 @@
-
-
 // ignore_for_file: must_be_immutable
 
 // Flutter imports:
@@ -8,12 +6,11 @@ import 'package:flutter/material.dart';
 class CommonTextfield extends StatefulWidget {
   String text;
   Color textcolor;
-  CommonTextfield(
-      {Key? key,
-        required this.text,
-        required this.textcolor,
-        })
-      : super(key: key);
+  CommonTextfield({
+    Key? key,
+    required this.text,
+    required this.textcolor,
+  }) : super(key: key);
 
   @override
   State<CommonTextfield> createState() => _CommonTextfieldState();
@@ -24,23 +21,18 @@ class _CommonTextfieldState extends State<CommonTextfield> {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(top: 10,bottom: 10,left: 10),
-        label: Text(widget.text, style: TextStyle(color: widget.textcolor)),
-        focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Colors.grey)
-        ,borderRadius: BorderRadius.circular(10)),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: BorderSide(color: Colors.grey.shade200),
-        )
-      ),
+          contentPadding: const EdgeInsets.only(top: 10, bottom: 10, left: 10),
+          label: Text(widget.text, style: TextStyle(color: widget.textcolor)),
+          focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.grey),
+              borderRadius: BorderRadius.circular(10)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade200),
+          )),
     );
   }
 }
-
-
-
-
-
 
 // Widget fourcontainer(){
 //   return Padding(
@@ -54,7 +46,7 @@ class _CommonTextfieldState extends State<CommonTextfield> {
 //           height: 100,
 //           decoration: BoxDecoration(
 //             borderRadius: BorderRadius.circular(10),
-//             border: Border.all(color: Colors.grey.withOpacity(0.4),width: 1),
+//             border: Border.all(color: Colors.grey.withValues(alpha:0.4),width: 1),
 //           ),
 //           child:  Padding(
 //             padding: const EdgeInsets.only(left: 20),

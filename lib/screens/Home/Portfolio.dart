@@ -9,8 +9,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 // Project imports:
 import '../../Dark mode.dart';
-import '../Activity&History/Transaction Chart.dart';
-import '../Activity&History/Transaction History.dart';
 import '../config/common.dart';
 import 'bottom.dart';
 
@@ -388,7 +386,7 @@ class _PortfolioState extends State<Portfolio> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
                                         color: Colors.purpleAccent
-                                            .withOpacity(0.1),
+                                            .withValues(alpha: 0.1),
                                         image: DecorationImage(
                                             image: AssetImage(notifier.isDark
                                                 ? "assets/images/crypto_dark.png"
@@ -501,7 +499,7 @@ class _PortfolioState extends State<Portfolio> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(25),
                                         color: Colors.purpleAccent
-                                            .withOpacity(0.1),
+                                            .withValues(alpha: 0.1),
                                         image: DecorationImage(
                                             image: AssetImage(notifier.isDark
                                                 ? "assets/images/nft_dark.png"

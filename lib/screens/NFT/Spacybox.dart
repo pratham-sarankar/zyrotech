@@ -240,7 +240,7 @@ class _SpacyState extends State<Spacy> with SingleTickerProviderStateMixin {
                             height: height / 14,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
-                                color: Colors.grey.withOpacity(0.2)),
+                                color: Colors.grey.withValues(alpha: 0.2)),
                             child: const Icon(Icons.more_horiz,
                                 color: Color(0xff94A3B8)),
                           )
@@ -262,7 +262,7 @@ class _SpacyState extends State<Spacy> with SingleTickerProviderStateMixin {
                           controller: _tabController,
                           indicator: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey.withOpacity(0.1),
+                            color: Colors.grey.withValues(alpha: 0.1),
                           ),
                           tabs: [
                             Tab(

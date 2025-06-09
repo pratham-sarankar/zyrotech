@@ -68,7 +68,7 @@ class _Bank_account_add_bankState extends State<Bank_account_add_bank> {
               // width: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.grey.withOpacity(0.1),
+                color: Colors.grey.withValues(alpha: 0.1),
               ),
               child: Center(
                 child: TextField(
@@ -103,8 +103,9 @@ class _Bank_account_add_bankState extends State<Bank_account_add_bank> {
                       width: MediaQuery.of(context).size.width / 2.5,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: Colors.grey.withOpacity(
-                            0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
+                        color: Colors.grey.withValues(
+                            alpha:
+                                0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
                       ),
                       child: Center(
                         child: TextField(
@@ -141,8 +142,9 @@ class _Bank_account_add_bankState extends State<Bank_account_add_bank> {
                       width: MediaQuery.of(context).size.width / 2.5,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: Colors.grey.withOpacity(
-                            0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
+                        color: Colors.grey.withValues(
+                            alpha:
+                                0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
                       ),
                       child: Center(
                         child: TextField(
@@ -177,8 +179,9 @@ class _Bank_account_add_bankState extends State<Bank_account_add_bank> {
               // width: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.grey.withOpacity(
-                    0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
+                color: Colors.grey.withValues(
+                    alpha:
+                        0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
               ),
               child: Center(
                 child: TextField(
@@ -209,8 +212,9 @@ class _Bank_account_add_bankState extends State<Bank_account_add_bank> {
               // width: 200,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: Colors.grey.withOpacity(
-                    0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
+                color: Colors.grey.withValues(
+                    alpha:
+                        0.1), /*border: Border.all(color: Color(0xff6B39F4))*/
               ),
               child: Center(
                 child: TextField(

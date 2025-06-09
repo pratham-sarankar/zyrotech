@@ -43,7 +43,7 @@ class _BotScreenState extends State<BotScreen> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                notifier.container.withOpacity(0.8),
+                notifier.container.withValues(alpha: 0.8),
                 notifier.background,
               ],
             ),
@@ -64,7 +64,7 @@ class _BotScreenState extends State<BotScreen> {
             Text(
               '${bots.length} Active Bots',
               style: TextStyle(
-                color: notifier.textColor.withOpacity(0.7),
+                color: notifier.textColor.withValues(alpha: 0.7),
                 fontSize: 14,
                 fontFamily: 'Manrope',
               ),
@@ -79,14 +79,14 @@ class _BotScreenState extends State<BotScreen> {
             child: Container(
               height: 48,
               decoration: BoxDecoration(
-                color: notifier.container.withOpacity(0.5),
+                color: notifier.container.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: notifier.textColor.withOpacity(0.1),
+                  color: notifier.textColor.withValues(alpha: 0.1),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: notifier.textColor.withOpacity(0.05),
+                    color: notifier.textColor.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -101,18 +101,18 @@ class _BotScreenState extends State<BotScreen> {
                 decoration: InputDecoration(
                   hintText: 'Search bots...',
                   hintStyle: TextStyle(
-                    color: notifier.textColor.withOpacity(0.5),
+                    color: notifier.textColor.withValues(alpha: 0.5),
                     fontSize: 14,
                   ),
                   prefixIcon: Icon(
                     Icons.search_rounded,
-                    color: notifier.textColor.withOpacity(0.5),
+                    color: notifier.textColor.withValues(alpha: 0.5),
                   ),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
                           icon: Icon(
                             Icons.clear_rounded,
-                            color: notifier.textColor.withOpacity(0.5),
+                            color: notifier.textColor.withValues(alpha: 0.5),
                           ),
                           onPressed: () {
                             _searchController.clear();
@@ -148,10 +148,10 @@ class _BotScreenState extends State<BotScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: notifier.container.withOpacity(0.5),
+        color: notifier.container.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: notifier.textColor.withOpacity(0.1),
+          color: notifier.textColor.withValues(alpha: 0.1),
         ),
       ),
       child: Row(
@@ -180,7 +180,7 @@ class _BotScreenState extends State<BotScreen> {
         Text(
           label,
           style: TextStyle(
-            color: notifier.textColor.withOpacity(0.7),
+            color: notifier.textColor.withValues(alpha: 0.7),
             fontSize: 12,
           ),
         ),
@@ -196,18 +196,18 @@ class _BotScreenState extends State<BotScreen> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            notifier.container.withOpacity(0.7),
-            notifier.container.withOpacity(0.5),
+            notifier.container.withValues(alpha: 0.7),
+            notifier.container.withValues(alpha: 0.5),
           ],
         ),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: notifier.textColor.withOpacity(0.15),
+          color: notifier.textColor.withValues(alpha: 0.15),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: notifier.textColor.withOpacity(0.1),
+            color: notifier.textColor.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
             spreadRadius: 1,
@@ -258,7 +258,7 @@ class _BotScreenState extends State<BotScreen> {
                           Text(
                             bot.description,
                             style: TextStyle(
-                              color: notifier.textColor.withOpacity(0.8),
+                              color: notifier.textColor.withValues(alpha: 0.8),
                               fontSize: 12,
                             ),
                           ),
@@ -269,7 +269,7 @@ class _BotScreenState extends State<BotScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: bot.profitColor.withOpacity(0.1),
+                        color: bot.profitColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
@@ -301,10 +301,10 @@ class _BotScreenState extends State<BotScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   decoration: BoxDecoration(
-                    color: notifier.background.withOpacity(0.3),
+                    color: notifier.background.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: notifier.textColor.withOpacity(0.1),
+                      color: notifier.textColor.withValues(alpha: 0.1),
                     ),
                   ),
                   child: Row(
@@ -333,7 +333,7 @@ class _BotScreenState extends State<BotScreen> {
           Text(
             label,
             style: TextStyle(
-              color: notifier.textColor.withOpacity(0.7),
+              color: notifier.textColor.withValues(alpha: 0.7),
               fontSize: 10,
               fontWeight: FontWeight.w500,
             ),
@@ -343,7 +343,7 @@ class _BotScreenState extends State<BotScreen> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
-              color: notifier.container.withOpacity(0.5),
+              color: notifier.container.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(

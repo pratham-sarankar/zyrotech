@@ -87,10 +87,10 @@ class _SignalsScreenState extends State<SignalsScreen> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: notifier.container.withOpacity(0.5),
+          color: notifier.container.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: notifier.textColor.withOpacity(0.1),
+            color: notifier.textColor.withValues(alpha: 0.1),
             width: 1,
           ),
         ),
@@ -184,7 +184,7 @@ class _SignalsScreenState extends State<SignalsScreen> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: notifier.textColor.withOpacity(0.2),
+                color: notifier.textColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -193,7 +193,7 @@ class _SignalsScreenState extends State<SignalsScreen> {
             Text(
               "#915765224",
               style: TextStyle(
-                color: notifier.textColor.withOpacity(0.7),
+                color: notifier.textColor.withValues(alpha: 0.7),
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
@@ -341,7 +341,7 @@ class _SignalsScreenState extends State<SignalsScreen> {
           Text(
             label,
             style: TextStyle(
-              color: notifier.textColor.withOpacity(0.7),
+              color: notifier.textColor.withValues(alpha: 0.7),
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),

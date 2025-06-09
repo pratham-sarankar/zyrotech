@@ -113,7 +113,7 @@ class _CollectionsState extends State<Collections> {
                                 width: width / 1.3,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.black.withOpacity(0.1),
+                                  color: Colors.black.withValues(alpha: 0.1),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(10),

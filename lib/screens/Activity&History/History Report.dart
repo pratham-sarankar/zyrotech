@@ -335,7 +335,7 @@ class _History_reportState extends State<History_report> {
                             width: 72,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                color: Colors.green.withOpacity(0.1)),
+                                color: Colors.green.withValues(alpha: 0.1)),
                             child: const Center(
                                 child: Text("Successfull",
                                     style: TextStyle(

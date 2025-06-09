@@ -1,20 +1,16 @@
 // ignore_for_file: file_names
 
 // Dart imports:
-import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import '../../Dark mode.dart';
 import '../../services/auth_service.dart';
-import '../Home/bottom.dart';
 import '../config/common.dart';
 import 'Email verification.dart';
 import 'login.dart';
@@ -280,65 +276,34 @@ class _SignState extends State<Sign> {
                   width: double.infinity,
                   height: 56,
                   child: OutlinedButton(
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(13),
-                        ),
-                      ),
-                      side: MaterialStatePropertyAll(
-                        BorderSide(color: notifier.getContainerBorder),
-                      ),
-                    ),
-                    onPressed: () async {
-                      if (!_isLoading) {
-                        setState(() {
-                          _isLoading = true;
-                        });
-                        try {
-                          final response = await AuthService().loginWithGoogle();
-                          final prefs = await SharedPreferences.getInstance();
-                          await prefs.setBool('isLoggedIn', true);
-                          await prefs.setString('token', response['token']);
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const BottomBarScreen(),
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(13),
                             ),
-                          );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(e.toString()),
-                              backgroundColor: Colors.red.shade600,
-                            ),
-                          );
-                        } finally {
-                          setState(() {
-                            _isLoading = false;
-                          });
-                        }
-                      }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Image(
-                          image: AssetImage("assets/images/google.png"),
-                          height: 19,
-                          width: 16,
-                        ),
-                        Text(
-                          " Google",
-                          style: TextStyle(
-                            color: notifier.isDark ? Colors.white : Colors.black,
-                            fontFamily: "Manrope-SemiBold",
-                            fontSize: 16,
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+                          side: MaterialStatePropertyAll(
+                              BorderSide(color: notifier.getContainerBorder))),
+                      onPressed: () {},
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Image(
+                            image: AssetImage("assets/images/google.png"),
+                            height: 19,
+                            width: 16,
+                          ),
+                          Text(
+                            " Google",
+                            style: TextStyle(
+                                color: notifier.isDark
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontFamily: "Manrop-SemiBold",
+                                fontSize: 16),
+                          )
+                        ],
+                      ),),
                 ),
               ),
               AppConstants.Height(20),

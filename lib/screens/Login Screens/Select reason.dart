@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
-import 'Create pin.dart';
 
 class Reason extends StatefulWidget {
   const Reason({super.key});
@@ -190,7 +189,7 @@ class _ReasonState extends State<Reason> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: notifier.textField.withOpacity(0.5),
+        color: notifier.textField.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(

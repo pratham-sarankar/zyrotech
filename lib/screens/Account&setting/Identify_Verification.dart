@@ -66,8 +66,6 @@ class _Identify_VerificationState extends State<Identify_Verification> {
   @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: notifier.background,
       appBar: AppBar(
@@ -125,7 +123,7 @@ class _Identify_VerificationState extends State<Identify_Verification> {
                           child: Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.1),
+                              color: Colors.white.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Column(
@@ -139,7 +137,7 @@ class _Identify_VerificationState extends State<Identify_Verification> {
                                       padding: const EdgeInsets.all(6),
                                       decoration: BoxDecoration(
                                         color: _getStatusColor(personalStatus)
-                                            .withOpacity(0.2),
+                                            .withValues(alpha: 0.2),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Icon(
@@ -184,7 +182,7 @@ class _Identify_VerificationState extends State<Identify_Verification> {
                           child: Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.1),
+                              color: Colors.white.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Column(
@@ -198,7 +196,7 @@ class _Identify_VerificationState extends State<Identify_Verification> {
                                       padding: const EdgeInsets.all(6),
                                       decoration: BoxDecoration(
                                         color: _getStatusColor(kycStatus)
-                                            .withOpacity(0.2),
+                                            .withValues(alpha: 0.2),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Icon(
@@ -262,7 +260,7 @@ class _Identify_VerificationState extends State<Identify_Verification> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.1),
+                          color: Colors.grey.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.grey),
                         ),
@@ -378,8 +376,8 @@ class _Identify_VerificationState extends State<Identify_Verification> {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: isCompleted
-                ? Colors.green.withOpacity(0.1)
-                : Colors.grey.withOpacity(0.1),
+                ? Colors.green.withValues(alpha: 0.1)
+                : Colors.grey.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
@@ -407,7 +405,7 @@ class _Identify_VerificationState extends State<Identify_Verification> {
                 style: TextStyle(
                   fontFamily: "Manrope-Regular",
                   fontSize: 14,
-                  color: notifier.textColor.withOpacity(0.7),
+                  color: notifier.textColor.withValues(alpha: 0.7),
                 ),
               ),
             ],

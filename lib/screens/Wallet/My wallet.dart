@@ -159,7 +159,8 @@ class _WalletState extends State<Wallet> {
                               width: 56,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(28),
-                                  color: Colors.purpleAccent.withOpacity(0.3)),
+                                  color: Colors.purpleAccent
+                                      .withValues(alpha: 0.3)),
                               child: const Center(
                                   child: Icon(
                                 Icons.add_circle_outline,
@@ -193,7 +194,8 @@ class _WalletState extends State<Wallet> {
                               width: 56,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(28),
-                                  color: Colors.purpleAccent.withOpacity(0.3)),
+                                  color: Colors.purpleAccent
+                                      .withValues(alpha: 0.3)),
                               child: Center(
                                 child: Image.asset(
                                   "assets/images/Recieve.png",
@@ -230,7 +232,8 @@ class _WalletState extends State<Wallet> {
                               width: 56,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(28),
-                                color: Colors.purpleAccent.withOpacity(0.3),
+                                color:
+                                    Colors.purpleAccent.withValues(alpha: 0.3),
                               ),
                               child: Center(
                                 child: Image.asset(
@@ -267,7 +270,8 @@ class _WalletState extends State<Wallet> {
                               width: 56,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(28),
-                                  color: Colors.purpleAccent.withOpacity(0.3)),
+                                  color: Colors.purpleAccent
+                                      .withValues(alpha: 0.3)),
                               child: Center(
                                   child: Image.asset(
                                       "assets/images/coin white.png",

@@ -92,7 +92,7 @@ class _StaticsState extends State<Statics> with SingleTickerProviderStateMixin {
                             dividerColor: Colors.red,
                             indicator: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey.withOpacity(0.1),
+                              color: Colors.grey.withValues(alpha: 0.1),
                             ),
                             tabs: [
                               Tab(
