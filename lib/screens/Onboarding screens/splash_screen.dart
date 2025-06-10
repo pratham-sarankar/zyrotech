@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Home/bottom.dart';
-import 'package:crowwn/screens/Login Screens/login screen.dart';
+import 'package:crowwn/screens/Login%20Screens/login_screen.dart';
 import 'package:crowwn/screens/config/common.dart';
 import '../../Dark mode.dart';
 

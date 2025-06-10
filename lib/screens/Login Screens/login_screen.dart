@@ -1,14 +1,18 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iconly/iconly.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Home/bottom.dart';
 import 'package:crowwn/services/auth_service.dart';
+import 'package:crowwn/utils/snackbar_utils.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Forget pass.dart';
@@ -27,59 +31,58 @@ class _LoginState extends State<Login> {
   bool _isLoading = false;
   ColorNotifire notifier = ColorNotifire();
   final AuthService _authService = AuthService();
-
-  // Add controllers
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  final _formKey = GlobalKey<FormBuilderState>();
 
   Future<void> _login() async {
-    setState(() {
-      _isLoading = true;
-    });
+    if (_formKey.currentState?.saveAndValidate() ?? false) {
+      setState(() {
+        _isLoading = true;
+      });
 
-    try {
-      final response = await _authService.login(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-      );
-      final message = response['message'];
-      final token = response['token'];
-      final user = response['user'];
+      try {
+        final formData = _formKey.currentState!.value;
+        final response = await _authService.login(
+          formData['email'].toString().trim(),
+          formData['password'].toString().trim(),
+        );
+        final message = response['message'];
+        final token = response['token'];
+        final user = response['user'];
 
-      print('Login successful: $message');
-      print('Token: $token');
-      print('User: $user');
+        print('Login successful: $message');
+        print('Token: $token');
+        print('User: $user');
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-      await prefs.setString('token', token);
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('token', token);
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const BottomBarScreen(),
-        ),
-      );
-    } catch (e) {
-      print('Error: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-          backgroundColor: Colors.red.shade600,
-        ),
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          SnackbarUtils.showSuccess(
+            context: context,
+            message: 'Login successful! Welcome back.',
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const BottomBarScreen(),
+            ),
+          );
+        }
+      } catch (e) {
+        print('Error: $e');
+        if (mounted) {
+          SnackbarUtils.showError(
+            context: context,
+            message: e.toString(),
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     }
   }
@@ -93,25 +96,33 @@ class _LoginState extends State<Login> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
       await prefs.setString('token', response['token']);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const BottomBarScreen(),
-        ),
-      );
+
+      if (mounted) {
+        SnackbarUtils.showSuccess(
+          context: context,
+          message: 'Google login successful! Welcome back.',
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const BottomBarScreen(),
+          ),
+        );
+      }
     } on Exception catch (e) {
       print('Error: $e');
-      // Show error message to user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-          backgroundColor: Colors.red.shade600,
-        ),
-      );
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: e.toString(),
+        );
+      }
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -184,21 +195,19 @@ class _LoginState extends State<Login> {
                     AppConstants.Height(10),
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Column(
-                        children: [
-                          AppConstants.Height(10),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: notifier.textField,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: TextField(
-                              controller: _emailController,
+                      child: FormBuilder(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            AppConstants.Height(10),
+                            FormBuilderTextField(
+                              name: 'email',
                               style: TextStyle(color: notifier.textColor),
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                 hintText: "Email",
                                 fillColor: notifier.textField,
+                                prefixIcon: Icon(IconlyLight.message),
                                 filled: true,
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
@@ -206,109 +215,134 @@ class _LoginState extends State<Login> {
                                 ),
                                 hintStyle: TextStyle(
                                     color: notifier.textFieldHintText),
+                                errorStyle: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                ),
                               ),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(
+                                    errorText: 'Email is required'),
+                                FormBuilderValidators.email(
+                                    errorText: 'Please enter a valid email'),
+                              ]),
                             ),
-                          ),
-                          AppConstants.Height(15),
-                          TextField(
-                            controller: _passwordController,
-                            style: TextStyle(color: notifier.textColor),
-                            obscureText: _obsecuretext,
-                            decoration: InputDecoration(
-                              hintText: "Password",
-                              fillColor: notifier.textField,
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              hintStyle:
-                                  TextStyle(color: notifier.textFieldHintText),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _obsecuretext = !_obsecuretext;
-                                  });
-                                },
-                                icon: _obsecuretext
-                                    ? const Icon(Icons.remove_red_eye_outlined)
-                                    : const Icon(Icons.visibility_off_outlined),
-                              ),
-                            ),
-                          ),
-                          // AppConstants.Height(10),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Checkbox(
-                                  // checkColor: Colors.blue,
-                                  side: const BorderSide(
-                                      color: Color(0xff334155)),
-                                  activeColor: const Color(0xff6B39F4),
-                                  checkColor: const Color(0xffFFFFFF),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)),
-                                  value: value,
-                                  onChanged: (value) {
+                            AppConstants.Height(15),
+                            FormBuilderTextField(
+                              name: 'password',
+                              style: TextStyle(color: notifier.textColor),
+                              obscureText: _obsecuretext,
+                              decoration: InputDecoration(
+                                hintText: "Password",
+                                fillColor: notifier.textField,
+                                prefixIcon: Icon(IconlyLight.lock),
+                                filled: true,
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                hintStyle: TextStyle(
+                                    color: notifier.textFieldHintText),
+                                errorStyle: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                ),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
                                     setState(() {
-                                      this.value = value!;
+                                      _obsecuretext = !_obsecuretext;
                                     });
                                   },
+                                  icon: _obsecuretext
+                                      ? const Icon(
+                                          IconlyLight.show,
+                                        )
+                                      : const Icon(
+                                          IconlyLight.hide,
+                                        ),
                                 ),
-                                Text("Remember me",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: "Manrope-Medium",
-                                        color: notifier.textColor)),
-                                Expanded(child: AppConstants.Width(60)),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => const Forget(),
-                                        ));
-                                  },
-                                  child: const Text(
-                                    "Forgot Password?",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Color(0xff6B39F4),
-                                        fontFamily: "Manrope-Bold"),
+                              ),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(
+                                    errorText: 'Password is required'),
+                                FormBuilderValidators.minLength(6,
+                                    errorText:
+                                        'Password must be at least 6 characters'),
+                              ]),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Checkbox(
+                                    // checkColor: Colors.blue,
+                                    side: const BorderSide(
+                                        color: Color(0xff334155)),
+                                    activeColor: const Color(0xff6B39F4),
+                                    checkColor: const Color(0xffFFFFFF),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5)),
+                                    value: value,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        this.value = value!;
+                                      });
+                                    },
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                          // AppConstants.Height(5),
-                          TextButton(
-                            onPressed: _isLoading ? null : _login,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xff6B39F4),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 15,
-                              ),
-                            ),
-                            child: Center(
-                              child: _isLoading
-                                  ? CircularProgressIndicator(
-                                      color: Colors.white)
-                                  : const Text(
-                                      "Sign In",
+                                  Text("Remember me",
                                       style: TextStyle(
-                                        color: Color(0xffFFFFFF),
-                                        fontSize: 15,
-                                        fontFamily: "Manrope-Bold",
-                                      ),
+                                          fontSize: 14,
+                                          fontFamily: "Manrope-Medium",
+                                          color: notifier.textColor)),
+                                  Expanded(child: AppConstants.Width(60)),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Forget(),
+                                          ));
+                                    },
+                                    child: const Text(
+                                      "Forgot Password?",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Color(0xff6B39F4),
+                                          fontFamily: "Manrope-Bold"),
                                     ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                            TextButton(
+                              onPressed: _isLoading ? null : _login,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff6B39F4),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 15,
+                                ),
+                              ),
+                              child: Center(
+                                child: _isLoading
+                                    ? CircularProgressIndicator(
+                                        color: Colors.white)
+                                    : const Text(
+                                        "Sign In",
+                                        style: TextStyle(
+                                          color: Color(0xffFFFFFF),
+                                          fontSize: 15,
+                                          fontFamily: "Manrope-Bold",
+                                        ),
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     AppConstants.Height(20),

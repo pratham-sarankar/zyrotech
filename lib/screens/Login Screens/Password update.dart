@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 // Project imports:
 import '../../Dark mode.dart';
 import '../config/common.dart';
-import 'login screen.dart';
+import 'login_screen.dart';
 
 class Password extends StatefulWidget {
   const Password({super.key});

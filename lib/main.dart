@@ -38,12 +38,11 @@ class _MyAppState extends State<MyApp> {
       ],
       builder: (_, context) {
         return MaterialApp(
-          theme: ThemeData(
+          theme: ThemeData.from(
             useMaterial3: false,
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            dividerColor: Colors.transparent,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xff6B39F4),
+            ),
           ),
           debugShowCheckedModeBanner: false,
           localizationsDelegates: const [

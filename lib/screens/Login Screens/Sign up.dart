@@ -15,7 +15,7 @@ import '../../Dark mode.dart';
 import '../../services/auth_service.dart';
 import '../config/common.dart';
 import 'Email verification.dart';
-import 'login screen.dart';
+import 'login_screen.dart';
 
 class Sign extends StatefulWidget {
   const Sign({super.key});
