@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'package:crowwn/features/onboarding/presentation/kyc/sections/experience_screen.dart';
+import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -6,9 +8,10 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Home/bottom.dart';
-import 'package:crowwn/screens/Login%20Screens/Create%20pin.dart';
-import '../../../Dark mode.dart';
-import '../../../screens/Login Screens/Select reason.dart';
+import '../../../../Dark mode.dart';
+import '../../../../services/api_service.dart';
+import '../../data/repositories/kyc_repository_impl.dart';
+import '../providers/kyc_provider.dart';
 import 'sections/basic_info_screen.dart';
 import 'sections/risk_profiling_screen.dart';
 import 'sections/capital_management_screen.dart';
@@ -21,6 +24,20 @@ class KYCOnboarding extends StatefulWidget {
 }
 
 class _KYCOnboardingState extends State<KYCOnboarding> {
+  @override
+  Widget build(BuildContext context) {
+    return const _KYCOnboardingContent();
+  }
+}
+
+class _KYCOnboardingContent extends StatefulWidget {
+  const _KYCOnboardingContent();
+
+  @override
+  State<_KYCOnboardingContent> createState() => _KYCOnboardingContentState();
+}
+
+class _KYCOnboardingContentState extends State<_KYCOnboardingContent> {
   ColorNotifire notifier = ColorNotifire();
   final PageController _pageController = PageController();
   int _currentPage = 0;
@@ -63,7 +80,7 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
   }
 
   void _nextPage() {
-    if (_currentPage < 2) {
+    if (_currentPage < 3) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -83,12 +100,11 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
     );
   }
 
-  void _submitKYC() {
-    // TODO: Implement KYC data submission
+  void _onExperienceSubmit() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => const Reason(),
+        builder: (context) => const Success(),
       ),
     );
   }
@@ -129,6 +145,7 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
       ),
       body: PageView(
         controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
         onPageChanged: (int page) {
           setState(() {
             _currentPage = page;
@@ -170,7 +187,7 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
                 setState(() => _isAwareOfRisks = value),
           ),
           CapitalManagementScreen(
-            onSubmit: _submitKYC,
+            onSubmit: _nextPage,
             selectedInitialCapital: _selectedInitialCapital,
             selectedTradePreference: _selectedTradePreference,
             wantsRiskLimit: _wantsRiskLimit,
@@ -184,6 +201,9 @@ class _KYCOnboardingState extends State<KYCOnboarding> {
                 setState(() => _wantsRiskLimit = value),
             onAutoDisableChanged: (value) =>
                 setState(() => _autoDisableOnStopLoss = value),
+          ),
+          ExperienceScreen(
+            onSubmit: _onExperienceSubmit,
           ),
         ],
       ),

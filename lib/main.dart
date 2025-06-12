@@ -1,5 +1,7 @@
 // Flutter imports:
-import 'package:crowwn/features/onboarding/splash/splash_screen.dart';
+import 'package:crowwn/features/onboarding/data/repositories/kyc_repository_impl.dart';
+import 'package:crowwn/features/onboarding/presentation/providers/kyc_provider.dart';
+import 'package:crowwn/features/onboarding/presentation/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -38,6 +40,11 @@ void main() async {
             context.read<ApiService>(),
           ),
         ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return KYCProvider(KYCRepositoryImpl(context.read<ApiService>()));
+          },
+        )
       ],
       child: const MyApp(),
     ),
@@ -54,33 +61,24 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => ColorNotifire(),
+    return MaterialApp(
+      theme: ThemeData.from(
+        useMaterial3: false,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xff6B39F4),
         ),
+      ),
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        ChartLocalization.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
-      builder: (_, context) {
-        return MaterialApp(
-          theme: ThemeData.from(
-            useMaterial3: false,
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xff6B39F4),
-            ),
-          ),
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: const [
-            ChartLocalization.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale('en'), // English
-          ],
-          home: const Splash(),
-        );
-      },
+      supportedLocales: const [
+        Locale('en'), // English
+      ],
+      home: const Splash(),
     );
   }
 }

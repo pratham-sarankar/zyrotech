@@ -1,7 +1,10 @@
 import 'package:crowwn/Dark%20mode.dart';
+import 'package:crowwn/screens/config/common.dart';
+import 'package:crowwn/utils/api_error.dart';
+import 'package:crowwn/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../screens/config/common.dart';
+import '../../providers/kyc_provider.dart';
 
 class CapitalManagementScreen extends StatefulWidget {
   final VoidCallback onSubmit;
@@ -36,10 +39,63 @@ class CapitalManagementScreen extends StatefulWidget {
 
 class _CapitalManagementScreenState extends State<CapitalManagementScreen> {
   ColorNotifire notifier = ColorNotifire();
+  bool _isSubmitting = false;
+
+  Future<void> _handleSubmit() async {
+    if (widget.selectedInitialCapital == null ||
+        widget.selectedTradePreference == null ||
+        widget.wantsRiskLimit == null ||
+        widget.autoDisableOnStopLoss == null ||
+        (widget.wantsRiskLimit == true &&
+            widget.riskLimitController.text.isEmpty)) {
+      SnackbarUtils.showAlert(
+        context: context,
+        message: "Please answer all questions",
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      await context.read<KYCProvider>().submitCapitalManagement(
+            initialCapital: widget.selectedInitialCapital!,
+            tradePreference: widget.selectedTradePreference!,
+            wantsRiskLimit: widget.wantsRiskLimit!,
+            riskLimitPercentage: widget.wantsRiskLimit == true
+                ? widget.riskLimitController.text
+                : null,
+            autoDisableOnStopLoss: widget.autoDisableOnStopLoss!,
+          );
+
+      if (mounted) {
+        widget.onSubmit();
+      }
+    } on ApiError catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: e.message,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: "An unknown error occurred. Please try again later.",
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
+    final kycProvider = context.watch<KYCProvider>();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -99,7 +155,44 @@ class _CapitalManagementScreenState extends State<CapitalManagementScreen> {
             widget.onAutoDisableChanged,
           ),
           AppConstants.Height(24),
-          _buildSubmitButton(),
+          GestureDetector(
+            onTap:
+                kycProvider.isLoading || _isSubmitting ? null : _handleSubmit,
+            child: Container(
+              height: 56,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: const Color(0xff6B39F4),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xff6B39F4).withOpacity(0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: (kycProvider.isLoading || _isSubmitting)
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        "Submit KYC",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Manrope-SemiBold",
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -276,37 +369,6 @@ class _CapitalManagementScreenState extends State<CapitalManagementScreen> {
             style: TextStyle(
               color: isSelected ? const Color(0xff6B39F4) : notifier.textColor,
               fontFamily: "Manrope-SemiBold",
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSubmitButton() {
-    return GestureDetector(
-      onTap: widget.onSubmit,
-      child: Container(
-        height: 56,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: const Color(0xff6B39F4),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xff6B39F4).withOpacity(0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: const Center(
-          child: Text(
-            "Submit KYC",
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: "Manrope-SemiBold",
-              color: Colors.white,
             ),
           ),
         ),

@@ -35,16 +35,17 @@ class _Succcess extends State<Success> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.only(left: 10, top: 10),
                   child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(
-                        Icons.close,
-                        color: notifier.textColor,
-                        size: 25,
-                      )),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Icon(
+                      Icons.close,
+                      color: notifier.textColor,
+                      size: 25,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -61,20 +62,28 @@ class _Succcess extends State<Success> {
               ),
             ),
             AppConstants.Height(20),
-            Text(
-              "Thanks for submitting your \n Documents for Verification",
-              style: TextStyle(
-                  fontSize: 24,
-                  fontFamily: "Manrope-Bold",
-                  color: notifier.textColor),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                "Thanks for completing your KYC verification process",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 24,
+                    fontFamily: "Manrope-Bold",
+                    color: notifier.textColor),
+              ),
             ),
             AppConstants.Height(10),
-            const Text(
-              "We are reviewing your Aadhar Card and PAN Card.\n Please wait while we verify your documents.",
-              style: TextStyle(
-                  fontSize: 14,
-                  fontFamily: "Manrope-Regular",
-                  color: Color(0xff64748B)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: const Text(
+                "We are reviewing your Aadhar Card and PAN Card. Please wait while we verify your documents.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: "Manrope-Regular",
+                    color: Color(0xff64748B)),
+              ),
             ),
             const Spacer(),
             GestureDetector(
@@ -88,16 +97,24 @@ class _Succcess extends State<Success> {
               },
               child: Container(
                 // width: 327,
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
                 height: 56,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     color: const Color(0xff6B39F4)),
                 child: const Center(
-                    child: Text("Continue",
-                        style: TextStyle(
-                            fontFamily: "Manrope-Bold",
-                            fontSize: 18,
-                            color: Color(0xffFFFFFF)))),
+                  child: Text(
+                    "Continue",
+                    style: TextStyle(
+                      fontFamily: "Manrope-Bold",
+                      fontSize: 18,
+                      color: Color(0xffFFFFFF),
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

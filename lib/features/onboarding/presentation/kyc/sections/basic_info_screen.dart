@@ -1,7 +1,10 @@
 import 'package:crowwn/Dark%20mode.dart';
+import 'package:crowwn/utils/api_error.dart';
+import 'package:crowwn/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../screens/config/common.dart';
+import '../../../../../screens/config/common.dart';
+import '../../providers/kyc_provider.dart';
 
 class BasicInfoScreen extends StatefulWidget {
   final VoidCallback onContinue;
@@ -29,10 +32,69 @@ class BasicInfoScreen extends StatefulWidget {
 
 class _BasicInfoScreenState extends State<BasicInfoScreen> {
   ColorNotifire notifier = ColorNotifire();
+  bool _isSubmitting = false;
+
+  Future<void> _handleSubmit() async {
+    if (widget.fullNameController.text.isEmpty ||
+        widget.dobController.text.isEmpty ||
+        widget.selectedGender == null ||
+        widget.panController.text.isEmpty) {
+      SnackbarUtils.showAlert(
+        context: context,
+        message: "Please fill in all required fields",
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      // Parse the date from DD/MM/YYYY format to DateTime
+      final dateParts = widget.dobController.text.split('/');
+      final dob = DateTime(
+        int.parse(dateParts[2]), // year
+        int.parse(dateParts[1]), // month
+        int.parse(dateParts[0]), // day
+      );
+
+      await context.read<KYCProvider>().submitBasicDetails(
+            fullName: widget.fullNameController.text,
+            dob: dob,
+            gender: widget.selectedGender!,
+            pan: widget.panController.text,
+            aadharNumber: widget.aadhaarController.text.isEmpty
+                ? null
+                : widget.aadhaarController.text,
+          );
+
+      if (mounted) {
+        widget.onContinue();
+      }
+    } on ApiError catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: e.message,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: "An unknown error occurred. Please try again later.",
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
+    final kycProvider = context.watch<KYCProvider>();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -111,7 +173,44 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
             hint: "Enter your Aadhaar number",
           ),
           AppConstants.Height(24),
-          _buildContinueButton(),
+          GestureDetector(
+            onTap:
+                kycProvider.isLoading || _isSubmitting ? null : _handleSubmit,
+            child: Container(
+              height: 56,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: const Color(0xff6B39F4),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xff6B39F4).withOpacity(0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: (kycProvider.isLoading || _isSubmitting)
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        "Continue",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Manrope-SemiBold",
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -212,37 +311,6 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
             style: TextStyle(
               color: isSelected ? const Color(0xff6B39F4) : notifier.textColor,
               fontFamily: "Manrope-SemiBold",
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildContinueButton() {
-    return GestureDetector(
-      onTap: widget.onContinue,
-      child: Container(
-        height: 56,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: const Color(0xff6B39F4),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xff6B39F4).withOpacity(0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: const Center(
-          child: Text(
-            "Continue",
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: "Manrope-SemiBold",
-              color: Colors.white,
             ),
           ),
         ),

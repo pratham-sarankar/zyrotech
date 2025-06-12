@@ -1,5 +1,5 @@
 // Flutter imports:
-import 'package:crowwn/features/onboarding/kyc/kyc_screen.dart';
+import 'package:crowwn/features/onboarding/presentation/kyc/kyc_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:

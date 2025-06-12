@@ -1,24 +1,31 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 // Flutter imports:
+import 'package:crowwn/dark%20mode.dart';
+import 'package:crowwn/screens/config/common.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
-import '../../Dark mode.dart';
-import '../config/common.dart';
+import 'package:crowwn/utils/api_error.dart';
+import 'package:crowwn/utils/snackbar_utils.dart';
+import '../../providers/kyc_provider.dart';
 
-class Reason extends StatefulWidget {
-  const Reason({super.key});
+class ExperienceScreen extends StatefulWidget {
+  final VoidCallback onSubmit;
+
+  const ExperienceScreen({
+    super.key,
+    required this.onSubmit,
+  });
 
   @override
-  State<Reason> createState() => _ReasonState();
+  State<ExperienceScreen> createState() => _ReasonState();
 }
 
-class _ReasonState extends State<Reason> {
+class _ReasonState extends State<ExperienceScreen> {
   // Experience years selection
   Set<int> selectedExperienceYears = {};
 
@@ -27,6 +34,8 @@ class _ReasonState extends State<Reason> {
 
   // Interested coins selection
   Set<int> selectedCoins = {};
+
+  bool _isSubmitting = false;
 
   List<String> experienceYears = [
     "1 year",
@@ -56,9 +65,60 @@ class _ReasonState extends State<Reason> {
 
   ColorNotifire notifier = ColorNotifire();
 
+  Future<void> _handleSubmit() async {
+    if (selectedExperienceYears.isEmpty ||
+        selectedInvestmentCapacity.isEmpty ||
+        selectedCoins.isEmpty) {
+      SnackbarUtils.showAlert(
+        context: context,
+        message: "Please answer all questions",
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      final experienceYear = experienceYears[selectedExperienceYears.first];
+      final investmentCap =
+          investmentCapacity[selectedInvestmentCapacity.first];
+      final coins =
+          selectedCoins.map((index) => interestedCoins[index]).toList();
+
+      await context.read<KYCProvider>().submitExperience(
+            experienceYears: experienceYear,
+            investmentCapacity: investmentCap,
+            interestedCoins: coins,
+          );
+
+      if (mounted) {
+        widget.onSubmit();
+      }
+    } on ApiError catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: e.message,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: "An unknown error occurred. Please try again later.",
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    notifier = Provider.of<ColorNotifire>(context, listen: true);
+    final kycProvider = context.watch<KYCProvider>();
+
     return Scaffold(
       backgroundColor: notifier.background,
       appBar: AppBar(
@@ -158,22 +218,25 @@ class _ReasonState extends State<Reason> {
               ),
               backgroundColor: const Color(0xff6B39F4),
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const Success(),
-                ),
-              );
-            },
-            child: const Text(
-              "Continue",
-              style: TextStyle(
-                fontSize: 16,
-                fontFamily: "Manrope-SemiBold",
-                color: Colors.white,
-              ),
-            ),
+            onPressed:
+                kycProvider.isLoading || _isSubmitting ? null : _handleSubmit,
+            child: (kycProvider.isLoading || _isSubmitting)
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : const Text(
+                    "Continue",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: "Manrope-SemiBold",
+                      color: Colors.white,
+                    ),
+                  ),
           ),
         ),
       ),
