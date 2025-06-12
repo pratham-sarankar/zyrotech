@@ -31,7 +31,8 @@ void main() async {
         ),
         Provider<ApiService>(
           create: (context) => ApiService(
-            baseUrl: 'http://0.0.0.0:3000', // Using the same base URL as before
+            baseUrl:
+                'https://zyrotech-backend.onrender.com', // Using the same base URL as before
             authStorage: context.read<AuthStorageService>(),
           ),
         ),
