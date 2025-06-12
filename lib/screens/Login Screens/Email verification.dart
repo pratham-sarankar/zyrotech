@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 // Flutter imports:
-import 'package:crowwn/screens/Onboarding%20screens/kyc_onboarding.dart';
+import 'package:crowwn/features/onboarding/kyc/kyc_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -16,7 +16,6 @@ import '../../services/auth_service.dart';
 import '../../services/auth_storage_service.dart';
 import '../../utils/snackbar_utils.dart';
 import '../../utils/api_error.dart';
-import '../Home/bottom.dart';
 import '../config/common.dart';
 import 'Sign phone.dart';
 

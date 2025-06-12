@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:crowwn/features/onboarding/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -9,7 +10,6 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/Dark%20mode.dart';
-import 'package:crowwn/screens/Onboarding%20screens/splash_screen.dart';
 import 'firebase_options.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';

@@ -1,0 +1,252 @@
+import 'package:crowwn/Dark%20mode.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../../screens/config/common.dart';
+
+class BasicInfoScreen extends StatefulWidget {
+  final VoidCallback onContinue;
+  final TextEditingController fullNameController;
+  final TextEditingController dobController;
+  final TextEditingController panController;
+  final TextEditingController aadhaarController;
+  final String? selectedGender;
+  final Function(String?) onGenderSelected;
+
+  const BasicInfoScreen({
+    super.key,
+    required this.onContinue,
+    required this.fullNameController,
+    required this.dobController,
+    required this.panController,
+    required this.aadhaarController,
+    required this.selectedGender,
+    required this.onGenderSelected,
+  });
+
+  @override
+  State<BasicInfoScreen> createState() => _BasicInfoScreenState();
+}
+
+class _BasicInfoScreenState extends State<BasicInfoScreen> {
+  ColorNotifire notifier = ColorNotifire();
+
+  @override
+  Widget build(BuildContext context) {
+    notifier = Provider.of<ColorNotifire>(context, listen: true);
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Basic Information",
+            style: TextStyle(
+              fontSize: 24,
+              fontFamily: "Manrope-Bold",
+              color: notifier.textColor,
+            ),
+          ),
+          AppConstants.Height(16),
+          const Text(
+            "Please provide your basic identification details for KYC verification",
+            style: TextStyle(
+              fontSize: 16,
+              color: Color(0xff64748B),
+              fontFamily: "Manrope-Medium",
+            ),
+          ),
+          AppConstants.Height(24),
+          _buildTextField(
+            controller: widget.fullNameController,
+            label: "Full Name (as per PAN/Aadhaar)",
+            hint: "Enter your full name",
+          ),
+          AppConstants.Height(16),
+          _buildTextField(
+            controller: widget.dobController,
+            label: "Date of Birth",
+            hint: "DD/MM/YYYY",
+            onTap: () async {
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime.now(),
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: ColorScheme.light(
+                        primary: const Color(0xff6B39F4),
+                        onPrimary: Colors.white,
+                        surface: notifier.background,
+                        onSurface: notifier.textColor,
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
+              );
+              if (picked != null) {
+                setState(() {
+                  widget.dobController.text =
+                      "${picked.day.toString().padLeft(2, '0')}/${picked.month.toString().padLeft(2, '0')}/${picked.year}";
+                });
+              }
+            },
+            readOnly: true,
+          ),
+          AppConstants.Height(16),
+          _buildGenderSelector(),
+          AppConstants.Height(16),
+          _buildTextField(
+            controller: widget.panController,
+            label: "PAN Number",
+            hint: "Enter your PAN number",
+          ),
+          AppConstants.Height(16),
+          _buildTextField(
+            controller: widget.aadhaarController,
+            label: "Aadhaar Number (Optional)",
+            hint: "Enter your Aadhaar number",
+          ),
+          AppConstants.Height(24),
+          _buildContinueButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    VoidCallback? onTap,
+    TextInputType? keyboardType,
+    bool readOnly = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            fontFamily: "Manrope-SemiBold",
+            color: notifier.textColor,
+          ),
+        ),
+        AppConstants.Height(8),
+        Container(
+          decoration: BoxDecoration(
+            color: notifier.textField,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: TextField(
+            controller: controller,
+            onTap: onTap,
+            keyboardType: keyboardType,
+            style: TextStyle(color: notifier.textColor),
+            decoration: InputDecoration(
+              hintText: hint,
+              hintStyle: TextStyle(color: notifier.textFieldHintText),
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.all(16),
+            ),
+            readOnly: readOnly,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGenderSelector() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Gender",
+          style: TextStyle(
+            fontSize: 14,
+            fontFamily: "Manrope-SemiBold",
+            color: notifier.textColor,
+          ),
+        ),
+        AppConstants.Height(8),
+        Row(
+          children: [
+            Expanded(
+              child: _buildGenderOption("Male", "male"),
+            ),
+            AppConstants.Width(16),
+            Expanded(
+              child: _buildGenderOption("Female", "female"),
+            ),
+            AppConstants.Width(16),
+            Expanded(
+              child: _buildGenderOption("Other", "other"),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGenderOption(String label, String value) {
+    final isSelected = widget.selectedGender == value;
+    return GestureDetector(
+      onTap: () => widget.onGenderSelected(value),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xffF8F5FF) : notifier.textField,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? const Color(0xff6B39F4) : Colors.transparent,
+            width: 1.5,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? const Color(0xff6B39F4) : notifier.textColor,
+              fontFamily: "Manrope-SemiBold",
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContinueButton() {
+    return GestureDetector(
+      onTap: widget.onContinue,
+      child: Container(
+        height: 56,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: const Color(0xff6B39F4),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xff6B39F4).withOpacity(0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: const Center(
+          child: Text(
+            "Continue",
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: "Manrope-SemiBold",
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 // Flutter imports:
+import 'package:crowwn/features/onboarding/kyc/kyc_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -9,7 +10,6 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import '../../Dark mode.dart';
-import '../Onboarding screens/kyc_onboarding.dart';
 import '../config/common.dart';
 
 class CountrySelection extends StatefulWidget {

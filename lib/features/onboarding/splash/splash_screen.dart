@@ -1,5 +1,4 @@
 // Flutter imports:
-import 'package:crowwn/screens/Onboarding%20screens/kyc_onboarding.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -10,7 +9,7 @@ import 'package:crowwn/screens/Home/bottom.dart';
 import 'package:crowwn/screens/Login%20Screens/login_screen.dart';
 import 'package:crowwn/screens/config/common.dart';
 import 'package:crowwn/services/auth_storage_service.dart';
-import '../../Dark mode.dart';
+import '../../../Dark mode.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
