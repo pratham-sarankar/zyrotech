@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/config/common.dart';
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 
 class About_App extends StatefulWidget {
   const About_App({super.key});

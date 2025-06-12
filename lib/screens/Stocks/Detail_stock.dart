@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../config/common.dart';
 import 'Portfolio_stock.dart';
 

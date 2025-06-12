@@ -2,10 +2,12 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../config/common.dart';
 import 'login_screen.dart';
 

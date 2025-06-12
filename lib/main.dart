@@ -1,7 +1,4 @@
 // Flutter imports:
-import 'package:crowwn/features/onboarding/data/repositories/kyc_repository_impl.dart';
-import 'package:crowwn/features/onboarding/presentation/providers/kyc_provider.dart';
-import 'package:crowwn/features/onboarding/presentation/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -11,7 +8,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:crowwn/Dark%20mode.dart';
+import 'package:crowwn/dark_mode.dart';
+import 'package:crowwn/features/onboarding/data/repositories/kyc_repository_impl.dart';
+import 'package:crowwn/features/onboarding/presentation/providers/kyc_provider.dart';
+import 'package:crowwn/features/onboarding/presentation/splash/splash_screen.dart';
 import 'firebase_options.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';

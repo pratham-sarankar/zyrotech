@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:crowwn/screens/Home/Profile.dart';
 import 'package:crowwn/screens/config/common.dart';
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 
 class Payment_method extends StatefulWidget {
   const Payment_method({super.key});

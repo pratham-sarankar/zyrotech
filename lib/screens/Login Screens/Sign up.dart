@@ -2,19 +2,19 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:provider/provider.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../../services/auth_service.dart';
+import '../../utils/api_error.dart';
 import '../../utils/snackbar_utils.dart';
 import '../config/common.dart';
 import 'Email verification.dart';
 import 'login_screen.dart';
-import '../../utils/api_error.dart';
 
 class Sign extends StatefulWidget {
   const Sign({super.key});

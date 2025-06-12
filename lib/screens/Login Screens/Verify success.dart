@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../Home/bottom.dart';
 import '../config/common.dart';
 

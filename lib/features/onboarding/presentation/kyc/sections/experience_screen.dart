@@ -1,14 +1,14 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 // Flutter imports:
-import 'package:crowwn/dark%20mode.dart';
-import 'package:crowwn/screens/config/common.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
 
 // Project imports:
+import 'package:crowwn/dark_mode.dart';
+import 'package:crowwn/screens/config/common.dart';
 import 'package:crowwn/utils/api_error.dart';
 import 'package:crowwn/utils/snackbar_utils.dart';
 import '../../providers/kyc_provider.dart';

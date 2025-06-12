@@ -1,17 +1,19 @@
 // ignore_for_file: file_names
 
-// Flutter imports:
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+// Dart imports:
 import 'dart:convert';
 
+// Flutter imports:
+import 'package:flutter/material.dart';
+
 // Package imports:
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
-import 'Password update.dart';
+import '../../dark_mode.dart';
 import '../../services/auth_service.dart';
+import 'Password update.dart';
 
 class Forget extends StatefulWidget {
   const Forget({super.key});

@@ -10,7 +10,7 @@ import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../config/common.dart';
 import 'Password update.dart';
 

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/models/bot.dart';
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import 'performance/performance_screen.dart';
 
 class BotScreen extends StatefulWidget {

@@ -2,7 +2,6 @@
 // import 'package:Crowwn/Home/bottom.dart';
 
 // Flutter imports:
-import 'package:crowwn/screens/Login%20Screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,7 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import 'package:crowwn/screens/Login%20Screens/login_screen.dart';
+import '../../dark_mode.dart';
 import '../Account&setting/API_Connection.dart';
 import '../Account&setting/About App.dart';
 import '../Account&setting/Help Center.dart';

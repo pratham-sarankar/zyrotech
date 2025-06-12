@@ -1,21 +1,21 @@
 // Flutter imports:
-import 'package:crowwn/screens/Login%20Screens/Email%20verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:iconly/iconly.dart';
 
 // Package imports:
-import 'package:provider/provider.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Home/bottom.dart';
+import 'package:crowwn/screens/Login%20Screens/Email%20verification.dart';
 import 'package:crowwn/services/auth_service.dart';
 import 'package:crowwn/services/auth_storage_service.dart';
-import 'package:crowwn/utils/snackbar_utils.dart';
 import 'package:crowwn/utils/api_error.dart';
-import '../../Dark mode.dart';
+import 'package:crowwn/utils/snackbar_utils.dart';
+import '../../dark_mode.dart';
 import '../config/common.dart';
 import 'Forget pass.dart';
 import 'Sign up.dart';

@@ -1,12 +1,12 @@
 // Flutter imports:
-import 'package:crowwn/features/onboarding/presentation/kyc/kyc_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import 'package:crowwn/features/onboarding/presentation/kyc/kyc_screen.dart';
+import '../../dark_mode.dart';
 import '../config/common.dart';
 
 enum VerificationStatus { incomplete, pending, rejected, completed }

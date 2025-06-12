@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/config/common.dart';
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import 'Bank Account Add bank.dart';
 import 'Bank Account detail.dart';
 

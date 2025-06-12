@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Home/stocks_.dart';
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../Crypto/Detail_crypto.dart';
 import '../Crypto/crypto.dart';
 import '../Gold/Detail_gold.dart';

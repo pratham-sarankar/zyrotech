@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 // Flutter imports:
-import 'package:crowwn/features/onboarding/presentation/kyc/kyc_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -11,11 +10,12 @@ import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import 'package:crowwn/features/onboarding/presentation/kyc/kyc_screen.dart';
+import '../../dark_mode.dart';
 import '../../services/auth_service.dart';
 import '../../services/auth_storage_service.dart';
-import '../../utils/snackbar_utils.dart';
 import '../../utils/api_error.dart';
+import '../../utils/snackbar_utils.dart';
 import '../config/common.dart';
 import 'Sign phone.dart';
 

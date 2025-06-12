@@ -1,9 +1,14 @@
-import 'package:crowwn/Dark%20mode.dart';
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:crowwn/dark_mode.dart';
 import 'package:crowwn/screens/config/common.dart';
 import 'package:crowwn/utils/api_error.dart';
 import 'package:crowwn/utils/snackbar_utils.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../providers/kyc_provider.dart';
 
 class CapitalManagementScreen extends StatefulWidget {

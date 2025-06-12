@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../NFT/Collections.dart';
 import '../NFT/Hot bids see all.dart';
 import '../NFT/Hot colletion see all.dart';

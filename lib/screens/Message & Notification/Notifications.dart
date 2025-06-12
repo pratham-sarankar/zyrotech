@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../config/common.dart';
 import 'Activity.dart';
 import 'Information.dart';
@@ -144,10 +144,9 @@ class _NotificationsState extends State<Notifications>
                                       ),
                                       const Spacer(),
                                       Radio(
-                                        fillColor:
-                                            WidgetStateColor.resolveWith(
-                                                (states) =>
-                                                    const Color(0xff6B39F4)),
+                                        fillColor: WidgetStateColor.resolveWith(
+                                            (states) =>
+                                                const Color(0xff6B39F4)),
                                         // activeColor: const Color(0xff0056D2),
                                         value: 0,
                                         groupValue: status,
@@ -195,10 +194,9 @@ class _NotificationsState extends State<Notifications>
                                       ),
                                       const Spacer(),
                                       Radio(
-                                        fillColor:
-                                            WidgetStateColor.resolveWith(
-                                                (states) =>
-                                                    const Color(0xff6B39F4)),
+                                        fillColor: WidgetStateColor.resolveWith(
+                                            (states) =>
+                                                const Color(0xff6B39F4)),
                                         // activeColor: const Color(0xff0056D2),
                                         value: 1,
                                         groupValue: status,
@@ -246,10 +244,9 @@ class _NotificationsState extends State<Notifications>
                                       ),
                                       const Spacer(),
                                       Radio(
-                                        fillColor:
-                                            WidgetStateColor.resolveWith(
-                                                (states) =>
-                                                    const Color(0xff6B39F4)),
+                                        fillColor: WidgetStateColor.resolveWith(
+                                            (states) =>
+                                                const Color(0xff6B39F4)),
                                         // activeColor: const Color(0xff0056D2),
                                         value: 2,
                                         groupValue: status,

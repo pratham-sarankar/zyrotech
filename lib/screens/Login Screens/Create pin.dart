@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Project imports:
 import 'package:crowwn/screens/Login%20Screens/Country%20residence.dart';
 import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../../services/auth_service.dart';
 import '../config/common.dart';
 

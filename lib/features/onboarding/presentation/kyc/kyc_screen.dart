@@ -1,20 +1,17 @@
 // Flutter imports:
-import 'package:crowwn/features/onboarding/presentation/kyc/sections/experience_screen.dart';
-import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
 
 // Project imports:
+import 'package:crowwn/dark_mode.dart';
+import 'package:crowwn/features/onboarding/presentation/kyc/sections/experience_screen.dart';
 import 'package:crowwn/screens/Home/bottom.dart';
-import '../../../../Dark mode.dart';
-import '../../../../services/api_service.dart';
-import '../../data/repositories/kyc_repository_impl.dart';
-import '../providers/kyc_provider.dart';
+import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
 import 'sections/basic_info_screen.dart';
-import 'sections/risk_profiling_screen.dart';
 import 'sections/capital_management_screen.dart';
+import 'sections/risk_profiling_screen.dart';
 
 class KYCOnboarding extends StatefulWidget {
   const KYCOnboarding({super.key});

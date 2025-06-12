@@ -2,10 +2,10 @@
 import 'dart:convert';
 
 // Package imports:
-import 'package:crowwn/models/responses/sign_up_response.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 // Project imports:
+import 'package:crowwn/models/responses/sign_up_response.dart';
 import '../utils/api_error.dart';
 import 'api_service.dart';
 

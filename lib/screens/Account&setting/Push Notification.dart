@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/config/Push_notification.dart';
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 
 class Push_Notifications extends StatefulWidget {
   const Push_Notifications({super.key});

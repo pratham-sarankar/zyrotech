@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../Crypto/Latest News.dart';
 import '../Gold/Detail_gold.dart';
 import '../Gold/buy gold in.dart';
@@ -559,7 +559,6 @@ class _gold_State extends State<gold_> {
     );
   }
 }
-
 
 // GestureDetector(
 //   onTap: () {

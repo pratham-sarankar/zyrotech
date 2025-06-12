@@ -11,7 +11,7 @@ import 'package:crowwn/screens/NFT/Collections.dart';
 import 'package:crowwn/screens/NFT/Spacybox.dart';
 import 'package:crowwn/screens/NFT/Statics.dart';
 import 'package:crowwn/screens/config/common.dart';
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import 'Hot bids see all.dart';
 import 'Hot colletion see all.dart';
 import 'Nemus Genesis.dart';

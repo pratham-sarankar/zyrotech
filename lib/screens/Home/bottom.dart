@@ -10,7 +10,7 @@ import 'package:crowwn/screens/Home/Profile.dart';
 import 'package:crowwn/screens/Home/bot.dart';
 import 'package:crowwn/screens/Home/my_signals.dart';
 import 'package:crowwn/screens/Home/new_home_screen.dart';
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 
 class BottomBarScreen extends StatefulWidget {
   const BottomBarScreen({super.key});

@@ -8,7 +8,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Home/performance/signals_screen.dart';
-import '../../../Dark mode.dart';
+import '../../../dark_mode.dart';
 
 class PerformanceScreen extends StatefulWidget {
   final String strategyName;

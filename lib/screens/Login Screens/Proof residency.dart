@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../config/Liner_indicator.dart';
 import '../config/common.dart';
 

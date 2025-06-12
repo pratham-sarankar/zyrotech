@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../Dark mode.dart';
+import '../../dark_mode.dart';
 import '../config/See_all_assets_model.dart';
 import '../config/common.dart';
 import 'Detail_crypto.dart';
