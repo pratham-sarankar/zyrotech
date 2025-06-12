@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:country_picker/country_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Login%20Screens/Create%20pin.dart';
@@ -26,17 +25,19 @@ class _phoneState extends State<phone> {
   String selectedCountryCode = '+91'; // Default to India
   String selectedCountryFlag = '🇮🇳';
   final TextEditingController _phoneController = TextEditingController();
+  late final AuthService _authService;
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = context.read<AuthService>();
+  }
 
   void _sendOtp() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
-      print('Token retrieved for sending OTP: ' + (token ?? 'No token found'));
-      final authService = AuthService();
-      final response = await authService.sendPhoneOtp(_phoneController.text, token);
+      final response = await _authService.sendPhoneOtp(_phoneController.text);
       print(response['message']);
       // Navigate to the OTP screen
-      // builder: (context) => PhoneOtpScreen(phoneNumber: _phoneController.text),
     } catch (e) {
       print(e.toString());
     }
@@ -166,7 +167,8 @@ class _phoneState extends State<phone> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Pin(), // Assuming CreatePin is the next screen
+                    builder: (context) =>
+                        const Pin(), // Assuming CreatePin is the next screen
                   ),
                 );
               },

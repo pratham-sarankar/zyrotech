@@ -11,13 +11,37 @@ import 'package:provider/provider.dart';
 import 'package:crowwn/Dark%20mode.dart';
 import 'package:crowwn/screens/Onboarding%20screens/splash_screen.dart';
 import 'firebase_options.dart';
+import 'services/api_service.dart';
+import 'services/auth_service.dart';
+import 'services/auth_storage_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ColorNotifire()),
+        Provider<AuthStorageService>(
+          create: (_) => AuthStorageService(),
+        ),
+        Provider<ApiService>(
+          create: (context) => ApiService(
+            baseUrl: 'http://0.0.0.0:3000', // Using the same base URL as before
+            authStorage: context.read<AuthStorageService>(),
+          ),
+        ),
+        Provider<AuthService>(
+          create: (context) => AuthService(
+            context.read<ApiService>(),
+          ),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

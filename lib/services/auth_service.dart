@@ -2,18 +2,22 @@
 import 'dart:convert';
 
 // Package imports:
+import 'package:crowwn/models/responses/sign_up_response.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
+
+// Project imports:
+import '../utils/api_error.dart';
+import 'api_service.dart';
 
 class AuthService {
-  final String baseUrl = 'https://zyrotech-backend.onrender.com';
+  final ApiService _apiService;
 
-  Future<Map<String, dynamic>> signUp(
+  AuthService(this._apiService);
+
+  Future<SignUpResponse> signUp(
       String fullName, String email, String password) async {
-    final url = Uri.parse('$baseUrl/api/auth/signup');
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
+    final response = await _apiService.post(
+      '/api/auth/signup',
       body: jsonEncode({
         'fullName': fullName,
         'email': email,
@@ -22,54 +26,48 @@ class AuthService {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      return jsonDecode(response.body);
+      return SignUpResponse.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Failed to sign up: ${response.body}');
+      throw ApiError.fromMap(jsonDecode(response.body));
     }
   }
 
   Future<Map<String, dynamic>> sendEmailOtp(String email) async {
-    final url = Uri.parse('$baseUrl/api/auth/send-email-otp');
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
+    final response = await _apiService.post(
+      '/api/auth/send-email-otp',
       body: jsonEncode({'email': email}),
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to send OTP: ${response.body}');
+      throw ApiError.fromMap(jsonDecode(response.body));
     }
   }
 
   Future<Map<String, dynamic>> verifyEmailOtp(String email, String otp) async {
-    final url = Uri.parse('$baseUrl/api/auth/verify-email-otp');
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
+    final response = await _apiService.post(
+      '/api/auth/verify-email-otp',
       body: jsonEncode({'email': email, 'otp': otp}),
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to verify OTP: ${response.body}');
+      throw ApiError.fromMap(jsonDecode(response.body));
     }
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
-    final url = Uri.parse('$baseUrl/api/auth/login');
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
+    final response = await _apiService.post(
+      '/api/auth/login',
       body: jsonEncode({'email': email, 'password': password}),
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to login: ${response.body}');
+      throw ApiError.fromMap(jsonDecode(response.body));
     }
   }
 
@@ -84,73 +82,64 @@ class AuthService {
       await googleSignIn.signOut();
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
-      if (googleSignInAccount == null) throw "Signin Cancelled";
+      if (googleSignInAccount == null) {
+        throw ApiError.fromString('Sign in cancelled by user');
+      }
+
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
-      final response = await http.post(
-        Uri.parse('$baseUrl/api/auth/google'),
-        headers: {'Content-Type': 'application/json'},
+      final response = await _apiService.post(
+        '/api/auth/google',
         body: jsonEncode({'idToken': googleSignInAuthentication.idToken}),
       );
+
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
       } else {
-        throw Exception('Failed to login with Google: ${response.body}');
+        throw ApiError.fromMap(jsonDecode(response.body));
       }
     } catch (e) {
-      if (e is String) throw Exception(e);
-      throw Exception('Failed to login with Google');
+      if (e is ApiError) rethrow;
+      throw ApiError.fromString('Failed to login with Google');
     }
   }
 
-  Future<Map<String, dynamic>> sendPhoneOtp(String phoneNumber, String? token) async {
-    final url = Uri.parse('$baseUrl/api/profile/phone');
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        if (token != null) 'Authorization': 'Bearer $token',
-      },
+  Future<Map<String, dynamic>> sendPhoneOtp(String phoneNumber) async {
+    final response = await _apiService.post(
+      '/api/profile/phone',
       body: jsonEncode({'phoneNumber': phoneNumber}),
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to send OTP: ${response.body}');
+      throw ApiError.fromMap(jsonDecode(response.body));
     }
   }
 
-  Future<Map<String, dynamic>> createPin(String pin, String? token) async {
-    final url = Uri.parse('$baseUrl/api/profile/pin');
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        if (token != null) 'Authorization': 'Bearer $token',
-      },
+  Future<Map<String, dynamic>> createPin(String pin) async {
+    final response = await _apiService.post(
+      '/api/profile/pin',
       body: jsonEncode({'pin': pin}),
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to create PIN: \\${response.body}');
+      throw ApiError.fromMap(jsonDecode(response.body));
     }
   }
 
   Future<Map<String, dynamic>> forgotPassword(String email) async {
-    final url = Uri.parse('$baseUrl/api/auth/forgot-password');
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
+    final response = await _apiService.post(
+      '/api/auth/forgot-password',
       body: jsonEncode({'email': email}),
     );
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      throw Exception('Failed to send reset link: ${response.body}');
+      throw ApiError.fromMap(jsonDecode(response.body));
     }
   }
 }

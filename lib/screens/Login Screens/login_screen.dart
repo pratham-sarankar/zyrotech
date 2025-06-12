@@ -1,18 +1,20 @@
 // Flutter imports:
+import 'package:crowwn/screens/Login%20Screens/Email%20verification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconly/iconly.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Home/bottom.dart';
 import 'package:crowwn/services/auth_service.dart';
+import 'package:crowwn/services/auth_storage_service.dart';
 import 'package:crowwn/utils/snackbar_utils.dart';
+import 'package:crowwn/utils/api_error.dart';
 import '../../Dark mode.dart';
 import '../config/common.dart';
 import 'Forget pass.dart';
@@ -30,8 +32,15 @@ class _LoginState extends State<Login> {
   bool _obsecuretext = true;
   bool _isLoading = false;
   ColorNotifire notifier = ColorNotifire();
-  final AuthService _authService = AuthService();
+  late final AuthService _authService;
+  final AuthStorageService _authStorage = AuthStorageService();
   final _formKey = GlobalKey<FormBuilderState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = context.read<AuthService>();
+  }
 
   Future<void> _login() async {
     if (_formKey.currentState?.saveAndValidate() ?? false) {
@@ -39,29 +48,21 @@ class _LoginState extends State<Login> {
         _isLoading = true;
       });
 
+      final formData = _formKey.currentState!.value;
+
+      final email = formData['email'].toString().trim();
+      final password = formData['password'].toString().trim();
+
       try {
-        final formData = _formKey.currentState!.value;
         final response = await _authService.login(
-          formData['email'].toString().trim(),
-          formData['password'].toString().trim(),
+          email,
+          password,
         );
-        final message = response['message'];
         final token = response['token'];
-        final user = response['user'];
 
-        print('Login successful: $message');
-        print('Token: $token');
-        print('User: $user');
-
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('isLoggedIn', true);
-        await prefs.setString('token', token);
+        await _authStorage.setToken(token);
 
         if (mounted) {
-          SnackbarUtils.showSuccess(
-            context: context,
-            message: 'Login successful! Welcome back.',
-          );
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -69,12 +70,30 @@ class _LoginState extends State<Login> {
             ),
           );
         }
-      } catch (e) {
-        print('Error: $e');
+      } on ApiError catch (e) {
+        if (e.code == "email-not-verified") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EmailVerification(
+                email: email,
+                password: password,
+              ),
+            ),
+          );
+          return;
+        }
         if (mounted) {
           SnackbarUtils.showError(
             context: context,
-            message: e.toString(),
+            message: e.message,
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          SnackbarUtils.showError(
+            context: context,
+            message: 'An unexpected error occurred. Please try again.',
           );
         }
       } finally {
@@ -84,6 +103,11 @@ class _LoginState extends State<Login> {
           });
         }
       }
+    } else {
+      SnackbarUtils.showAlert(
+        context: context,
+        message: 'Please fill in all required fields correctly.',
+      );
     }
   }
 
@@ -93,9 +117,7 @@ class _LoginState extends State<Login> {
         _isLoading = true;
       });
       final response = await _authService.loginWithGoogle();
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-      await prefs.setString('token', response['token']);
+      await _authStorage.setToken(response['token']);
 
       if (mounted) {
         SnackbarUtils.showSuccess(
@@ -109,12 +131,18 @@ class _LoginState extends State<Login> {
           ),
         );
       }
-    } on Exception catch (e) {
-      print('Error: $e');
+    } on ApiError catch (e) {
       if (mounted) {
         SnackbarUtils.showError(
           context: context,
-          message: e.toString(),
+          message: e.message,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: 'An unexpected error occurred. Please try again.',
         );
       }
     } finally {
@@ -271,29 +299,11 @@ class _LoginState extends State<Login> {
                               ]),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                              ),
                               child: Row(
                                 children: [
-                                  Checkbox(
-                                    // checkColor: Colors.blue,
-                                    side: const BorderSide(
-                                        color: Color(0xff334155)),
-                                    activeColor: const Color(0xff6B39F4),
-                                    checkColor: const Color(0xffFFFFFF),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)),
-                                    value: value,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        this.value = value!;
-                                      });
-                                    },
-                                  ),
-                                  Text("Remember me",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: "Manrope-Medium",
-                                          color: notifier.textColor)),
                                   Expanded(child: AppConstants.Width(60)),
                                   GestureDetector(
                                     onTap: () {
@@ -328,17 +338,14 @@ class _LoginState extends State<Login> {
                                 ),
                               ),
                               child: Center(
-                                child: _isLoading
-                                    ? CircularProgressIndicator(
-                                        color: Colors.white)
-                                    : const Text(
-                                        "Sign In",
-                                        style: TextStyle(
-                                          color: Color(0xffFFFFFF),
-                                          fontSize: 15,
-                                          fontFamily: "Manrope-Bold",
-                                        ),
-                                      ),
+                                child: const Text(
+                                  "Sign In",
+                                  style: TextStyle(
+                                    color: Color(0xffFFFFFF),
+                                    fontSize: 15,
+                                    fontFamily: "Manrope-Bold",
+                                  ),
+                                ),
                               ),
                             ),
                           ],

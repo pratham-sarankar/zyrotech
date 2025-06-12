@@ -12,7 +12,7 @@ class SnackbarUtils {
       context: context,
       message: message,
       icon: IconlyLight.info_circle,
-      backgroundColor: Colors.blue.withOpacity(0.1),
+      backgroundColor: Colors.blue.withValues(alpha: 0.1),
       iconColor: Colors.blue,
       duration: duration,
     );
@@ -27,7 +27,7 @@ class SnackbarUtils {
       context: context,
       message: message,
       icon: IconlyLight.danger,
-      backgroundColor: Colors.red.withOpacity(0.1),
+      backgroundColor: Colors.red.withValues(alpha: 0.1),
       iconColor: Colors.red,
       duration: duration,
     );
@@ -42,7 +42,7 @@ class SnackbarUtils {
       context: context,
       message: message,
       icon: IconlyLight.tick_square,
-      backgroundColor: Colors.green.withOpacity(0.1),
+      backgroundColor: Colors.green.withValues(alpha: 0.1),
       iconColor: Colors.green,
       duration: duration,
     );
@@ -68,7 +68,7 @@ class SnackbarUtils {
             color: backgroundColor,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: iconColor.withOpacity(0.2),
+              color: iconColor.withValues(alpha: 0.2),
               width: 1,
             ),
           ),
@@ -94,9 +94,9 @@ class SnackbarUtils {
         elevation: 0,
         duration: duration,
         margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-          left: 16,
-          right: 16,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+          left: 0,
+          right: 0,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),

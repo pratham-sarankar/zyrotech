@@ -27,7 +27,13 @@ class _ForgetState extends State<Forget> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
-  final AuthService _authService = AuthService();
+  late final AuthService _authService;
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = context.read<AuthService>();
+  }
 
   Future<void> _sendForgotPasswordRequest(String email) async {
     setState(() {
@@ -109,7 +115,8 @@ class _ForgetState extends State<Forget> {
                   controller: _emailController,
                   decoration: InputDecoration(
                     hintText: "Email",
-                    border: const OutlineInputBorder(borderSide: BorderSide.none),
+                    border:
+                        const OutlineInputBorder(borderSide: BorderSide.none),
                     hintStyle: TextStyle(color: notifier.textFieldHintText),
                   ),
                   validator: (value) {

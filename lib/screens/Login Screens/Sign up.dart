@@ -1,21 +1,20 @@
-// ignore_for_file: file_names
-
-// Dart imports:
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:iconly/iconly.dart';
 
 // Project imports:
 import '../../Dark mode.dart';
 import '../../services/auth_service.dart';
+import '../../utils/snackbar_utils.dart';
 import '../config/common.dart';
 import 'Email verification.dart';
 import 'login_screen.dart';
+import '../../utils/api_error.dart';
 
 class Sign extends StatefulWidget {
   const Sign({super.key});
@@ -25,86 +24,94 @@ class Sign extends StatefulWidget {
 }
 
 class _SignState extends State<Sign> {
-  bool value = false;
   bool _obsecuretext1 = true;
   ColorNotifire notifier = ColorNotifire();
   bool _isLoading = false;
+  final _formKey = GlobalKey<FormBuilderState>();
+  late final AuthService _authService;
 
-  final TextEditingController _fullNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _authService = context.read<AuthService>();
+  }
 
   // Function to handle sign-up
-  Future<void> signUp(String fullName, String email, String password) async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      final authService = AuthService();
-      final response = await authService.signUp(fullName, email, password);
-      final responseData =
-          response; // Use response directly as it's already a map
-      print(responseData['message']);
-      // Check if the user already exists
-      if (responseData['status'] == 'fail') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(responseData['message']),
-            backgroundColor: Colors.red,
-          ),
+  Future<void> signUp() async {
+    if (_formKey.currentState?.saveAndValidate() ?? false) {
+      final formData = _formKey.currentState!.value;
+
+      // Check if terms are accepted
+      if (formData['terms'] != true) {
+        SnackbarUtils.showAlert(
+          context: context,
+          message: 'Please accept the terms and conditions to continue.',
         );
-        return; // Exit the function early
+        return;
       }
-      // After successful sign-up, send email OTP
-      if (responseData['message'] ==
-          'Account created. Please verify your email.') {
-        final emailOtpResponse = await authService.sendEmailOtp(email);
-        print(emailOtpResponse['message']);
-        // Navigate to email verification or show a success message
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                EmailVerification(email: email, password: password),
-          ),
-        );
-      }
-    } catch (e) {
-      String errorMessage = 'An error occurred';
-      if (e is http.Response) {
-        try {
-          final responseData = json.decode(e.body);
-          errorMessage = responseData['message'] ?? errorMessage;
-        } catch (decodeError) {
-          // If decoding fails, use the default error message
-        }
-      } else if (e is Exception) {
-        // Attempt to parse the message from the exception if possible
-        final messageMatch =
-            RegExp(r'message":"(.*?)"').firstMatch(e.toString());
-        if (messageMatch != null) {
-          errorMessage = messageMatch.group(1) ?? errorMessage;
-        }
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorMessage),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
+
       setState(() {
-        _isLoading = false;
+        _isLoading = true;
       });
+
+      try {
+        final response = await _authService.signUp(
+          formData['fullName'].toString().trim(),
+          formData['email'].toString().trim(),
+          formData['password'].toString().trim(),
+        );
+
+        if (mounted) {
+          SnackbarUtils.showSuccess(
+            context: context,
+            message: response.message,
+          );
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EmailVerification(
+                email: formData['email'].toString().trim(),
+                password: formData['password'].toString().trim(),
+              ),
+            ),
+          );
+        }
+      } on ApiError catch (e) {
+        if (mounted) {
+          SnackbarUtils.showError(
+            context: context,
+            message: e.message,
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          SnackbarUtils.showError(
+            context: context,
+            message: 'An unexpected error occurred. Please try again.',
+          );
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    } else {
+      SnackbarUtils.showAlert(
+        context: context,
+        message: 'Please fill in all required fields correctly.',
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
-    var height = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: notifier.background,
       appBar: AppBar(
         backgroundColor: notifier.background,
@@ -120,230 +127,304 @@ class _SignState extends State<Sign> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AppConstants.Height(50),
-              Text(
-                "Create your account",
-                style: TextStyle(
-                    fontSize: 24,
-                    fontFamily: "Manrope-SemiBold",
-                    color: notifier.isDark ? Colors.white : null),
-              ),
-              AppConstants.Height(10),
-              const Text(
-                "Let's get started with a free Financy account.",
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Color(0xff64748B),
-                    fontFamily: "Manrope-Medium"),
-              ),
-              AppConstants.Height(10),
-              Container(
-                height: height / 13,
-                decoration: BoxDecoration(
-                    color: notifier.textField,
-                    borderRadius: BorderRadius.circular(15)),
-                child: TextField(
-                  controller: _fullNameController,
-                  style: TextStyle(color: notifier.textColor),
-                  decoration: InputDecoration(
-                      hintText: "Full Name",
-                      border:
-                          const OutlineInputBorder(borderSide: BorderSide.none),
-                      hintStyle: TextStyle(color: notifier.textFieldHintText)),
-                ),
-              ),
-              // CommonTextfield(text: "Full name", textcolor: Color(0xff94A3B8)),
-              AppConstants.Height(15),
-              Container(
-                height: height / 13,
-                decoration: BoxDecoration(
-                    color: notifier.textField,
-                    borderRadius: BorderRadius.circular(15)),
-                child: TextField(
-                  controller: _emailController,
-                  style: TextStyle(color: notifier.textColor),
-                  decoration: InputDecoration(
-                      hintText: "Email",
-                      border:
-                          const OutlineInputBorder(borderSide: BorderSide.none),
-                      hintStyle: TextStyle(color: notifier.textFieldHintText)),
-                ),
-              ),
-              AppConstants.Height(15),
-              Container(
-                height: height / 13,
-                decoration: BoxDecoration(
-                    color: notifier.textField,
-                    borderRadius: BorderRadius.circular(15)),
-                child: TextField(
-                  controller: _passwordController,
-                  style: TextStyle(color: notifier.textColor),
-                  obscureText: _obsecuretext1,
-                  decoration: InputDecoration(
-                    hintText: "Password",
-                    border:
-                        const OutlineInputBorder(borderSide: BorderSide.none),
-                    hintStyle: TextStyle(color: notifier.textFieldHintText),
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _obsecuretext1 = !_obsecuretext1;
-                          });
-                        },
-                        icon: _obsecuretext1
-                            ? const Icon(Icons.remove_red_eye_outlined)
-                            : Icon(
-                                Icons.visibility_off_outlined,
-                                color: notifier.passwordIcon,
-                              )),
-                  ),
-                ),
-              ),
-              AppConstants.Height(20),
-              GestureDetector(
-                onTap: () {
-                  if (!_isLoading) {
-                    signUp(
-                      _fullNameController.text,
-                      _emailController.text,
-                      _passwordController.text,
-                    );
-                  }
-                },
-                child: Container(
-                  height: height / 12,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: const Color(0xff6B39F4),
-                  ),
-                  child: Center(
-                    child: _isLoading
-                        ? CircularProgressIndicator(color: Colors.white)
-                        : const Text(
-                            "Sign Up",
-                            style: TextStyle(
-                                color: Color(0xffFFFFFF),
-                                fontSize: 15,
-                                fontFamily: "Manrope-Bold"),
-                          ),
-                  ),
-                ),
-              ),
-              AppConstants.Height(10),
-              Row(
-                children: [
-                  Checkbox(
-                    side: const BorderSide(color: Color(0xff334155)),
-                    activeColor: const Color(0xff6B39F4),
-                    checkColor: const Color(0xffFFFFFF),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    value: value,
-                    onChanged: (value) {
-                      setState(() {
-                        this.value = value!;
-                      });
-                    },
-                  ),
-                  Flexible(
-                    child: Text(
-                      "I certify that I'm 18 years of age or older, and I \n agree to the User Agreement and Privacy Policy.",
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: FormBuilder(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppConstants.Height(20),
+                    Text(
+                      "Create your account",
                       style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: "Manrope-SemiBold",
+                        color: notifier.isDark ? Colors.white : null,
+                      ),
+                    ),
+                    AppConstants.Height(10),
+                    const Text(
+                      "Let's get started with a free Financy account.",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xff64748B),
+                        fontFamily: "Manrope-Medium",
+                      ),
+                    ),
+                    AppConstants.Height(20),
+                    FormBuilderTextField(
+                      name: 'fullName',
+                      style: TextStyle(color: notifier.textColor),
+                      decoration: InputDecoration(
+                        hintText: "Full Name",
+                        fillColor: notifier.textField,
+                        filled: true,
+                        prefixIcon: const Icon(IconlyLight.profile),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        hintStyle: TextStyle(color: notifier.textFieldHintText),
+                        errorStyle: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                        ),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                          errorText: 'Full name is required',
+                        ),
+                        FormBuilderValidators.minLength(
+                          2,
+                          errorText: 'Name must be at least 2 characters',
+                        ),
+                      ]),
+                    ),
+                    AppConstants.Height(15),
+                    FormBuilderTextField(
+                      name: 'email',
+                      style: TextStyle(color: notifier.textColor),
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: "Email",
+                        fillColor: notifier.textField,
+                        filled: true,
+                        prefixIcon: const Icon(IconlyLight.message),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        hintStyle: TextStyle(color: notifier.textFieldHintText),
+                        errorStyle: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                        ),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                          errorText: 'Email is required',
+                        ),
+                        FormBuilderValidators.email(
+                          errorText: 'Please enter a valid email',
+                        ),
+                      ]),
+                    ),
+                    AppConstants.Height(15),
+                    FormBuilderTextField(
+                      name: 'password',
+                      style: TextStyle(color: notifier.textColor),
+                      obscureText: _obsecuretext1,
+                      decoration: InputDecoration(
+                        hintText: "Password",
+                        fillColor: notifier.textField,
+                        filled: true,
+                        prefixIcon: const Icon(IconlyLight.lock),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        hintStyle: TextStyle(color: notifier.textFieldHintText),
+                        errorStyle: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 12,
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _obsecuretext1 = !_obsecuretext1;
+                            });
+                          },
+                          icon: _obsecuretext1
+                              ? const Icon(IconlyLight.show)
+                              : const Icon(IconlyLight.hide),
+                        ),
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                          errorText: 'Password is required',
+                        ),
+                        FormBuilderValidators.minLength(
+                          6,
+                          errorText: 'Password must be at least 6 characters',
+                        ),
+                      ]),
+                    ),
+                    AppConstants.Height(20),
+                    FormBuilderCheckbox(
+                      name: 'terms',
+                      title: Text(
+                        "I certify that I'm 18 years of age or older, and I agree to the User Agreement and Privacy Policy.",
+                        style: TextStyle(
                           fontSize: 12,
                           fontFamily: "Manrope-Medium",
-                          color: notifier.textColor),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                          color: notifier.textColor,
+                        ),
+                      ),
+                      activeColor: const Color(0xff6B39F4),
+                      checkColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      side: const BorderSide(color: Color(0xff334155)),
+                      validator: FormBuilderValidators.equal(
+                        true,
+                        errorText: 'You must accept the terms to continue',
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              AppConstants.Height(15),
-              const Center(
-                child: Text(
-                  "--------------- Or sign in with ---------------",
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Color(0xff64748B),
-                      fontFamily: "Manrope-Medium"),
-                ),
-              ),
-              AppConstants.Height(10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: OutlinedButton(
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(13),
+                    AppConstants.Height(20),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : signUp,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff6B39F4),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                        ),
+                        child: const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontFamily: "Manrope-Bold",
                           ),
                         ),
-                        side: MaterialStatePropertyAll(
-                            BorderSide(color: notifier.getContainerBorder))),
-                    onPressed: () {},
-                    child: Row(
+                      ),
+                    ),
+                    AppConstants.Height(20),
+                    const Center(
+                      child: Text(
+                        "--------------- Or sign in with ---------------",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xff64748B),
+                          fontFamily: "Manrope-Medium",
+                        ),
+                      ),
+                    ),
+                    AppConstants.Height(10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                            side:
+                                BorderSide(color: notifier.getContainerBorder),
+                          ),
+                          onPressed: () {},
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Image(
+                                image: AssetImage("assets/images/google.png"),
+                                height: 19,
+                                width: 16,
+                              ),
+                              Text(
+                                " Google",
+                                style: TextStyle(
+                                  color: notifier.isDark
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontFamily: "Manrope-SemiBold",
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    AppConstants.Height(20),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Image(
-                          image: AssetImage("assets/images/google.png"),
-                          height: 19,
-                          width: 16,
-                        ),
-                        Text(
-                          " Google",
+                        const Text(
+                          "Already have an account?",
                           style: TextStyle(
-                              color:
-                                  notifier.isDark ? Colors.white : Colors.black,
-                              fontFamily: "Manrop-SemiBold",
-                              fontSize: 16),
-                        )
+                            fontFamily: "Manrope-Medium",
+                            color: Color(0xff64748B),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Login(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "Sign In",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xff6B39F4),
+                              fontFamily: "Manrope-Medium",
+                            ),
+                          ),
+                        ),
                       ],
                     ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Loading Overlay
+          if (_isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Color(0xff6B39F4),
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        'Creating account...',
+                        style: TextStyle(
+                          color: notifier.textColor,
+                          fontSize: 16,
+                          fontFamily: "Manrope-Medium",
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              AppConstants.Height(20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Already have an account?",
-                    style: TextStyle(
-                        fontFamily: "Manrope-Medium", color: Color(0xff64748B)),
-                  ),
-                  GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Login(),
-                            ));
-                      },
-                      child: const Text(
-                        "Sign In",
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xff6B39F4),
-                            fontFamily: "Manrope-Medium"),
-                      ))
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              )
-            ],
-          ),
-        ),
+            ),
+        ],
       ),
     );
   }

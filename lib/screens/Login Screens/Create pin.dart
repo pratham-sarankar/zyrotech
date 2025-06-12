@@ -27,15 +27,18 @@ class Pin extends StatefulWidget {
 class _PinState extends State<Pin> {
   ColorNotifire notifier = ColorNotifire();
   OtpFieldController otpController = OtpFieldController();
+  late final AuthService _authService;
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = context.read<AuthService>();
+  }
 
   void _createPin(String pin) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
-      final authService = AuthService();
-      final response = await authService.createPin(pin, token);
+      final response = await _authService.createPin(pin);
       print(response['message']);
-      // Navigate to the next screen or show a success message
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

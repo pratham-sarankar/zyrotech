@@ -1,14 +1,15 @@
 // Flutter imports:
+import 'package:crowwn/screens/Onboarding%20screens/kyc_onboarding.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Home/bottom.dart';
 import 'package:crowwn/screens/Login%20Screens/login_screen.dart';
 import 'package:crowwn/screens/config/common.dart';
+import 'package:crowwn/services/auth_storage_service.dart';
 import '../../Dark mode.dart';
 
 class Splash extends StatefulWidget {
@@ -19,6 +20,8 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  final AuthStorageService _authStorage = AuthStorageService();
+
   @override
   void initState() {
     init();
@@ -26,19 +29,19 @@ class _SplashState extends State<Splash> {
   }
 
   void init() async {
-    final prefs = await SharedPreferences.getInstance();
-    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-
     Future.delayed(
-      const Duration(seconds: 2),
-      () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                isLoggedIn ? const BottomBarScreen() : const Login(),
-          ),
-        );
+      const Duration(seconds: 1),
+      () async {
+        final isLoggedIn = await _authStorage.isLoggedIn();
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  isLoggedIn ? const BottomBarScreen() : const Login(),
+            ),
+          );
+        }
       },
     );
   }
