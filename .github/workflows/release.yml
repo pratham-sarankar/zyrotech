@@ -38,6 +38,10 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/key.jks
 
+      - name: Decode env.json
+        run: |
+          echo "${{ secrets.ENV_JSON_BASE64 }}" | base64 --decode > env.json
+
       - name: Setup Gradle
         run: |
           cd android
@@ -49,7 +53,7 @@ jobs:
 
       - name: Build APK
         run: |
-          flutter build apk --release --no-tree-shake-icons
+          flutter build apk --release --no-tree-shake-icons --dart-define-from-file=env.json
 
       - name: Get version
         id: get_version
