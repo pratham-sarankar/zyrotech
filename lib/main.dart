@@ -30,11 +30,13 @@ void main() async {
           create: (_) => AuthStorageService(),
         ),
         Provider<ApiService>(
-          create: (context) => ApiService(
-            baseUrl:
-                'https://zyrotech-backend.onrender.com', // Using the same base URL as before
-            authStorage: context.read<AuthStorageService>(),
-          ),
+          create: (context) {
+            const apiUrl = String.fromEnvironment('API_URL');
+            return ApiService(
+              baseUrl: apiUrl,
+              authStorage: context.read<AuthStorageService>(),
+            );
+          },
         ),
         Provider<AuthService>(
           create: (context) => AuthService(

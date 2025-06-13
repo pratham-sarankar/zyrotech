@@ -1,12 +1,12 @@
 // Flutter imports:
+import 'package:crowwn/features/onboarding/presentation/kyc/kyc_screen.dart';
+import 'package:crowwn/screens/Home/bottom.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:crowwn/features/onboarding/presentation/kyc/kyc_screen.dart';
-import 'package:crowwn/screens/Home/bottom.dart';
 import 'package:crowwn/screens/Login%20Screens/login_screen.dart';
 import 'package:crowwn/screens/config/common.dart';
 import 'package:crowwn/services/auth_storage_service.dart';
@@ -38,7 +38,7 @@ class _SplashState extends State<Splash> {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  isLoggedIn ? const KYCOnboarding() : const Login(),
+                  isLoggedIn ? const BottomBarScreen() : const Login(),
             ),
           );
         }
