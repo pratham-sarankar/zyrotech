@@ -2,6 +2,7 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'dart:async'; // Add this import for Timer
 
 // Package imports:
 import 'package:otp_text_field/otp_field.dart';
@@ -40,15 +41,55 @@ class _EmailVerificationState extends State<EmailVerification> {
   bool _isSendingOtp = false;
   bool _canResendOtp = false;
   int _resendCountdown = 60;
+  Timer? _resendTimer;
+  bool _isFirstSend = true;
+  String _currentOtp = '';
+  final int _otpLength = 6;
 
   @override
   void initState() {
     super.initState();
     _authService = context.read<AuthService>();
-    _sendEmailOtp();
+    _sendInitialOtp();
   }
 
-  Future<void> _sendEmailOtp() async {
+  @override
+  void dispose() {
+    _resendTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  void _startResendCountdown() {
+    setState(() {
+      _canResendOtp = false;
+      _resendCountdown = 60;
+    });
+
+    _resendTimer?.cancel();
+
+    _resendTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (!mounted) {
+        timer.cancel();
+        return;
+      }
+
+      setState(() {
+        if (_resendCountdown > 0) {
+          _resendCountdown--;
+        } else {
+          _canResendOtp = true;
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  Future<void> _sendInitialOtp() async {
     if (_isSendingOtp) return;
 
     setState(() {
@@ -70,7 +111,6 @@ class _EmailVerificationState extends State<EmailVerification> {
           context: context,
           message: e.message,
         );
-        Navigator.pop(context); // Return to previous page on API error
       }
     } catch (e) {
       if (mounted) {
@@ -78,7 +118,51 @@ class _EmailVerificationState extends State<EmailVerification> {
           context: context,
           message: 'Failed to send verification code. Please try again.',
         );
-        Navigator.pop(context); // Return to previous page on error
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSendingOtp = false;
+          _isFirstSend = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _sendEmailOtp() async {
+    if (_isSendingOtp || (!_canResendOtp && !_isFirstSend)) return;
+
+    if (_isFirstSend) {
+      await _sendInitialOtp();
+      return;
+    }
+
+    setState(() {
+      _isSendingOtp = true;
+    });
+
+    try {
+      await _authService.sendEmailOtp(widget.email);
+      if (mounted) {
+        SnackbarUtils.showSuccess(
+          context: context,
+          message: 'Verification code sent to your email',
+        );
+        _startResendCountdown();
+      }
+    } on ApiError catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: e.message,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: 'Failed to send verification code. Please try again.',
+        );
       }
     } finally {
       if (mounted) {
@@ -89,35 +173,16 @@ class _EmailVerificationState extends State<EmailVerification> {
     }
   }
 
-  void _startResendCountdown() {
-    setState(() {
-      _canResendOtp = false;
-      _resendCountdown = 60;
-    });
-
-    Future.delayed(const Duration(seconds: 1), () {
-      if (!mounted) return;
-
-      setState(() {
-        if (_resendCountdown > 0) {
-          _resendCountdown--;
-          _startResendCountdown();
-        } else {
-          _canResendOtp = true;
-        }
-      });
-    });
-  }
-
-  Future<void> _verifyOtp(String otp) async {
-    if (_isLoading) return;
+  Future<void> _verifyOtp() async {
+    if (_isLoading || _currentOtp.length != _otpLength) return;
 
     setState(() {
       _isLoading = true;
     });
 
     try {
-      final response = await _authService.verifyEmailOtp(widget.email, otp);
+      final response =
+          await _authService.verifyEmailOtp(widget.email, _currentOtp);
 
       if (response['message'] == 'Email verified successfully') {
         final loginResponse =
@@ -318,7 +383,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                 ),
                 AppConstants.Height(30),
                 OTPTextField(
-                  length: 6,
+                  length: _otpLength,
                   width: width,
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldWidth: 45,
@@ -334,12 +399,14 @@ class _EmailVerificationState extends State<EmailVerification> {
                     color: notifier.textColor,
                   ),
                   onChanged: (pin) {
-                    // Handle OTP change
+                    setState(() {
+                      _currentOtp = pin;
+                    });
                   },
                   onCompleted: (pin) {
-                    if (!_isLoading) {
-                      _verifyOtp(pin);
-                    }
+                    setState(() {
+                      _currentOtp = pin;
+                    });
                   },
                 ),
                 AppConstants.Height(20),
@@ -378,26 +445,22 @@ class _EmailVerificationState extends State<EmailVerification> {
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: _isLoading
-                        ? null
-                        : () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const phone(),
-                              ),
-                            );
-                          },
+                    onPressed: (_currentOtp.length == _otpLength && !_isLoading)
+                        ? _verifyOtp
+                        : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff6B39F4),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 15),
+                      disabledBackgroundColor:
+                          const Color(0xff6B39F4).withOpacity(0.5),
+                      disabledForegroundColor: Colors.white.withOpacity(0.5),
                     ),
-                    child: const Text(
-                      "Verify Email",
-                      style: TextStyle(
+                    child: Text(
+                      _isLoading ? "Verifying..." : "Verify Email",
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.white,
                         fontFamily: "Manrope-Bold",
