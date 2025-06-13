@@ -1,0 +1,2 @@
+C:/Users/yashs/Desktop/zyrotech/android/app/.cxx/Debug/h3r1l341/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/yashs/Desktop/zyrotech/android/app/.cxx/Debug/h3r1l341/arm64-v8a/CMakeFiles/rebuild_cache.dir
