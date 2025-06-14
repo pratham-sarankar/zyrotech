@@ -52,7 +52,8 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return ProfileProvider(ProfileRepositoryImpl(context.read<ApiService>()));
+            return ProfileProvider(
+                ProfileRepositoryImpl(context.read<ApiService>()));
           },
         ),
       ],

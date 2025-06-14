@@ -136,7 +136,7 @@ class _ProfileState extends State<Profile> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     final statusBarHeight = MediaQuery.of(context).padding.top;
-    
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
@@ -146,12 +146,13 @@ class _ProfileState extends State<Profile> {
           child: Consumer<ProfileProvider>(
             builder: (context, profileProvider, child) {
               return SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(), // Required for RefreshIndicator
+                physics:
+                    const AlwaysScrollableScrollPhysics(), // Required for RefreshIndicator
                 child: Column(
                   children: [
                     Container(
-                      height: height * 0.25,
                       width: double.infinity,
+                      padding: EdgeInsets.only(bottom: 10),
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage("assets/images/Background (2).png"),
@@ -170,7 +171,8 @@ class _ProfileState extends State<Profile> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Material(
                                     color: Colors.transparent,
@@ -180,15 +182,18 @@ class _ProfileState extends State<Profile> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => const BottomBarScreen(),
+                                            builder: (context) =>
+                                                const BottomBarScreen(),
                                           ),
                                         );
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.15),
-                                          borderRadius: BorderRadius.circular(12),
+                                          color: Colors.white
+                                              .withValues(alpha: 0.15),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         child: const Icon(
                                           Icons.arrow_back_ios_new_rounded,
@@ -206,7 +211,8 @@ class _ProfileState extends State<Profile> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => const Personal_data(),
+                                            builder: (context) =>
+                                                const Personal_data(),
                                           ),
                                         );
                                       },
@@ -214,7 +220,8 @@ class _ProfileState extends State<Profile> {
                                         padding: const EdgeInsets.all(8),
                                         decoration: BoxDecoration(
                                           color: Colors.white.withOpacity(0.15),
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         child: const Icon(
                                           Icons.edit_outlined,
@@ -229,7 +236,8 @@ class _ProfileState extends State<Profile> {
                               if (profileProvider.isLoading)
                                 const Center(
                                   child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
                                     strokeWidth: 2,
                                   ),
                                 )
@@ -251,7 +259,8 @@ class _ProfileState extends State<Profile> {
                                     decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
-                                        image: AssetImage("assets/images/profile.png"),
+                                        image: AssetImage(
+                                            "assets/images/profile.png"),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -264,7 +273,8 @@ class _ProfileState extends State<Profile> {
                                     style: const TextStyle(
                                       fontFamily: "Manrope-Bold",
                                       color: Color(0xffFFFFFF),
-                                      fontSize: 15,
+                                      fontSize: 18,
+                                      height: 1.2,
                                     ),
                                   ),
                                 ),
@@ -274,8 +284,8 @@ class _ProfileState extends State<Profile> {
                                     profileProvider.profile!.email,
                                     style: const TextStyle(
                                       fontFamily: "Manrope-Regular",
-                                      color: Color(0xffB59CFA),
-                                      fontSize: 11,
+                                      color: Color.fromARGB(255, 214, 200, 255),
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -323,17 +333,19 @@ class _ProfileState extends State<Profile> {
                               height: 75,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  border:
-                                      Border.all(color: notifier.getContainerBorder)),
+                                  border: Border.all(
+                                      color: notifier.getContainerBorder)),
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 10, right: 10),
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
                                 child: Row(
                                   children: [
                                     Container(
                                         height: 40,
                                         width: 40,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(25),
+                                            borderRadius:
+                                                BorderRadius.circular(25),
                                             color: notifier.tabBar1),
                                         child: Image.asset(
                                           "assets/images/Person.png",
@@ -343,7 +355,8 @@ class _ProfileState extends State<Profile> {
                                     const SizedBox(width: 20),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           AppConstants.Height(20),
                                           Row(
@@ -359,10 +372,13 @@ class _ProfileState extends State<Profile> {
                                               ),
                                               const SizedBox(width: 8),
                                               Container(
-                                                padding: const EdgeInsets.symmetric(
-                                                    horizontal: 8, vertical: 2),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 2),
                                                 decoration: BoxDecoration(
-                                                  color: const Color(0xffE8F5E9),
+                                                  color:
+                                                      const Color(0xffE8F5E9),
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                 ),
@@ -371,7 +387,8 @@ class _ProfileState extends State<Profile> {
                                                   style: TextStyle(
                                                     color: Color(0xff2E7D32),
                                                     fontSize: 10,
-                                                    fontFamily: "Manrope-Regular",
+                                                    fontFamily:
+                                                        "Manrope-Regular",
                                                   ),
                                                 ),
                                               ),
@@ -410,7 +427,8 @@ class _ProfileState extends State<Profile> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Identify_Verification(),
+                                  builder: (context) =>
+                                      const Identify_Verification(),
                                 ),
                               );
                             },
@@ -418,17 +436,19 @@ class _ProfileState extends State<Profile> {
                               height: 75,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  border:
-                                      Border.all(color: notifier.getContainerBorder)),
+                                  border: Border.all(
+                                      color: notifier.getContainerBorder)),
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 10, right: 10),
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
                                 child: Row(
                                   children: [
                                     Container(
                                         height: 40,
                                         width: 40,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(25),
+                                            borderRadius:
+                                                BorderRadius.circular(25),
                                             color: notifier.tabBar1),
                                         child: Image.asset(
                                           "assets/images/Identycard_.png",
@@ -437,7 +457,8 @@ class _ProfileState extends State<Profile> {
                                         )),
                                     const SizedBox(width: 20),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         AppConstants.Height(20),
                                         Text(
@@ -490,17 +511,19 @@ class _ProfileState extends State<Profile> {
                               height: 75,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  border:
-                                      Border.all(color: notifier.getContainerBorder)),
+                                  border: Border.all(
+                                      color: notifier.getContainerBorder)),
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 10, right: 10),
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
                                 child: Row(
                                   children: [
                                     Container(
                                         height: 40,
                                         width: 40,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(25),
+                                            borderRadius:
+                                                BorderRadius.circular(25),
                                             color: notifier.tabBar1),
                                         child: Image.asset(
                                           "assets/images/cloud-connection.png",
@@ -512,7 +535,8 @@ class _ProfileState extends State<Profile> {
                                         )),
                                     const SizedBox(width: 20),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         AppConstants.Height(12),
                                         Text(
@@ -565,7 +589,8 @@ class _ProfileState extends State<Profile> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const Push_Notifications(),
+                                    builder: (context) =>
+                                        const Push_Notifications(),
                                   ));
                             },
                             child: accountDetails(
@@ -576,7 +601,8 @@ class _ProfileState extends State<Profile> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const Notifications(),
+                                      builder: (context) =>
+                                          const Notifications(),
                                     ));
                               },
                             ),
@@ -585,10 +611,12 @@ class _ProfileState extends State<Profile> {
                             height: 75,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: notifier.getContainerBorder),
+                              border: Border.all(
+                                  color: notifier.getContainerBorder),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 10),
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
                               child: Row(
                                 children: [
                                   Container(
@@ -606,7 +634,8 @@ class _ProfileState extends State<Profile> {
                                       )),
                                   const SizedBox(width: 20),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       AppConstants.Height(20),
                                       Text(
@@ -660,7 +689,8 @@ class _ProfileState extends State<Profile> {
                                   ));
                             },
                             child: accountDetails(
-                              image: "assets/images/question-circle-outlined.png",
+                              image:
+                                  "assets/images/question-circle-outlined.png",
                               name: "Help Center",
                               desc: "Get supports",
                               onPress: () {
@@ -742,11 +772,12 @@ class _ProfileState extends State<Profile> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: notifier.background,
-                                border:
-                                    Border.all(color: notifier.getContainerBorder),
+                                border: Border.all(
+                                    color: notifier.getContainerBorder),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -1084,7 +1115,6 @@ class _ProfileState extends State<Profile> {
       required String desc,
       required void Function()? onPress}) {
     return Padding(
-      
       padding: const EdgeInsets.only(bottom: 20),
       child: Container(
         height: 75,
