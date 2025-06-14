@@ -61,4 +61,27 @@ class ApiService {
     );
     return response;
   }
+
+  /// Changes the user's password
+  /// 
+  /// [currentPassword] is the user's current password
+  /// [newPassword] is the new password to set
+  /// 
+  /// Returns a [Future<http.Response>] with the API response
+  /// Throws an [ApiError] if the request fails
+  Future<http.Response> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final headers = await _getHeaders();
+    final response = await http.put(
+      Uri.parse('$baseUrl/api/profile/password'),
+      headers: headers,
+      body: jsonEncode({
+        'password': currentPassword,
+        'newPassword': newPassword,
+      }),
+    );
+    return response;
+  }
 }
