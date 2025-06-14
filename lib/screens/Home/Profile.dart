@@ -27,6 +27,7 @@ import '../config/common.dart';
 import 'bottom.dart';
 import 'package:crowwn/features/profile/presentation/providers/profile_provider.dart';
 import 'package:crowwn/features/profile/data/models/profile_model.dart';
+import '../Account&setting/ChangePassword.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -668,6 +669,80 @@ class _ProfileState extends State<Profile> {
                                     },
                                   ),
                                 ],
+                              ),
+                            ),
+                          ),
+                          AppConstants.Height(12),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ChangePassword(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 75,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: notifier.getContainerBorder),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10, right: 10),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(25),
+                                        color: notifier.tabBar1,
+                                      ),
+                                      child: Icon(
+                                        Icons.lock_outline,
+                                        color: notifier.passwordIcon,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        AppConstants.Height(20),
+                                        Text(
+                                          "Change Password",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: "Manrope_bold",
+                                            fontSize: 14,
+                                            color: notifier.textColor,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 7),
+                                        const Text(
+                                          "Update your password",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Manrope_bold",
+                                            fontSize: 12,
+                                            letterSpacing: 0.2,
+                                            color: Color(0xff64748B),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        color: notifier.tabBarText2,
+                                        size: 18,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
