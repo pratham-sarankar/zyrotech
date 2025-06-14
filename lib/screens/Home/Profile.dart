@@ -16,7 +16,6 @@ import '../../dark_mode.dart';
 import '../Account&setting/API_Connection.dart';
 import '../Account&setting/About App.dart';
 import '../Account&setting/Help Center.dart';
-import '../Account&setting/Identify_Verification.dart';
 import '../Account&setting/Personal data.dart';
 import '../Account&setting/Privacy&Policy.dart';
 import '../Account&setting/Push Notification.dart';
@@ -28,6 +27,7 @@ import 'bottom.dart';
 import 'package:crowwn/features/profile/presentation/providers/profile_provider.dart';
 import 'package:crowwn/features/profile/data/models/profile_model.dart';
 import '../Account&setting/ChangePassword.dart';
+import '../../features/kyc/presentation/screens/identify_verification_screen.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -429,7 +429,7 @@ class _ProfileState extends State<Profile> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      const Identify_Verification(),
+                                      const IdentifyVerificationScreen(),
                                 ),
                               );
                             },
