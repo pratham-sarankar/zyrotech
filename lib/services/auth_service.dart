@@ -2,6 +2,8 @@
 import 'dart:convert';
 
 // Package imports:
+import 'package:crowwn/features/settings/change-password/data/models/change_password_response.dart';
+import 'package:crowwn/features/settings/change-password/presentation/change_password.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 // Project imports:
@@ -151,7 +153,7 @@ class AuthService {
   ///
   /// Returns a [Future<http.Response>] with the API response
   /// Throws an [ApiError] if the request fails
-  Future<Response> changePassword({
+  Future<ChangePasswordResponse> changePassword({
     required String currentPassword,
     required String newPassword,
   }) async {
@@ -162,6 +164,9 @@ class AuthService {
         'newPassword': newPassword,
       }),
     );
-    return response;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return ChangePasswordResponse.fromJson(jsonDecode(response.body));
+    }
+    throw ApiError.fromMap(jsonDecode(response.body));
   }
 }

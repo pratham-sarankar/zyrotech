@@ -10,7 +10,8 @@ import 'dart:convert';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import '../../../dark_mode.dart';
+import '../../../../dark_mode.dart';
+import 'package:crowwn/utils/api_error.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -50,30 +51,27 @@ class _ChangePasswordState extends State<ChangePassword> {
         newPassword: _newPasswordController.text,
       );
 
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        if (mounted) {
-          SnackbarUtils.showSuccess(
-            context: context,
-            message: responseData['message'],
-          );
-          Navigator.pop(context);
-        }
-      } else {
-        final errorData = jsonDecode(response.body);
-        if (mounted) {
-          SnackbarUtils.showError(
-            context: context,
-            message: errorData['message'],
-          );
-        }
+      if (mounted) {
+        SnackbarUtils.showSuccess(
+          context: context,
+          message: response.message,
+        );
+        Navigator.pop(context);
       }
-    } catch (e) {
+    } on ApiError catch (e) {
       if (mounted) {
         SnackbarUtils.showError(
           context: context,
-          message: e.toString(),
+          message: e.message,
         );
+      }
+    } catch (e, stackTrace) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: 'An unexpected error occurred. Please try again later.',
+        );
+        debugPrint('Error changing password: $e\n$stackTrace');
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
