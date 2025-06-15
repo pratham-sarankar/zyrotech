@@ -11,15 +11,14 @@ class CommonButton extends StatefulWidget {
 
   void Function() tap;
 
-  CommonButton(
-      {Key? key,
-      required this.tap,
-      required this.color,
-      required this.text,
-      required this.textcolor,
-      required this.fontsize,
-      })
-      : super(key: key);
+  CommonButton({
+    Key? key,
+    required this.tap,
+    required this.color,
+    required this.text,
+    required this.textcolor,
+    required this.fontsize,
+  }) : super(key: key);
 
   @override
   State<CommonButton> createState() => _CommonButtonState();
@@ -40,8 +39,7 @@ class _CommonButtonState extends State<CommonButton> {
           child: Center(
               child: Text(widget.text,
                   style: TextStyle(
-                    color: widget.textcolor,fontSize: widget.fontsize
-                  )))),
+                      color: widget.textcolor, fontSize: widget.fontsize)))),
     );
   }
 }
@@ -53,36 +51,33 @@ Widget button({required String text}) {
     decoration: BoxDecoration(
         color: Colors.deepPurple, borderRadius: BorderRadius.circular(15)),
     child: ElevatedButton(
-      onPressed: () {
-      },
+      onPressed: () {},
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.deepPurple,
+          backgroundColor: Colors.deepPurple,
           shape: RoundedRectangleBorder(
               side: const BorderSide(width: 300),
               borderRadius: BorderRadius.circular(15))),
-      child: Text(text, style: const TextStyle(color: Colors.white, fontSize: 17)),
+      child:
+          Text(text, style: const TextStyle(color: Colors.white, fontSize: 17)),
     ),
   );
 }
 
-
-Widget button1({required String text,required onPressed}){
-  return  Container(
+Widget button1({required String text, required onPressed}) {
+  return Container(
     height: 50,
     width: 330,
     decoration: BoxDecoration(
         color: const Color(0xff6B39F4),
-        borderRadius: BorderRadius.circular(15)
-    ),
+        borderRadius: BorderRadius.circular(15)),
     child: ElevatedButton(
-      onPressed: (){},
+      onPressed: () {},
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
               side: const BorderSide(width: 300),
-              borderRadius: BorderRadius.circular(15)
-          )
-      ),
-      child:  Text(text,style: const TextStyle(color: Colors.white,fontSize: 19)),
+              borderRadius: BorderRadius.circular(15))),
+      child:
+          Text(text, style: const TextStyle(color: Colors.white, fontSize: 19)),
     ),
   );
 }

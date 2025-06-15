@@ -3,12 +3,11 @@ import 'dart:convert';
 
 // Package imports:
 import 'package:crowwn/features/settings/change-password/data/models/change_password_response.dart';
-import 'package:crowwn/features/settings/change-password/presentation/change_password.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:crowwn/models/responses/sign_up_response.dart';
-import 'package:http/http.dart';
 import '../utils/api_error.dart';
 import 'api_service.dart';
 
@@ -168,5 +167,25 @@ class AuthService {
       return ChangePasswordResponse.fromJson(jsonDecode(response.body));
     }
     throw ApiError.fromMap(jsonDecode(response.body));
+  }
+
+  /// Logs out the user by:
+  /// 1. Clearing SharedPreferences
+  /// 2. Signing out from Google
+  ///
+  /// Throws an [ApiError] if the logout process fails
+  Future<void> logout() async {
+    try {
+      // Clear SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      // Sign out from Google
+      final googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
+    } catch (e) {
+      if (e is ApiError) rethrow;
+      throw ApiError.fromString('Failed to logout: ${e.toString()}');
+    }
   }
 }

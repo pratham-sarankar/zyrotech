@@ -1,4 +1,3 @@
-
 // ignore_for_file: file_names
 class AccountModel1 {
   String image;
@@ -29,16 +28,10 @@ List<AccountModel1> accountDetail1 = [
     desc: "Your transaction details",
   ),
   AccountModel1(
-    image:"assets/images/card.png",
+    image: "assets/images/card.png",
     name: "Bank Account",
     desc: "Manage your bank account",
   ),
-
-
-
-
-
-
 ];
 
 class AccountModel2 {
@@ -54,7 +47,6 @@ class AccountModel2 {
 }
 
 List<AccountModel2> accountDetail2 = [
-
   AccountModel2(
     image: "",
     name: "",
@@ -66,7 +58,6 @@ List<AccountModel2> accountDetail2 = [
     desc: "",
   ),
 ];
-
 
 class AccountModel3 {
   String image;
@@ -81,9 +72,8 @@ class AccountModel3 {
 }
 
 List<AccountModel3> accountDetail3 = [
-
   AccountModel3(
-    image:"",
+    image: "",
     name: "",
     desc: "",
   ),
@@ -99,8 +89,6 @@ List<AccountModel3> accountDetail3 = [
   ),
 ];
 
-
-
 class AccountModel4 {
   String image;
   String name;
@@ -114,7 +102,6 @@ class AccountModel4 {
 }
 
 List<AccountModel4> accountDetail4 = [
-
   AccountModel4(
     image: "",
     name: "",

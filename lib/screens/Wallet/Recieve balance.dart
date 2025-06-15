@@ -25,7 +25,6 @@ class _Recevie_balanceState extends State<Recevie_balance> {
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
     var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: notifier.background,

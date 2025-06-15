@@ -38,7 +38,6 @@ class _KYCOnboardingContentState extends State<_KYCOnboardingContent> {
   ColorNotifire notifier = ColorNotifire();
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  bool _isSkipped = false;
 
   // Form controllers
   final TextEditingController _fullNameController = TextEditingController();
@@ -86,9 +85,6 @@ class _KYCOnboardingContentState extends State<_KYCOnboardingContent> {
   }
 
   void _skipKYC() {
-    setState(() {
-      _isSkipped = true;
-    });
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -120,10 +116,10 @@ class _KYCOnboardingContentState extends State<_KYCOnboardingContent> {
             child: OutlinedButton(
               onPressed: _skipKYC,
               style: ButtonStyle(
-                side: MaterialStatePropertyAll(
+                side: WidgetStatePropertyAll(
                   BorderSide(color: notifier.outlinedButtonColor),
                 ),
-                padding: const MaterialStatePropertyAll(
+                padding: const WidgetStatePropertyAll(
                   EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 ),
               ),

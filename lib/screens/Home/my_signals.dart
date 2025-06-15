@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/models/bot.dart';
-import 'package:crowwn/models/signal.dart';
 import '../../dark_mode.dart';
 
 class MySignals extends StatefulWidget {
@@ -236,109 +235,107 @@ class _MySignalsState extends State<MySignals>
     );
   }
 
-  Widget _buildSignalItem(Signal signal) {
-    //Temp
-    return Container();
-    // return Container(
-    //   margin: const EdgeInsets.only(bottom: 12),
-    //   padding: const EdgeInsets.all(16),
-    //   decoration: BoxDecoration(
-    //     color: notifier.background,
-    //     borderRadius: BorderRadius.circular(12),
-    //     border: Border.all(
-    //       color: notifier.textColor.withValues(alpha:0.1),
-    //       width: 1,
-    //     ),
-    //   ),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         children: [
-    //           Text(
-    //             signal.pair,
-    //             style: TextStyle(
-    //               color: notifier.textColor,
-    //               fontSize: 14,
-    //               fontWeight: FontWeight.bold,
-    //             ),
-    //           ),
-    //           Container(
-    //             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    //             decoration: BoxDecoration(
-    //               color: signal.typeColor.withValues(alpha:0.1),
-    //               borderRadius: BorderRadius.circular(12),
-    //             ),
-    //             child: Text(
-    //               signal.type,
-    //               style: TextStyle(
-    //                 color: signal.typeColor,
-    //                 fontSize: 12,
-    //                 fontWeight: FontWeight.bold,
-    //               ),
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //       const SizedBox(height: 12),
-    //       Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         children: [
-    //           _buildSignalMetric('Entry', signal.entryPrice),
-    //           _buildSignalMetric('Target', signal.targetPrice),
-    //           _buildSignalMetric('Stop Loss', signal.stopLoss),
-    //         ],
-    //       ),
-    //       const SizedBox(height: 12),
-    //       Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //         children: [
-    //           Text(
-    //             signal.timeAgo,
-    //             style: TextStyle(
-    //               color: notifier.textColor.withValues(alpha:0.7),
-    //               fontSize: 12,
-    //             ),
-    //           ),
-    //           Text(
-    //             'Risk: ${signal.riskLevel}',
-    //             style: TextStyle(
-    //               color: Colors.orange,
-    //               fontSize: 12,
-    //               fontWeight: FontWeight.w500,
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     ],
-    //   ),
-    // );
-  }
+  // Widget _buildSignalItem(Signal signal) {
+  //   return Container(
+  //     margin: const EdgeInsets.only(bottom: 12),
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       color: notifier.background,
+  //       borderRadius: BorderRadius.circular(12),
+  //       border: Border.all(
+  //         color: notifier.textColor.withValues(alpha: 0.1),
+  //         width: 1,
+  //       ),
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               'pair',
+  //               style: TextStyle(
+  //                 color: notifier.textColor,
+  //                 fontSize: 14,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //             Container(
+  //               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  //               decoration: BoxDecoration(
+  //                 // color: signal.typeColor.withValues(alpha:0.1),
+  //                 borderRadius: BorderRadius.circular(12),
+  //               ),
+  //               child: Text(
+  //                 'type',
+  //                 style: TextStyle(
+  //                   // color: signal.typeColor,
+  //                   fontSize: 12,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //         const SizedBox(height: 12),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             _buildSignalMetric('Entry', '\$100'),
+  //             _buildSignalMetric('Target', '\$20'),
+  //             _buildSignalMetric('Stop Loss', '\$10'),
+  //           ],
+  //         ),
+  //         const SizedBox(height: 12),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               'time',
+  //               style: TextStyle(
+  //                 color: notifier.textColor.withValues(alpha: 0.7),
+  //                 fontSize: 12,
+  //               ),
+  //             ),
+  //             Text(
+  //               'Risk: 2',
+  //               style: TextStyle(
+  //                 color: Colors.orange,
+  //                 fontSize: 12,
+  //                 fontWeight: FontWeight.w500,
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  Widget _buildSignalMetric(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: notifier.textColor.withValues(alpha: 0.7),
-            fontSize: 12,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            color: notifier.textColor,
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildSignalMetric(String label, String value) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         label,
+  //         style: TextStyle(
+  //           color: notifier.textColor.withValues(alpha: 0.7),
+  //           fontSize: 12,
+  //         ),
+  //       ),
+  //       const SizedBox(height: 4),
+  //       Text(
+  //         value,
+  //         style: TextStyle(
+  //           color: notifier.textColor,
+  //           fontSize: 14,
+  //           fontWeight: FontWeight.w600,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   void _showTradingDetailsBottomSheet({
     required String name,

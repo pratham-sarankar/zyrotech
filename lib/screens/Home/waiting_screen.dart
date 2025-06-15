@@ -38,4 +38,4 @@ class WaitingScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}
