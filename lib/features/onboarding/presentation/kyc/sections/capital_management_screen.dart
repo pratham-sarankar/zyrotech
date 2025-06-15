@@ -171,7 +171,7 @@ class _CapitalManagementScreenState extends State<CapitalManagementScreen> {
                 color: const Color(0xff6B39F4),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff6B39F4).withOpacity(0.3),
+                    color: const Color(0xff6B39F4).withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),

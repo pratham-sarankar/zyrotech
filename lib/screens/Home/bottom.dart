@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Home/Portfolio.dart';
-import 'package:crowwn/screens/Home/Profile.dart';
+import 'package:crowwn/features/profile/presentation/profile.dart';
 import 'package:crowwn/screens/Home/bot.dart';
 import 'package:crowwn/screens/Home/my_signals.dart';
 import 'package:crowwn/screens/Home/new_home_screen.dart';

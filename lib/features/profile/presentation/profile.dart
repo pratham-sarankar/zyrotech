@@ -6,25 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // Package imports:
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Login%20Screens/login_screen.dart';
-import '../../dark_mode.dart';
-import '../Account&setting/API_Connection.dart';
-import '../Account&setting/About App.dart';
-import '../Account&setting/Help Center.dart';
-import '../Account&setting/Identify_Verification.dart';
-import '../Account&setting/Personal data.dart';
-import '../Account&setting/Privacy&Policy.dart';
-import '../Account&setting/Push Notification.dart';
-import '../Account&setting/Refferal Code.dart';
-import '../Account&setting/Terms&conditions.dart';
-import '../Message & Notification/Notifications.dart';
-import '../config/common.dart';
-import 'bottom.dart';
+import '../../../dark_mode.dart';
+import '../../../screens/Account&setting/API_Connection.dart';
+import '../../../screens/Account&setting/About App.dart';
+import '../../../screens/Account&setting/Help Center.dart';
+import '../../../screens/Account&setting/Identify_Verification.dart';
+import '../../../screens/Account&setting/Personal data.dart';
+import '../../../screens/Account&setting/Privacy&Policy.dart';
+import '../../../screens/Account&setting/Push Notification.dart';
+import '../../../screens/Account&setting/Refferal Code.dart';
+import '../../../screens/Account&setting/Terms&conditions.dart';
+import '../../../screens/Message & Notification/Notifications.dart';
+import '../../../screens/config/common.dart';
+import '../../../services/auth_service.dart';
+import '../../../utils/api_error.dart';
+import '../../../utils/snackbar_utils.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -38,23 +38,31 @@ class _ProfileState extends State<Profile> {
 
   Future<void> _logout() async {
     try {
-      // Clear SharedPreferences
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.clear();
+      final authService = context.read<AuthService>();
+      await authService.logout();
 
-      // Sign out from Google
-      GoogleSignIn googleSignIn = GoogleSignIn();
-      await googleSignIn.signOut();
-
-      // Navigate to login screen or show a logout success message
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Login(),
-        ),
-      );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Login(),
+          ),
+        );
+      }
+    } on ApiError catch (e) {
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: e.message,
+        );
+      }
     } catch (e) {
-      print('Error logging out: $e');
+      if (mounted) {
+        SnackbarUtils.showError(
+          context: context,
+          message: 'An unexpected error occurred during logout.',
+        );
+      }
     }
   }
 
@@ -127,7 +135,6 @@ class _ProfileState extends State<Profile> {
           child: Column(
             children: [
               Container(
-                height: height / 4.5,
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -135,84 +142,74 @@ class _ProfileState extends State<Profile> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 35, right: 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const BottomBarScreen(),
-                                ),
-                              );
-                            },
-                            child: Image.asset(
-                              "assets/images/arrow-narrow-left (1).png",
-                              scale: 3,
-                              color: Colors.white,
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const Personal_data(),
+                                  ),
+                                );
+                              },
+                              child: Image.asset(
+                                "assets/images/edit.png",
+                                scale: 3,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Personal_data(),
-                                ),
-                              );
-                            },
-                            child: Image.asset(
-                              "assets/images/edit.png",
-                              scale: 3,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                      AppConstants.Height(3),
-                      Center(
-                        child: Container(
-                          height: height / 14,
-                          width: width / 4.2,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/profile.png"),
-                              fit: BoxFit.cover,
+                          ],
+                        ),
+                        AppConstants.Height(3),
+                        Center(
+                          child: Container(
+                            height: height / 14,
+                            width: width / 4.2,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: AssetImage("assets/images/profile.png"),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      AppConstants.Height(3),
-                      const Center(
-                        child: Text(
-                          "John Doe",
-                          style: TextStyle(
-                            fontFamily: "Manrope-Bold",
-                            color: Color(0xffFFFFFF),
-                            fontSize: 15,
+                        AppConstants.Height(3),
+                        const Center(
+                          child: Text(
+                            "John Doe",
+                            style: TextStyle(
+                              fontFamily: "Manrope-Bold",
+                              color: Color(0xffFFFFFF),
+                              fontSize: 18,
+                              height: 1.8,
+                            ),
                           ),
                         ),
-                      ),
-                      AppConstants.Height(1),
-                      const Center(
-                        child: Text(
-                          "johndoe@mail.com",
-                          style: TextStyle(
-                            fontFamily: "Manrope-Regular",
-                            color: Color(0xffB59CFA),
-                            fontSize: 11,
+                        AppConstants.Height(1),
+                        const Center(
+                          child: Text(
+                            "johndoe@mail.com",
+                            style: TextStyle(
+                              fontFamily: "Manrope-Regular",
+                              color: Color(0xffB59CFA),
+                              fontSize: 14,
+                              height: 1,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        AppConstants.Height(15),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -222,60 +219,61 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const Reffle_code(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        height: 70,
-                        decoration: BoxDecoration(
-                          color: notifier.background,
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                            color: const Color(0xffB59CFA),
-                          ),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Text(
-                                    "Invite your friends and win\n free asset up to 100",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: "Manrope-Regular",
-                                      color: notifier.textColor,
-                                      wordSpacing: 2,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const Spacer(),
-                            Container(
-                              alignment: Alignment.center,
-                              height: height / 9,
-                              width: width / 5,
-                              child: Image.asset(
-                                "assets/images/Gift_1.png",
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => const Reffle_code(),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Container(
+                    //     height: 70,
+                    //     decoration: BoxDecoration(
+                    //       color: notifier.background,
+                    //       borderRadius: BorderRadius.circular(15),
+                    //       border: Border.all(
+                    //         color: const Color(0xffB59CFA),
+                    //       ),
+                    //     ),
+                    //     child: Row(
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         Expanded(
+                    //           child: Column(
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             crossAxisAlignment: CrossAxisAlignment.start,
+                    //             children: [
+                    //               Padding(
+                    //                 padding: const EdgeInsets.only(left: 10),
+                    //                 child: Text(
+                    //                   "Invite your friends and win free asset up to 100",
+                    //                   style: TextStyle(
+                    //                     fontSize: 16,
+                    //                     fontFamily: "Manrope-Regular",
+                    //                     color: notifier.textColor,
+                    //                     wordSpacing: 2,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //         ),
+                    //         Container(
+                    //           alignment: Alignment.center,
+                    //           height: height / 9,
+                    //           width: width / 5,
+                    //           child: Image.asset(
+                    //             "assets/images/Gift_1.png",
+                    //             fit: BoxFit.cover,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     AppConstants.Height(12),
                     const Text(
                       "Profile",

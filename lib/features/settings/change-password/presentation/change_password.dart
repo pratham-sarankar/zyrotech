@@ -4,7 +4,6 @@ import 'package:crowwn/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
 
 // Dart imports:
-import 'dart:convert';
 
 // Package imports:
 import 'package:provider/provider.dart';
@@ -111,7 +110,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 Text(
                   'Enter your current password and choose a new password',
                   style: TextStyle(
-                    color: notifier.textColor.withOpacity(0.7),
+                    color: notifier.textColor.withValues(alpha: 0.7),
                     fontSize: 14,
                     fontFamily: 'Manrope-Regular',
                   ),
@@ -136,7 +135,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         _obscureCurrentPassword
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: notifier.textColor.withOpacity(0.5),
+                        color: notifier.textColor.withValues(alpha: 0.5),
                       ),
                       onPressed: () {
                         setState(() {
@@ -172,7 +171,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         _obscureNewPassword
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: notifier.textColor.withOpacity(0.5),
+                        color: notifier.textColor.withValues(alpha: 0.5),
                       ),
                       onPressed: () {
                         setState(() {
@@ -211,7 +210,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         _obscureConfirmPassword
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: notifier.textColor.withOpacity(0.5),
+                        color: notifier.textColor.withValues(alpha: 0.5),
                       ),
                       onPressed: () {
                         setState(() {

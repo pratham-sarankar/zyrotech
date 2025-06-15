@@ -71,7 +71,7 @@ class Signal {
       'stoploss': stoploss,
       'target_1r': target1r,
       'target_2r': target2r,
-      'exit_time': exitTime != null ? dateFormat.format(exitTime) : null,
+      'exit_time': dateFormat.format(exitTime),
       'exit_price': exitPrice,
       'exit_reason': exitReason,
       'profit_loss': profitLoss,

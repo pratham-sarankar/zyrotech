@@ -617,158 +617,158 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
     }
   }
 
-  Widget _buildStrategyCard(
-      String name, String ticker, String price, String change, Color color) {
-    return Container(
-      width: 160,
-      decoration: BoxDecoration(
-        color: notifier.container,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: () {},
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Logo and Name Section
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: color.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child:
-                          Icon(Icons.currency_bitcoin, size: 24, color: color),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            name,
-                            style: TextStyle(
-                              color: notifier.textColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            ticker,
-                            style: TextStyle(
-                              color: notifier.textColor.withValues(alpha: 0.7),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
+  // Widget _buildStrategyCard(
+  //     String name, String ticker, String price, String change, Color color) {
+  //   return Container(
+  //     width: 160,
+  //     decoration: BoxDecoration(
+  //       color: notifier.container,
+  //       borderRadius: BorderRadius.circular(16),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.black.withValues(alpha: 0.05),
+  //           blurRadius: 10,
+  //           offset: const Offset(0, 4),
+  //         ),
+  //       ],
+  //     ),
+  //     child: Material(
+  //       color: Colors.transparent,
+  //       child: InkWell(
+  //         borderRadius: BorderRadius.circular(16),
+  //         onTap: () {},
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(16.0),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               // Logo and Name Section
+  //               Row(
+  //                 children: [
+  //                   Container(
+  //                     padding: const EdgeInsets.all(8),
+  //                     decoration: BoxDecoration(
+  //                       color: color.withValues(alpha: 0.1),
+  //                       borderRadius: BorderRadius.circular(12),
+  //                     ),
+  //                     child:
+  //                         Icon(Icons.currency_bitcoin, size: 24, color: color),
+  //                   ),
+  //                   const SizedBox(width: 8),
+  //                   Expanded(
+  //                     child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         Text(
+  //                           name,
+  //                           style: TextStyle(
+  //                             color: notifier.textColor,
+  //                             fontSize: 16,
+  //                             fontWeight: FontWeight.w600,
+  //                           ),
+  //                           overflow: TextOverflow.ellipsis,
+  //                         ),
+  //                         Text(
+  //                           ticker,
+  //                           style: TextStyle(
+  //                             color: notifier.textColor.withValues(alpha: 0.7),
+  //                             fontSize: 13,
+  //                             fontWeight: FontWeight.w500,
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //               const SizedBox(height: 16),
 
-                // Line Chart Section
-                Container(
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: CustomPaint(
-                    painter: LineChartPainter(
-                      color: color,
-                      isPositive: change.startsWith('▲'),
-                    ),
-                    size: const Size(double.infinity, 60),
-                  ),
-                ),
-                const SizedBox(height: 16),
+  //               // Line Chart Section
+  //               Container(
+  //                 height: 60,
+  //                 decoration: BoxDecoration(
+  //                   color: color.withValues(alpha: 0.05),
+  //                   borderRadius: BorderRadius.circular(12),
+  //                 ),
+  //                 child: CustomPaint(
+  //                   painter: LineChartPainter(
+  //                     color: color,
+  //                     isPositive: change.startsWith('▲'),
+  //                   ),
+  //                   size: const Size(double.infinity, 60),
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 16),
 
-                // Price and Rate Section
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        price,
-                        style: TextStyle(
-                          color: notifier.textColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      flex: 3,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 4, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: (change.startsWith('▲')
-                                  ? Colors.green
-                                  : Colors.red)
-                              .withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              change.startsWith('▲')
-                                  ? Icons.trending_up
-                                  : Icons.trending_down,
-                              size: 12,
-                              color: change.startsWith('▲')
-                                  ? Colors.green
-                                  : Colors.red,
-                            ),
-                            const SizedBox(width: 2),
-                            Flexible(
-                              child: Text(
-                                change,
-                                style: TextStyle(
-                                  color: change.startsWith('▲')
-                                      ? Colors.green
-                                      : Colors.red,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  //               // Price and Rate Section
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                 children: [
+  //                   Expanded(
+  //                     flex: 3,
+  //                     child: Text(
+  //                       price,
+  //                       style: TextStyle(
+  //                         color: notifier.textColor,
+  //                         fontSize: 14,
+  //                         fontWeight: FontWeight.bold,
+  //                         letterSpacing: 0.5,
+  //                       ),
+  //                       overflow: TextOverflow.ellipsis,
+  //                     ),
+  //                   ),
+  //                   const SizedBox(width: 4),
+  //                   Expanded(
+  //                     flex: 3,
+  //                     child: Container(
+  //                       padding: const EdgeInsets.symmetric(
+  //                           horizontal: 4, vertical: 3),
+  //                       decoration: BoxDecoration(
+  //                         color: (change.startsWith('▲')
+  //                                 ? Colors.green
+  //                                 : Colors.red)
+  //                             .withValues(alpha: 0.1),
+  //                         borderRadius: BorderRadius.circular(6),
+  //                       ),
+  //                       child: Row(
+  //                         mainAxisSize: MainAxisSize.min,
+  //                         children: [
+  //                           Icon(
+  //                             change.startsWith('▲')
+  //                                 ? Icons.trending_up
+  //                                 : Icons.trending_down,
+  //                             size: 12,
+  //                             color: change.startsWith('▲')
+  //                                 ? Colors.green
+  //                                 : Colors.red,
+  //                           ),
+  //                           const SizedBox(width: 2),
+  //                           Flexible(
+  //                             child: Text(
+  //                               change,
+  //                               style: TextStyle(
+  //                                 color: change.startsWith('▲')
+  //                                     ? Colors.green
+  //                                     : Colors.red,
+  //                                 fontSize: 10,
+  //                                 fontWeight: FontWeight.w600,
+  //                               ),
+  //                               overflow: TextOverflow.ellipsis,
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildStrategyResultItem(
     String name,
@@ -941,31 +941,31 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
     );
   }
 
-  Widget _buildActionButton(String text, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: notifier.textColor.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon,
-              size: 14, color: notifier.textColor.withValues(alpha: 0.7)),
-          const SizedBox(width: 4),
-          Text(
-            text,
-            style: TextStyle(
-              color: notifier.textColor.withValues(alpha: 0.7),
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildActionButton(String text, IconData icon) {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+  //     decoration: BoxDecoration(
+  //       color: notifier.textColor.withValues(alpha: 0.05),
+  //       borderRadius: BorderRadius.circular(8),
+  //     ),
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         Icon(icon,
+  //             size: 14, color: notifier.textColor.withValues(alpha: 0.7)),
+  //         const SizedBox(width: 4),
+  //         Text(
+  //           text,
+  //           style: TextStyle(
+  //             color: notifier.textColor.withValues(alpha: 0.7),
+  //             fontSize: 11,
+  //             fontWeight: FontWeight.w500,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildMetricChip(String text, IconData icon) {
     return Container(
@@ -993,91 +993,91 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
     );
   }
 
-  void _showExchangeBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: notifier.background,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Broker API",
-                style: TextStyle(
-                  color: notifier.textColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20),
-              _buildExchangeOption("Binance", Icons.account_balance),
-              const SizedBox(height: 12),
-              _buildExchangeOption("Delta Exchange", Icons.account_balance),
-              const SizedBox(height: 20),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  // void _showExchangeBottomSheet() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     backgroundColor: notifier.background,
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+  //     ),
+  //     builder: (context) {
+  //       return Container(
+  //         padding: const EdgeInsets.all(20),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //               "Broker API",
+  //               style: TextStyle(
+  //                 color: notifier.textColor,
+  //                 fontSize: 20,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //             const SizedBox(height: 20),
+  //             _buildExchangeOption("Binance", Icons.account_balance),
+  //             const SizedBox(height: 12),
+  //             _buildExchangeOption("Delta Exchange", Icons.account_balance),
+  //             const SizedBox(height: 20),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  Widget _buildExchangeOption(String name, IconData icon) {
-    final isSelected = selectedExchange == name;
-    return InkWell(
-      onTap: () {
-        setState(() {
-          selectedExchange = name;
-        });
-        Navigator.pop(context);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? const Color(0xff6B39F4).withValues(alpha: 0.1)
-              : notifier.container.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected
-                ? const Color(0xff6B39F4).withValues(alpha: 0.3)
-                : notifier.textColor.withValues(alpha: 0.1),
-          ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 20,
-              color: isSelected
-                  ? const Color(0xff6B39F4)
-                  : notifier.textColor.withValues(alpha: 0.7),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              name,
-              style: TextStyle(
-                color:
-                    isSelected ? const Color(0xff6B39F4) : notifier.textColor,
-                fontSize: 16,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              ),
-            ),
-            const Spacer(),
-            if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: const Color(0xff6B39F4),
-                size: 20,
-              ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _buildExchangeOption(String name, IconData icon) {
+  //   final isSelected = selectedExchange == name;
+  //   return InkWell(
+  //     onTap: () {
+  //       setState(() {
+  //         selectedExchange = name;
+  //       });
+  //       Navigator.pop(context);
+  //     },
+  //     child: Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  //       decoration: BoxDecoration(
+  //         color: isSelected
+  //             ? const Color(0xff6B39F4).withValues(alpha: 0.1)
+  //             : notifier.container.withValues(alpha: 0.5),
+  //         borderRadius: BorderRadius.circular(12),
+  //         border: Border.all(
+  //           color: isSelected
+  //               ? const Color(0xff6B39F4).withValues(alpha: 0.3)
+  //               : notifier.textColor.withValues(alpha: 0.1),
+  //         ),
+  //       ),
+  //       child: Row(
+  //         children: [
+  //           Icon(
+  //             icon,
+  //             size: 20,
+  //             color: isSelected
+  //                 ? const Color(0xff6B39F4)
+  //                 : notifier.textColor.withValues(alpha: 0.7),
+  //           ),
+  //           const SizedBox(width: 12),
+  //           Text(
+  //             name,
+  //             style: TextStyle(
+  //               color:
+  //                   isSelected ? const Color(0xff6B39F4) : notifier.textColor,
+  //               fontSize: 16,
+  //               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+  //             ),
+  //           ),
+  //           const Spacer(),
+  //           if (isSelected)
+  //             Icon(
+  //               Icons.check_circle,
+  //               color: const Color(0xff6B39F4),
+  //               size: 20,
+  //             ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }
