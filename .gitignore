@@ -45,6 +45,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# CMake build artifacts
+/android/app/.cxx/
+
 # FVM Version Cache
 .fvm/
 

@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 // Project imports:
 import 'package:crowwn/models/responses/sign_up_response.dart';
+import 'package:http/http.dart';
 import '../utils/api_error.dart';
 import 'api_service.dart';
 
@@ -141,5 +142,26 @@ class AuthService {
     } else {
       throw ApiError.fromMap(jsonDecode(response.body));
     }
+  }
+
+  /// Changes the user's password
+  ///
+  /// [currentPassword] is the user's current password
+  /// [newPassword] is the new password to set
+  ///
+  /// Returns a [Future<http.Response>] with the API response
+  /// Throws an [ApiError] if the request fails
+  Future<Response> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final response = await _apiService.put(
+      '/api/profile/password',
+      body: jsonEncode({
+        'password': currentPassword,
+        'newPassword': newPassword,
+      }),
+    );
+    return response;
   }
 }
