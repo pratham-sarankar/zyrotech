@@ -14,17 +14,35 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<ProfileModel> getProfile() async {
-    try {
-      final response = await _apiService.get('/api/profile/me');
+    final response = await _apiService.get('/api/profile/me');
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return ProfileModel.fromJson(data);
+    } else {
+      throw ApiError.fromMap(jsonDecode(response.body));
+    }
+  }
 
-      if (response.statusCode == 200) {
-        return ProfileModel.fromJson(jsonDecode(response.body));
-      } else {
-        throw ApiError.fromMap(jsonDecode(response.body));
-      }
-    } catch (e) {
-      if (e is ApiError) rethrow;
-      throw ApiError.fromMap({'message': e.toString()});
+  @override
+  Future<ProfileModel> updateProfile({
+    required String fullName,
+    required String email,
+    required String phoneNumber,
+  }) async {
+    final response = await _apiService.put(
+      '/api/profile',
+      body: jsonEncode({
+        'fullName': fullName,
+        'email': email,
+        'phoneNumber': phoneNumber,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return ProfileModel.fromJson(data['data']['user']);
+    } else {
+      throw ApiError.fromMap(jsonDecode(response.body));
     }
   }
 }

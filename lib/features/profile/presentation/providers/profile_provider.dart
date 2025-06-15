@@ -29,7 +29,35 @@ class ProfileProvider extends ChangeNotifier {
     } on ApiError catch (e) {
       _error = e.message;
     } catch (e) {
-      _error = 'Failed to fetch profile: ${e.toString()}';
+      _error = 'An unexpected error occurred';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> updateProfile({
+    required String fullName,
+    required String email,
+    required String phoneNumber,
+  }) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      _profile = await _repository.updateProfile(
+        fullName: fullName,
+        email: email,
+        phoneNumber: phoneNumber,
+      );
+      return true;
+    } on ApiError catch (e) {
+      _error = e.message;
+      return false;
+    } catch (e) {
+      _error = 'An unexpected error occurred';
+      return false;
     } finally {
       _isLoading = false;
       notifyListeners();

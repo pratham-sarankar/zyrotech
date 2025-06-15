@@ -5,6 +5,7 @@ class ProfileModel {
   final String id;
   final String fullName;
   final String email;
+  final String phoneNumber;
   final bool isEmailVerified;
   final bool isPhoneVerified;
   final DateTime createdAt;
@@ -14,6 +15,7 @@ class ProfileModel {
     required this.id,
     required this.fullName,
     required this.email,
+    required this.phoneNumber,
     required this.isEmailVerified,
     required this.isPhoneVerified,
     required this.createdAt,
@@ -26,14 +28,15 @@ class ProfileModel {
         id: json['id'] as String,
         fullName: json['fullName'] as String,
         email: json['email'] as String,
-        isEmailVerified: json['isEmailVerified'] as bool,
-        isPhoneVerified: json['isPhoneVerified'] as bool,
+        phoneNumber: json['phoneNumber'] as String? ?? '',
+        isEmailVerified: json['isEmailVerified'] as bool? ?? false,
+        isPhoneVerified: json['isPhoneVerified'] as bool? ?? false,
         createdAt: DateTime.parse(json['createdAt'] as String),
         updatedAt: DateTime.parse(json['updatedAt'] as String),
       );
     } catch (e) {
       throw ApiError.fromString(
-        'Failed to parse profile data: ${e.toString()}',
+        'Failed to parse profile data}',
       );
     }
   }
@@ -43,6 +46,7 @@ class ProfileModel {
       'id': id,
       'fullName': fullName,
       'email': email,
+      'phoneNumber': phoneNumber,
       'isEmailVerified': isEmailVerified,
       'isPhoneVerified': isPhoneVerified,
       'createdAt': createdAt.toIso8601String(),

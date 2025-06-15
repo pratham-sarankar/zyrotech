@@ -1,9 +1,8 @@
-// ignore_for_file: file_names
-// import 'package:Crowwn/Home/bottom.dart';
-
 // Flutter imports:
+import 'package:crowwn/features/profile/presentation/personal_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iconly/iconly.dart';
 import 'package:shimmer/shimmer.dart';
 
 // Package imports:
@@ -16,7 +15,6 @@ import '../../../screens/Account&setting/API_Connection.dart';
 import '../../../screens/Account&setting/About App.dart';
 import '../../../screens/Account&setting/Help Center.dart';
 import '../../../screens/Account&setting/Identify_Verification.dart';
-import '../../../screens/Account&setting/Personal data.dart';
 import '../../../screens/Account&setting/Privacy&Policy.dart';
 import '../../../screens/Account&setting/Push Notification.dart';
 import '../../../screens/Account&setting/Refferal Code.dart';
@@ -25,7 +23,7 @@ import '../../../screens/Message & Notification/Notifications.dart';
 import '../../../screens/config/common.dart';
 import '../../../services/auth_service.dart';
 import '../../../utils/api_error.dart';
-import '../../../utils/snackbar_utils.dart';
+import '../../../utils/toast_utils.dart';
 import 'providers/profile_provider.dart';
 
 class Profile extends StatefulWidget {
@@ -60,14 +58,14 @@ class _ProfileState extends State<Profile> {
       }
     } on ApiError catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: e.message,
         );
       }
     } catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: 'An unexpected error occurred during logout.',
         );
@@ -143,15 +141,13 @@ class _ProfileState extends State<Profile> {
         final isLoading = profileProvider.isLoading;
         final error = profileProvider.error;
 
-        // Show error in Snackbar if there is one
+        // Show error in overlay if there is one
         if (error != null && mounted) {
-          // Use Future.microtask to avoid setState during build
           Future.microtask(() {
-            SnackbarUtils.showError(
+            ToastUtils.showError(
               context: context,
               message: error,
             );
-            // Clear the error after showing it
             profileProvider.clearError();
           });
         }
@@ -187,7 +183,7 @@ class _ProfileState extends State<Profile> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const Personal_data(),
+                                            const PersonalData(),
                                       ),
                                     );
                                   },
@@ -206,11 +202,11 @@ class _ProfileState extends State<Profile> {
                                 width: width / 4.2,
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image:
-                                        AssetImage("assets/images/profile.png"),
-                                    fit: BoxFit.cover,
-                                  ),
+                                ),
+                                child: Icon(
+                                  IconlyBold.profile,
+                                  size: height / 16,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -238,7 +234,7 @@ class _ProfileState extends State<Profile> {
                                         fontFamily: "Manrope-Bold",
                                         color: Color(0xffFFFFFF),
                                         fontSize: 18,
-                                        height: 1.8,
+                                        height: 1.5,
                                       ),
                                     ),
                             ),
@@ -307,7 +303,7 @@ class _ProfileState extends State<Profile> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const Personal_data(),
+                                builder: (context) => const PersonalData(),
                               ),
                             );
                           },
