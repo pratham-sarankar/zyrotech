@@ -16,6 +16,8 @@ import 'firebase_options.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
 import 'services/auth_storage_service.dart';
+import 'package:crowwn/features/profile/presentation/providers/profile_provider.dart';
+import 'package:crowwn/features/profile/data/repositories/profile_repository_impl.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,7 +49,14 @@ void main() async {
           create: (context) {
             return KYCProvider(KYCRepositoryImpl(context.read<ApiService>()));
           },
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return ProfileProvider(
+              ProfileRepositoryImpl(context.read<ApiService>()),
+            );
+          },
+        ),
       ],
       child: const MyApp(),
     ),

@@ -24,7 +24,7 @@ List<AssetModel> assetDetail = [
     name: "Bitcoin",
     desc: "BTC",
     money: " \$19,075.00",
-    icon:"assets/images/up-arrow.png",
+    icon: "assets/images/up-arrow.png",
     percentage: "0.35%",
   ),
   AssetModel(
@@ -33,7 +33,7 @@ List<AssetModel> assetDetail = [
     desc: "ADA",
     money: " \$0,3908",
     percentage: "0.24%",
-    icon:"assets/images/up-arrow.png",
+    icon: "assets/images/up-arrow.png",
   ),
   AssetModel(
     image: "assets/images/polygon.png",
@@ -41,7 +41,7 @@ List<AssetModel> assetDetail = [
     desc: "Matic",
     money: " \$0,7869",
     percentage: "0.54%",
-    icon:"assets/images/up-arrow.png",
+    icon: "assets/images/up-arrow.png",
   ),
   AssetModel(
     image: "assets/images/SOL.png",
@@ -49,7 +49,7 @@ List<AssetModel> assetDetail = [
     desc: "sol",
     money: " \$0,789",
     percentage: "0.14%",
-    icon:"assets/images/up-arrow.png",
+    icon: "assets/images/up-arrow.png",
   ),
   AssetModel(
     image: "assets/images/S_P.png",
@@ -57,7 +57,7 @@ List<AssetModel> assetDetail = [
     desc: "shib",
     money: " \$0,2389",
     percentage: "0.44%",
-    icon:"assets/images/up-arrow.png",
+    icon: "assets/images/up-arrow.png",
   ),
   AssetModel(
     image: "assets/images/S_P.png",
@@ -65,7 +65,7 @@ List<AssetModel> assetDetail = [
     desc: "sp",
     money: " \$0,8389",
     percentage: "0.50%",
-    icon:"assets/images/up-arrow.png",
+    icon: "assets/images/up-arrow.png",
   ),
   AssetModel(
     image: "assets/images/UBS.png",
@@ -73,7 +73,7 @@ List<AssetModel> assetDetail = [
     desc: "ubs",
     money: " \$0,6789",
     percentage: "0.55%",
-    icon:"assets/images/up-arrow.png",
+    icon: "assets/images/up-arrow.png",
   ),
   AssetModel(
     image: "assets/images/Utilities.png",
@@ -81,12 +81,9 @@ List<AssetModel> assetDetail = [
     desc: "utilities",
     money: " \$0,4589",
     percentage: "0.60%",
-    icon:"assets/images/up-arrow.png",
+    icon: "assets/images/up-arrow.png",
   ),
 ];
-
-
-
 
 class AssetModel_ {
   String image;
@@ -110,7 +107,6 @@ List<AssetModel_> assetDetail_ = [
     name: "Bitcoin",
     desc: "BTC",
     money: " 19,075.00",
-
     percentage: "0.35%",
   ),
   AssetModel_(
@@ -119,7 +115,6 @@ List<AssetModel_> assetDetail_ = [
     desc: "ADA",
     money: " 0,3908",
     percentage: "0.24%",
-
   ),
   AssetModel_(
     image: "assets/images/polygon.png",
@@ -127,7 +122,6 @@ List<AssetModel_> assetDetail_ = [
     desc: "Matic",
     money: " 0,7869",
     percentage: "0.54%",
-
   ),
   AssetModel_(
     image: "assets/images/SOL.png",
@@ -135,7 +129,6 @@ List<AssetModel_> assetDetail_ = [
     desc: "sol",
     money: " 0,789",
     percentage: "0.14%",
-
   ),
   AssetModel_(
     image: "assets/images/SHIB.png",
@@ -143,7 +136,6 @@ List<AssetModel_> assetDetail_ = [
     desc: "shib",
     money: " 0,2389",
     percentage: "0.44%",
-
   ),
   AssetModel_(
     image: "assets/images/S_P.png",
@@ -151,7 +143,6 @@ List<AssetModel_> assetDetail_ = [
     desc: "sp",
     money: " 0,8389",
     percentage: "0.50%",
-
   ),
   AssetModel_(
     image: "assets/images/UBS.png",
@@ -159,7 +150,6 @@ List<AssetModel_> assetDetail_ = [
     desc: "ubs",
     money: " 0,6789",
     percentage: "0.55%",
-
   ),
   AssetModel_(
     image: "assets/images/Utilities.png",
@@ -167,6 +157,5 @@ List<AssetModel_> assetDetail_ = [
     desc: "utilities",
     money: " 0,4589",
     percentage: "0.60%",
-
   ),
 ];

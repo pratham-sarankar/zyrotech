@@ -33,7 +33,6 @@ List<MessageModel> messageDetail = [
   ),
 ];
 
-
 class MessageModel_1 {
   String image_;
   String name_;
@@ -47,13 +46,13 @@ class MessageModel_1 {
     required this.status_,
   });
 }
+
 List<MessageModel_1> messageDetail_ = [
   MessageModel_1(
     image_: "assets/images/Krishna.jpg",
     name_: "Marci Senter",
     desc_: "Hi Helene! I’d love to hear more about...",
     status_: "Yesterday",
-
   ),
   MessageModel_1(
     image_: "assets/images/Krishna1.png",

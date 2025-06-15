@@ -24,7 +24,6 @@ List<ContactModel> contactDetail = [
   ),
 ];
 
-
 class ContactModel_ {
   String image_;
   String name_;
@@ -58,7 +57,4 @@ List<ContactModel_> contactDetail_ = [
     name_: "Thad Eddings",
     desc_: "+7 445 556 8337",
   ),
-
 ];
-
-
