@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:crowwn/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -11,7 +12,6 @@ import 'package:provider/provider.dart';
 import '../../dark_mode.dart';
 import '../../services/auth_service.dart';
 import '../../utils/api_error.dart';
-import '../../utils/snackbar_utils.dart';
 import '../config/common.dart';
 import 'Email verification.dart';
 import 'login_screen.dart';
@@ -38,12 +38,13 @@ class _SignState extends State<Sign> {
 
   // Function to handle sign-up
   Future<void> signUp() async {
+    if (_isLoading) return;
     if (_formKey.currentState?.saveAndValidate() ?? false) {
       final formData = _formKey.currentState!.value;
 
       // Check if terms are accepted
       if (formData['terms'] != true) {
-        SnackbarUtils.showAlert(
+        ToastUtils.showInfo(
           context: context,
           message: 'Please accept the terms and conditions to continue.',
         );
@@ -62,7 +63,7 @@ class _SignState extends State<Sign> {
         );
 
         if (mounted) {
-          SnackbarUtils.showSuccess(
+          ToastUtils.showSuccess(
             context: context,
             message: response.message,
           );
@@ -79,14 +80,14 @@ class _SignState extends State<Sign> {
         }
       } on ApiError catch (e) {
         if (mounted) {
-          SnackbarUtils.showError(
+          ToastUtils.showError(
             context: context,
             message: e.message,
           );
         }
       } catch (e) {
         if (mounted) {
-          SnackbarUtils.showError(
+          ToastUtils.showError(
             context: context,
             message: 'An unexpected error occurred. Please try again.',
           );
@@ -99,7 +100,7 @@ class _SignState extends State<Sign> {
         }
       }
     } else {
-      SnackbarUtils.showAlert(
+      ToastUtils.showInfo(
         context: context,
         message: 'Please fill in all required fields correctly.',
       );
@@ -280,7 +281,7 @@ class _SignState extends State<Sign> {
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
-                        onPressed: _isLoading ? null : signUp,
+                        onPressed: signUp,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff6B39F4),
                           shape: RoundedRectangleBorder(

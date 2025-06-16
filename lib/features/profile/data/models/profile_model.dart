@@ -36,7 +36,7 @@ class ProfileModel {
       );
     } catch (e) {
       throw ApiError.fromString(
-        'Failed to parse profile data}',
+        'Failed to parse profile data',
       );
     }
   }

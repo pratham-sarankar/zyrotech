@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:crowwn/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -7,7 +8,6 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:crowwn/dark_mode.dart';
 import 'package:crowwn/utils/api_error.dart';
-import 'package:crowwn/utils/snackbar_utils.dart';
 import '../../../../../screens/config/common.dart';
 import '../../providers/kyc_provider.dart';
 
@@ -44,7 +44,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
         widget.dobController.text.isEmpty ||
         widget.selectedGender == null ||
         widget.panController.text.isEmpty) {
-      SnackbarUtils.showAlert(
+      ToastUtils.showInfo(
         context: context,
         message: "Please fill in all required fields",
       );
@@ -77,14 +77,14 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
       }
     } on ApiError catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: e.message,
         );
       }
     } catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: "An unknown error occurred. Please try again later.",
         );

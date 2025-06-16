@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'package:crowwn/services/auth_service.dart';
-import 'package:crowwn/utils/snackbar_utils.dart';
+import 'package:crowwn/utils/toast_utils.dart';
+
 import 'package:flutter/material.dart';
 
 // Dart imports:
@@ -51,7 +52,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       );
 
       if (mounted) {
-        SnackbarUtils.showSuccess(
+        ToastUtils.showSuccess(
           context: context,
           message: response.message,
         );
@@ -59,14 +60,14 @@ class _ChangePasswordState extends State<ChangePassword> {
       }
     } on ApiError catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: e.message,
         );
       }
     } catch (e, stackTrace) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: 'An unexpected error occurred. Please try again later.',
         );

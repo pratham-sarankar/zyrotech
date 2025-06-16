@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:crowwn/dark_mode.dart';
 import 'package:crowwn/models/signal.dart';
 import 'package:crowwn/repositories/signal_repository.dart';
+import 'package:provider/provider.dart';
 
 class SignalsScreen extends StatefulWidget {
   const SignalsScreen({super.key});
@@ -40,7 +41,9 @@ class _SignalsScreenState extends State<SignalsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    notifier = Provider.of<ColorNotifire>(context, listen: true);
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: _buildSignalList(),
     );
   }
@@ -68,14 +71,81 @@ class _SignalsScreenState extends State<SignalsScreen> {
 
     return Padding(
       padding: const EdgeInsets.all(15),
-      child: ListView.builder(
-        shrinkWrap: false,
-        itemCount: signals.length,
-        itemBuilder: (context, index) {
-          final signal = signals[index];
-          return _buildSignalItem(signal);
-        },
+      child: Column(
+        children: [
+          _buildPerformanceCard(),
+          const SizedBox(height: 16),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: false,
+              itemCount: signals.length,
+              itemBuilder: (context, index) {
+                final signal = signals[index];
+                return _buildSignalItem(signal);
+              },
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _buildPerformanceCard() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: notifier.container,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Performance Overview',
+            style: TextStyle(
+              color: notifier.textColor,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildPerformanceMetric(
+                  'Total PnL', '\$100', const Color(0xff6B39F4)),
+              _buildPerformanceMetric(
+                  'Win Rate', '16%', const Color(0xff6B39F4)),
+              _buildPerformanceMetric('ROI', '20%', const Color(0xff6B39F4)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPerformanceMetric(String label, String value, Color valueColor) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: notifier.textColor.withValues(alpha: 0.7),
+            fontSize: 12,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: TextStyle(
+            color: valueColor,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 
@@ -85,14 +155,18 @@ class _SignalsScreenState extends State<SignalsScreen> {
         _showTradingDetailsBottomSheet(signal: signal);
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
+        margin: EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: notifier.container.withValues(alpha: 0.5),
+          color: notifier.container,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: notifier.textColor.withValues(alpha: 0.1),
-            width: 1,
-          ),
+          border: Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 5,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         padding: const EdgeInsets.all(16),
         child: Row(

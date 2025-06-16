@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 // Flutter imports:
+import 'package:crowwn/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'dart:async'; // Add this import for Timer
 
@@ -16,7 +17,6 @@ import '../../dark_mode.dart';
 import '../../services/auth_service.dart';
 import '../../services/auth_storage_service.dart';
 import '../../utils/api_error.dart';
-import '../../utils/snackbar_utils.dart';
 import '../config/common.dart';
 
 class EmailVerification extends StatefulWidget {
@@ -98,7 +98,7 @@ class _EmailVerificationState extends State<EmailVerification> {
     try {
       await _authService.sendEmailOtp(widget.email);
       if (mounted) {
-        SnackbarUtils.showSuccess(
+        ToastUtils.showSuccess(
           context: context,
           message: 'Verification code sent to your email',
         );
@@ -106,14 +106,14 @@ class _EmailVerificationState extends State<EmailVerification> {
       }
     } on ApiError catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: e.message,
         );
       }
     } catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: 'Failed to send verification code. Please try again.',
         );
@@ -143,7 +143,7 @@ class _EmailVerificationState extends State<EmailVerification> {
     try {
       await _authService.sendEmailOtp(widget.email);
       if (mounted) {
-        SnackbarUtils.showSuccess(
+        ToastUtils.showSuccess(
           context: context,
           message: 'Verification code sent to your email',
         );
@@ -151,14 +151,14 @@ class _EmailVerificationState extends State<EmailVerification> {
       }
     } on ApiError catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: e.message,
         );
       }
     } catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: 'Failed to send verification code. Please try again.',
         );
@@ -199,14 +199,14 @@ class _EmailVerificationState extends State<EmailVerification> {
       }
     } on ApiError catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: e.message,
         );
       }
     } catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: 'Failed to verify email. Please try again.',
         );

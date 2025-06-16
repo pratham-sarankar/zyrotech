@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 // Flutter imports:
+import 'package:crowwn/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -10,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:crowwn/dark_mode.dart';
 import 'package:crowwn/screens/config/common.dart';
 import 'package:crowwn/utils/api_error.dart';
-import 'package:crowwn/utils/snackbar_utils.dart';
 import '../../providers/kyc_provider.dart';
 
 class ExperienceScreen extends StatefulWidget {
@@ -69,7 +69,7 @@ class _ReasonState extends State<ExperienceScreen> {
     if (selectedExperienceYears.isEmpty ||
         selectedInvestmentCapacity.isEmpty ||
         selectedCoins.isEmpty) {
-      SnackbarUtils.showAlert(
+      ToastUtils.showInfo(
         context: context,
         message: "Please answer all questions",
       );
@@ -96,14 +96,14 @@ class _ReasonState extends State<ExperienceScreen> {
       }
     } on ApiError catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: e.message,
         );
       }
     } catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: "An unknown error occurred. Please try again later.",
         );

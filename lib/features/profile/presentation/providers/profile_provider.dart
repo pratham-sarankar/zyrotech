@@ -24,7 +24,6 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future.delayed(const Duration(seconds: 3));
       _profile = await _repository.getProfile();
     } on ApiError catch (e) {
       _error = e.message;

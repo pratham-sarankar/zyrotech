@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:crowwn/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,7 +15,7 @@ import 'package:crowwn/screens/Login%20Screens/Email%20verification.dart';
 import 'package:crowwn/services/auth_service.dart';
 import 'package:crowwn/services/auth_storage_service.dart';
 import 'package:crowwn/utils/api_error.dart';
-import 'package:crowwn/utils/snackbar_utils.dart';
+
 import '../../dark_mode.dart';
 import '../config/common.dart';
 import 'Forget pass.dart';
@@ -43,6 +44,7 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> _login() async {
+    if (_isLoading) return;
     if (_formKey.currentState?.saveAndValidate() ?? false) {
       setState(() {
         _isLoading = true;
@@ -84,14 +86,14 @@ class _LoginState extends State<Login> {
           return;
         }
         if (mounted) {
-          SnackbarUtils.showError(
+          ToastUtils.showError(
             context: context,
             message: e.message,
           );
         }
       } catch (e) {
         if (mounted) {
-          SnackbarUtils.showError(
+          ToastUtils.showError(
             context: context,
             message: 'An unexpected error occurred. Please try again.',
           );
@@ -104,7 +106,7 @@ class _LoginState extends State<Login> {
         }
       }
     } else {
-      SnackbarUtils.showAlert(
+      ToastUtils.showInfo(
         context: context,
         message: 'Please fill in all required fields correctly.',
       );
@@ -120,7 +122,7 @@ class _LoginState extends State<Login> {
       await _authStorage.setToken(response['token']);
 
       if (mounted) {
-        SnackbarUtils.showSuccess(
+        ToastUtils.showSuccess(
           context: context,
           message: 'Google login successful! Welcome back.',
         );
@@ -133,14 +135,14 @@ class _LoginState extends State<Login> {
       }
     } on ApiError catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: e.message,
         );
       }
     } catch (e) {
       if (mounted) {
-        SnackbarUtils.showError(
+        ToastUtils.showError(
           context: context,
           message: 'An unexpected error occurred. Please try again.',
         );
@@ -236,13 +238,15 @@ class _LoginState extends State<Login> {
                                 hintText: "Email",
                                 fillColor: notifier.textField,
                                 prefixIcon: Icon(IconlyLight.message),
+                                prefixIconColor: notifier.textFieldHintText,
                                 filled: true,
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 hintStyle: TextStyle(
-                                    color: notifier.textFieldHintText),
+                                  color: notifier.textFieldHintText,
+                                ),
                                 errorStyle: const TextStyle(
                                   color: Colors.red,
                                   fontSize: 12,
@@ -264,6 +268,7 @@ class _LoginState extends State<Login> {
                                 hintText: "Password",
                                 fillColor: notifier.textField,
                                 prefixIcon: Icon(IconlyLight.lock),
+                                prefixIconColor: notifier.textFieldHintText,
                                 filled: true,
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
@@ -289,6 +294,7 @@ class _LoginState extends State<Login> {
                                           IconlyLight.hide,
                                         ),
                                 ),
+                                suffixIconColor: notifier.textFieldHintText,
                               ),
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(
@@ -326,7 +332,7 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                             TextButton(
-                              onPressed: _isLoading ? null : _login,
+                              onPressed: _login,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xff6B39F4),
                                 shape: RoundedRectangleBorder(
@@ -434,7 +440,7 @@ class _LoginState extends State<Login> {
                   child: Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: notifier.background,
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(

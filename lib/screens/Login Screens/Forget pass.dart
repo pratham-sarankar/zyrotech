@@ -3,6 +3,7 @@
 // Dart imports:
 
 // Flutter imports:
+import 'package:crowwn/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -41,18 +42,11 @@ class _ForgetState extends State<Forget> {
 
     try {
       final response = await _authService.forgotPassword(email);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(response['message']),
-          backgroundColor: Colors.green,
-        ),
-      );
+      ToastUtils.showSuccess(context: context, message: response['message']);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to send reset link: ${e.toString()}'),
-          backgroundColor: Colors.red,
-        ),
+      ToastUtils.showError(
+        context: context,
+        message: 'Failed to send reset link',
       );
     } finally {
       setState(() {
@@ -114,8 +108,12 @@ class _ForgetState extends State<Forget> {
                   controller: _emailController,
                   decoration: InputDecoration(
                     hintText: "Email",
-                    border:
-                        const OutlineInputBorder(borderSide: BorderSide.none),
+                    fillColor: notifier.textField,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                     hintStyle: TextStyle(color: notifier.textFieldHintText),
                   ),
                   validator: (value) {
@@ -129,32 +127,39 @@ class _ForgetState extends State<Forget> {
                   },
                 ),
                 SizedBox(height: height * 0.02),
-                GestureDetector(
-                  onTap: _isLoading
-                      ? null
-                      : () {
-                          if (_formKey.currentState!.validate()) {
-                            _sendForgotPasswordRequest(_emailController.text);
-                          }
-                        },
-                  child: Container(
-                    height: height / 12,
-                    decoration: BoxDecoration(
+                TextButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _sendForgotPasswordRequest(_emailController.text);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff6B39F4),
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
-                      color: _isLoading ? Colors.grey : const Color(0xff6B39F4),
                     ),
-                    child: Center(
-                      child: _isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text(
-                              "Send Reset Link",
-                              style: TextStyle(
-                                color: Color(0xffFFFFFF),
-                                fontSize: 15,
-                                fontFamily: "Manrope-Bold",
-                              ),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 15,
+                    ),
+                  ),
+                  child: Center(
+                    child: _isLoading
+                        ? SizedBox.square(
+                            dimension: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
                             ),
-                    ),
+                          )
+                        : const Text(
+                            "Send Reset Link",
+                            style: TextStyle(
+                              color: Color(0xffFFFFFF),
+                              fontSize: 15,
+                              fontFamily: "Manrope-Bold",
+                            ),
+                          ),
                   ),
                 ),
               ],

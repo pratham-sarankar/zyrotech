@@ -60,19 +60,6 @@ class _PersonalDataState extends State<PersonalData> {
     }
   }
 
-  void _toggleEditing() {
-    setState(() {
-      _isEditing = !_isEditing;
-      if (!_isEditing) {
-        // Reset form fields to profile data when exiting edit mode
-        final profile = context.read<ProfileProvider>().profile;
-        if (profile != null) {
-          _updateFormFields(profile);
-        }
-      }
-    });
-  }
-
   Future<void> _saveChanges() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 

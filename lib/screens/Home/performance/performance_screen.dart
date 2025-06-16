@@ -139,8 +139,8 @@ class _PerformanceScreenState extends State<PerformanceScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildPerformanceCard(),
-                const SizedBox(height: 20),
+                // _buildPerformanceCard(),
+                // const SizedBox(height: 20),
                 _buildPerformanceSummaryChart(),
                 const SizedBox(height: 20),
                 _buildDisclaimer(),
@@ -151,66 +151,6 @@ class _PerformanceScreenState extends State<PerformanceScreen>
           SignalsScreen(),
         ],
       ),
-    );
-  }
-
-  Widget _buildPerformanceCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: notifier.container.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Performance Overview',
-            style: TextStyle(
-              color: notifier.textColor,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildPerformanceMetric(
-                  'Total PnL', widget.price, const Color(0xff6B39F4)),
-              _buildPerformanceMetric(
-                  'Win Rate', widget.winRate, const Color(0xff6B39F4)),
-              _buildPerformanceMetric(
-                  'ROI', widget.roi, const Color(0xff6B39F4)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPerformanceMetric(String label, String value, Color valueColor) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: notifier.textColor.withValues(alpha: 0.7),
-            fontSize: 12,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            color: valueColor,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
     );
   }
 
