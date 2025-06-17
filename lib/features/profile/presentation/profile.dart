@@ -50,6 +50,11 @@ class _ProfileState extends State<Profile> {
       final authService = context.read<AuthService>();
       await authService.logout();
 
+      // Clear profile data when logging out
+      if (mounted) {
+        context.read<ProfileProvider>().clearProfile();
+      }
+
       if (mounted) {
         Navigator.pushReplacement(
           context,

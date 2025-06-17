@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/features/onboarding/presentation/kyc/kyc_screen.dart';
+import 'package:crowwn/features/profile/presentation/providers/profile_provider.dart';
 import '../../dark_mode.dart';
 import '../../services/auth_service.dart';
 import '../../services/auth_storage_service.dart';
@@ -187,6 +188,11 @@ class _EmailVerificationState extends State<EmailVerification> {
         final loginResponse =
             await _authService.login(widget.email, widget.password);
         await _authStorage.setToken(loginResponse['token']);
+
+        // Reload profile after successful email verification and login
+        if (mounted) {
+          await context.read<ProfileProvider>().fetchProfile(force: true);
+        }
 
         if (mounted) {
           Navigator.pushReplacement(

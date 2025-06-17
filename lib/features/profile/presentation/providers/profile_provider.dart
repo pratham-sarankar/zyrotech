@@ -16,8 +16,9 @@ class ProfileProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  Future<void> fetchProfile() async {
-    if (_profile != null) return; // Return cached profile if available
+  Future<void> fetchProfile({bool force = false}) async {
+    if (_profile != null && !force)
+      return; // Return cached profile if available and not forcing refresh
 
     _isLoading = true;
     _error = null;

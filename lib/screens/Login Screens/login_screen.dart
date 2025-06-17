@@ -15,6 +15,7 @@ import 'package:crowwn/screens/Login%20Screens/Email%20verification.dart';
 import 'package:crowwn/services/auth_service.dart';
 import 'package:crowwn/services/auth_storage_service.dart';
 import 'package:crowwn/utils/api_error.dart';
+import 'package:crowwn/features/profile/presentation/providers/profile_provider.dart';
 
 import '../../dark_mode.dart';
 import '../config/common.dart';
@@ -63,6 +64,11 @@ class _LoginState extends State<Login> {
         final token = response['token'];
 
         await _authStorage.setToken(token);
+
+        // Reload profile after successful login
+        if (mounted) {
+          await context.read<ProfileProvider>().fetchProfile(force: true);
+        }
 
         if (mounted) {
           Navigator.pushReplacement(
@@ -120,6 +126,11 @@ class _LoginState extends State<Login> {
       });
       final response = await _authService.loginWithGoogle();
       await _authStorage.setToken(response['token']);
+
+      // Reload profile after successful Google login
+      if (mounted) {
+        await context.read<ProfileProvider>().fetchProfile(force: true);
+      }
 
       if (mounted) {
         ToastUtils.showSuccess(
