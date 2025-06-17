@@ -45,7 +45,6 @@ dependencies:
   provider:
   custom_otp_textfield:
   blur:
-  country_picker: ^2.0.27
   file_picker: ^10.2.0
   flutter_launcher_icons: ^0.14.3
   flutter_trading_chart: ^0.0.2

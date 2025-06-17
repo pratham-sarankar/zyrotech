@@ -4,7 +4,6 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:country_picker/country_picker.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
@@ -85,64 +84,25 @@ class _phoneState extends State<phone> {
                   fontFamily: "Manrope-Medium"),
             ),
             AppConstants.Height(20),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    showCountryPicker(
-                      context: context,
-                      showPhoneCode: true,
-                      onSelect: (Country country) {
-                        setState(() {
-                          selectedCountryCode = '+${country.phoneCode}';
-                          selectedCountryFlag = country.flagEmoji;
-                        });
-                      },
-                    );
-                  },
-                  child: Container(
-                    height: 50,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: notifier.textField,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(selectedCountryFlag,
-                            style: const TextStyle(fontSize: 20)),
-                        const SizedBox(width: 5),
-                        Text(selectedCountryCode,
-                            style: TextStyle(
-                                fontSize: 17, color: notifier.textColor)),
-                      ],
-                    ),
+            Container(
+              height: 56,
+              width: 226,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: notifier.textField,
+              ),
+              child: TextField(
+                controller: _phoneController,
+                style: TextStyle(color: notifier.textColor),
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
                   ),
+                  hintText: 'Phone Number',
+                  hintStyle: TextStyle(color: Color(0xff64748B)),
                 ),
-                Expanded(child: AppConstants.Width(20)),
-                Container(
-                  height: 56,
-                  width: 226,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: notifier.textField,
-                  ),
-                  child: TextField(
-                    controller: _phoneController,
-                    style: TextStyle(color: notifier.textColor),
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                      hintText: 'Phone Number',
-                      hintStyle: TextStyle(color: Color(0xff64748B)),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
             AppConstants.Height(30),
             GestureDetector(

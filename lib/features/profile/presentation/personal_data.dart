@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 // Package imports:
-import 'package:country_picker/country_picker.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
@@ -24,7 +23,6 @@ class PersonalData extends StatefulWidget {
 
 class _PersonalDataState extends State<PersonalData> {
   ColorNotifire notifier = ColorNotifire();
-  Country? selectedCountry;
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _emailController;
@@ -37,19 +35,6 @@ class _PersonalDataState extends State<PersonalData> {
     _nameController = TextEditingController();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
-
-    selectedCountry = Country(
-      phoneCode: '91',
-      countryCode: 'IN',
-      e164Sc: 0,
-      geographic: true,
-      level: 1,
-      name: 'India',
-      example: '9876543210',
-      displayName: 'India (IN) [+91]',
-      displayNameNoCountryCode: 'India (IN)',
-      e164Key: '91-IN-0',
-    );
   }
 
   void _updateFormFields(ProfileModel? profile) {
@@ -105,9 +90,10 @@ class _PersonalDataState extends State<PersonalData> {
     if (value == null || value.isEmpty) {
       return 'Phone number is required';
     }
-    final phoneRegex = RegExp(r'^\d{10}$');
+    // International phone number regex: allows +1 to +15 digits, starting with 1-9
+    final phoneRegex = RegExp(r'^\+?[1-9]\d{1,14}$');
     if (!phoneRegex.hasMatch(value)) {
-      return 'Please enter a valid 10-digit phone number';
+      return 'Please enter a valid phone number';
     }
     return null;
   }
@@ -313,47 +299,22 @@ class _PersonalDataState extends State<PersonalData> {
                       ),
                     ),
                     AppConstants.Height(10),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: isLoading
-                              ? null
-                              : () {
-                                  showCountryPicker(
-                                    context: context,
-                                    showPhoneCode: true,
-                                    countryListTheme: CountryListThemeData(
-                                      borderRadius: BorderRadius.circular(15),
-                                      inputDecoration: InputDecoration(
-                                        hintText: 'Search',
-                                        hintStyle: TextStyle(
-                                            color: notifier.textColor),
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                        filled: true,
-                                        fillColor: notifier.isDark
-                                            ? Colors.grey.withValues(alpha: 0.1)
-                                            : Colors.grey
-                                                .withValues(alpha: 0.05),
-                                      ),
-                                      backgroundColor: notifier.background,
-                                      textStyle:
-                                          TextStyle(color: notifier.textColor),
-                                    ),
-                                    onSelect: (Country country) {
-                                      setState(() {
-                                        selectedCountry = country;
-                                      });
-                                    },
-                                  );
-                                },
-                          child: Container(
+                    isLoading
+                        ? Shimmer.fromColors(
+                            baseColor:
+                                Colors.grey[300]!.withValues(alpha: 0.25),
+                            highlightColor:
+                                Colors.grey[100]!.withValues(alpha: 0.25),
+                            child: Container(
+                              height: 56,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : Container(
                             height: 56,
-                            width: 100,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
                               color: notifier.isDark
@@ -363,94 +324,31 @@ class _PersonalDataState extends State<PersonalData> {
                                 color: Colors.grey.withValues(alpha: 0.2),
                               ),
                             ),
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (selectedCountry != null)
-                                    Text(
-                                      selectedCountry!.flagEmoji,
-                                      style: const TextStyle(fontSize: 20),
-                                    )
-                                  else
-                                    const Text(
-                                      "🇺🇸",
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    selectedCountry?.phoneCode ?? "+1",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: notifier.textColor,
-                                      fontFamily: "Manrope-Regular",
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_drop_down,
-                                    color: notifier.textColor,
-                                  ),
-                                ],
+                            child: TextFormField(
+                              controller: _phoneController,
+                              validator: _validatePhone,
+                              style: TextStyle(
+                                color: notifier.textColor,
+                                fontSize: 16,
+                                fontFamily: "Manrope-Regular",
+                              ),
+                              keyboardType: TextInputType.phone,
+                              decoration: InputDecoration(
+                                hintText: "Phone Number",
+                                hintStyle: TextStyle(
+                                  color:
+                                      notifier.textColor.withValues(alpha: 0.5),
+                                  fontSize: 14,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide.none,
+                                ),
+                                contentPadding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
                               ),
                             ),
                           ),
-                        ),
-                        AppConstants.Width(10),
-                        Expanded(
-                          child: isLoading
-                              ? Shimmer.fromColors(
-                                  baseColor:
-                                      Colors.grey[300]!.withValues(alpha: 0.25),
-                                  highlightColor:
-                                      Colors.grey[100]!.withValues(alpha: 0.25),
-                                  child: Container(
-                                    height: 56,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  height: 56,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: notifier.isDark
-                                        ? Colors.grey.withValues(alpha: 0.1)
-                                        : Colors.grey.withValues(alpha: 0.05),
-                                    border: Border.all(
-                                      color: Colors.grey.withValues(alpha: 0.2),
-                                    ),
-                                  ),
-                                  child: TextFormField(
-                                    controller: _phoneController,
-                                    validator: _validatePhone,
-                                    style: TextStyle(
-                                      color: notifier.textColor,
-                                      fontSize: 16,
-                                      fontFamily: "Manrope-Regular",
-                                    ),
-                                    keyboardType: TextInputType.phone,
-                                    decoration: InputDecoration(
-                                      hintText: "Phone Number",
-                                      hintStyle: TextStyle(
-                                        color: notifier.textColor
-                                            .withValues(alpha: 0.5),
-                                        fontSize: 14,
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                    ),
-                                  ),
-                                ),
-                        ),
-                      ],
-                    ),
                     AppConstants.Height(20),
                     Text(
                       "Email",
