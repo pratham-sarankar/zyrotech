@@ -10,7 +10,7 @@ import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:crowwn/screens/Home/bottom.dart';
+import 'package:crowwn/features/home/presentation/home_screen.dart';
 import 'package:crowwn/screens/Login%20Screens/Email%20verification.dart';
 import 'package:crowwn/services/auth_service.dart';
 import 'package:crowwn/services/auth_storage_service.dart';
@@ -74,7 +74,7 @@ class _LoginState extends State<Login> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const BottomBarScreen(),
+              builder: (context) => const HomeScreen(),
             ),
           );
         }
@@ -140,7 +140,7 @@ class _LoginState extends State<Login> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const BottomBarScreen(),
+            builder: (context) => const HomeScreen(),
           ),
         );
       }

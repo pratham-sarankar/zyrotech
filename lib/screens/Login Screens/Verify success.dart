@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 // Flutter imports:
+import 'package:crowwn/features/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -8,7 +9,6 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import '../../dark_mode.dart';
-import '../Home/bottom.dart';
 import '../config/common.dart';
 
 class Success extends StatefulWidget {
@@ -91,7 +91,7 @@ class _Succcess extends State<Success> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const BottomBarScreen(),
+                    builder: (context) => const HomeScreen(),
                   ),
                 );
               },

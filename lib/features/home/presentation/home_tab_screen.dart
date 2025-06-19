@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:crowwn/features/home/data/models/bot_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,9 +8,10 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Message%20&%20Notification/Notifications.dart';
-import 'performance/performance_screen.dart';
+import '../../../screens/Home/performance/performance_screen.dart';
+import 'package:crowwn/features/home/presentation/providers/bot_provider.dart';
 
-import '../../dark_mode.dart'; // Assuming Dark mode.dart is needed for theme colors
+import '../../../dark_mode.dart'; // Assuming Dark mode.dart is needed for theme colors
 
 // Custom painter for the line chart
 class LineChartPainter extends CustomPainter {
@@ -156,21 +158,44 @@ class LineChartPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
-class NewHomeScreen extends StatefulWidget {
-  const NewHomeScreen({Key? key}) : super(key: key);
+class HomeTabScreen extends StatefulWidget {
+  const HomeTabScreen({Key? key}) : super(key: key);
 
   @override
-  _NewHomeScreenState createState() => _NewHomeScreenState();
+  _HomeTabScreenState createState() => _HomeTabScreenState();
 }
 
-class _NewHomeScreenState extends State<NewHomeScreen> {
+class _HomeTabScreenState extends State<HomeTabScreen> {
   ColorNotifire notifier = ColorNotifire();
   String selectedTimeFilter = "Today";
   String selectedExchange = "Binance";
 
   @override
+  void initState() {
+    super.initState();
+    // Fetch bots when the screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BotProvider>().fetchBots();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
+    final botProvider = Provider.of<BotProvider>(context, listen: true);
+
+    // Show error via Snackbar if there's an error
+    if (botProvider.error != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(botProvider.error!),
+            backgroundColor: Colors.red,
+          ),
+        );
+        botProvider.clearError();
+      });
+    }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
@@ -490,15 +515,48 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                       ],
                     ),
                   ),
-                  _buildStrategyResultItem(
-                    "ZBT BTC Scalper",
-                    "Win Rate: 78%",
-                    "\$1,878.80",
-                    Colors.green,
-                    "BTC/USDT",
-                    "ROI: +12.5%",
-                    "High Frequency",
-                  ),
+                  // Display bots from API
+                  if (botProvider.isLoading)
+                    // Show shimmer loading for multiple bots
+                    Column(
+                      children:
+                          List.generate(3, (index) => _buildShimmerBotCard()),
+                    )
+                  else if (botProvider.bots.isNotEmpty)
+                    // Show all bots in a list
+                    Column(
+                      children: botProvider.bots
+                          .map((bot) => _buildStrategyResultItem(
+                                bot, // Use real bot name from API
+                                "Win Rate: 78%",
+                                "\$1,878.80",
+                                Colors.green,
+                                "BTC/USDT",
+                                "ROI: +12.5%",
+                                "High Frequency",
+                              ))
+                          .toList(),
+                    )
+                  else
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: notifier.container,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                            color: notifier.textColor.withValues(alpha: 0.1)),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'No bots available',
+                          style: TextStyle(
+                            color: notifier.textColor.withValues(alpha: 0.7),
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
                   // _buildStrategyResultItem(
                   //   "ETH/USDT Swing",
                   //   "Win Rate: 65%",
@@ -771,7 +829,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
   // }
 
   Widget _buildStrategyResultItem(
-    String name,
+    BotModel bot,
     String winRate,
     String price,
     Color pnlColor,
@@ -785,13 +843,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => PerformanceScreen(
-              strategyName: name,
-              winRate: winRate,
-              price: price,
-              pnlColor: pnlColor,
-              volume: volume,
-              roi: roi,
-              strategyType: strategyType,
+              bot: bot,
             ),
           ),
         );
@@ -836,7 +888,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                           children: [
                             Expanded(
                               child: Text(
-                                name,
+                                bot.name,
                                 style: TextStyle(
                                   color: notifier.textColor,
                                   fontSize: 15,
@@ -1080,4 +1132,207 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
   //     ),
   //   );
   // }
+
+  Widget _buildShimmerBotCard() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: notifier.container,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 5,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: notifier.textColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(Icons.show_chart,
+                      color: notifier.textColor, size: 20),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: 16,
+                              decoration: BoxDecoration(
+                                color:
+                                    notifier.textColor.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: notifier.textColor.withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Container(
+                              height: 9,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color:
+                                    notifier.textColor.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        height: 12,
+                        width: 80,
+                        decoration: BoxDecoration(
+                          color: notifier.textColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: notifier.textColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Container(
+                    height: 13,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: notifier.textColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: notifier.textColor.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 14,
+                        width: 14,
+                        decoration: BoxDecoration(
+                          color: notifier.textColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Container(
+                        height: 11,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          color: notifier.textColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: notifier.textColor.withValues(alpha: 0.05),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 14,
+                        width: 14,
+                        decoration: BoxDecoration(
+                          color: notifier.textColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Container(
+                        height: 11,
+                        width: 35,
+                        decoration: BoxDecoration(
+                          color: notifier.textColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: notifier.textColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 14,
+                        width: 14,
+                        decoration: BoxDecoration(
+                          color: notifier.textColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Container(
+                        height: 11,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          color: notifier.textColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

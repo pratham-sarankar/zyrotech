@@ -10,7 +10,6 @@ import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:crowwn/screens/Login%20Screens/Country%20residence.dart';
 import 'package:crowwn/screens/Login%20Screens/Verify%20success.dart';
 import '../../dark_mode.dart';
 import '../../services/auth_service.dart';
@@ -38,12 +37,6 @@ class _PinState extends State<Pin> {
     try {
       final response = await _authService.createPin(pin);
       print(response['message']);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const CountrySelection(),
-        ),
-      );
     } catch (e) {
       print(e.toString());
       // Handle error
@@ -129,15 +122,7 @@ class _PinState extends State<Pin> {
             ),
             AppConstants.Height(60),
             GestureDetector(
-              onTap: () {
-                // For now, just navigate to Country Selection
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CountrySelection(),
-                  ),
-                );
-              },
+              onTap: () {},
               child: Container(
                 height: height / 14,
                 width: double.infinity,

@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 // Flutter imports:
+import 'package:crowwn/features/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -10,7 +11,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 // Project imports:
 import '../../dark_mode.dart';
 import '../config/common.dart';
-import 'bottom.dart';
 
 class Portfolio extends StatefulWidget {
   const Portfolio({super.key});
@@ -63,7 +63,7 @@ class _PortfolioState extends State<Portfolio> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const BottomBarScreen(),
+                builder: (context) => const HomeScreen(),
               ),
             );
           },

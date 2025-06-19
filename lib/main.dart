@@ -12,6 +12,8 @@ import 'package:crowwn/dark_mode.dart';
 import 'package:crowwn/features/onboarding/data/repositories/kyc_repository_impl.dart';
 import 'package:crowwn/features/onboarding/presentation/providers/kyc_provider.dart';
 import 'package:crowwn/features/onboarding/presentation/splash/splash_screen.dart';
+import 'package:crowwn/features/home/data/repositories/bot_repository_impl.dart';
+import 'package:crowwn/features/home/presentation/providers/bot_provider.dart';
 import 'firebase_options.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
@@ -54,6 +56,13 @@ void main() async {
           create: (context) {
             return ProfileProvider(
               ProfileRepositoryImpl(context.read<ApiService>()),
+            );
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return BotProvider(
+              BotRepositoryImpl(context.read<ApiService>()),
             );
           },
         ),

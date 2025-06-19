@@ -21,7 +21,6 @@ import '../../../screens/Account&setting/Privacy&Policy.dart';
 import '../../../screens/Account&setting/Push Notification.dart';
 import '../../../screens/Account&setting/Refferal Code.dart';
 import '../../../screens/Account&setting/Terms&conditions.dart';
-import '../../../screens/Message & Notification/Notifications.dart';
 import '../../../screens/config/common.dart';
 import '../../../services/auth_service.dart';
 import '../../../utils/api_error.dart';

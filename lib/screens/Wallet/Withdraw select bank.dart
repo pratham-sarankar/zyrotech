@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, camel_case_types
 
 // Flutter imports:
+import 'package:crowwn/features/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -8,7 +9,6 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import '../../dark_mode.dart';
-import '../Home/bottom.dart';
 import '../config/common.dart';
 
 class Withdraw_select extends StatefulWidget {
@@ -464,10 +464,11 @@ class _Withdraw_selectState extends State<Withdraw_select> {
         child: GestureDetector(
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const BottomBarScreen(),
-                ));
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ),
+            );
           },
           child: Container(
             height: 56,

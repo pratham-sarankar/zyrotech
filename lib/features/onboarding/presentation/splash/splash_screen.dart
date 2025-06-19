@@ -1,5 +1,5 @@
 // Flutter imports:
-import 'package:crowwn/screens/Home/bottom.dart';
+import 'package:crowwn/features/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -37,7 +37,7 @@ class _SplashState extends State<Splash> {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  isLoggedIn ? const BottomBarScreen() : const Login(),
+                  isLoggedIn ? const HomeScreen() : const Login(),
             ),
           );
         }

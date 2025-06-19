@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:crowwn/features/home/data/models/bot_model.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -11,8 +12,8 @@ import 'package:crowwn/repositories/signal_repository.dart';
 import 'package:provider/provider.dart';
 
 class SignalsScreen extends StatefulWidget {
-  const SignalsScreen({super.key});
-
+  const SignalsScreen({super.key, required this.bot});
+  final BotModel bot;
   @override
   State<SignalsScreen> createState() => _SignalsScreenState();
 }

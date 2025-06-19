@@ -1,13 +1,13 @@
 // ignore_for_file: file_names, camel_case_types
 
 // Flutter imports:
+import 'package:crowwn/features/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:crowwn/screens/Home/bottom.dart';
 import '../../dark_mode.dart';
 import '../config/common.dart';
 
@@ -85,7 +85,7 @@ class _Order_successState extends State<Order_success> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const BottomBarScreen(),
+                    builder: (context) => const HomeScreen(),
                   ),
                 );
               },
@@ -113,7 +113,7 @@ class _Order_successState extends State<Order_success> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const BottomBarScreen(),
+                      builder: (context) => const HomeScreen(),
                     ));
               },
               child: Container(

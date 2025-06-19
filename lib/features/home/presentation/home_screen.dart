@@ -7,24 +7,24 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:crowwn/screens/Home/Portfolio.dart';
 import 'package:crowwn/features/profile/presentation/profile.dart';
-import 'package:crowwn/screens/Home/bot.dart';
 import 'package:crowwn/screens/Home/my_signals.dart';
-import 'package:crowwn/screens/Home/new_home_screen.dart';
-import '../../dark_mode.dart';
+import 'package:crowwn/features/home/presentation/home_tab_screen.dart';
+import '../../../dark_mode.dart';
 
-class BottomBarScreen extends StatefulWidget {
-  const BottomBarScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<BottomBarScreen> createState() => _BottomBarScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _BottomBarScreenState extends State<BottomBarScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
   List<Widget> myChildren = [
-    const NewHomeScreen(),
+    const HomeTabScreen(),
     const MySignals(),
-    const BotScreen(),
+    // const BotScreen(),
+    const Scaffold(),
     const Portfolio(),
     const Profile(),
   ];

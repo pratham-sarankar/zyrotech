@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:crowwn/features/home/data/models/bot_model.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -11,23 +12,11 @@ import 'package:crowwn/screens/Home/performance/signals_screen.dart';
 import '../../../dark_mode.dart';
 
 class PerformanceScreen extends StatefulWidget {
-  final String strategyName;
-  final String winRate;
-  final String price;
-  final Color pnlColor;
-  final String volume;
-  final String roi;
-  final String strategyType;
+  final BotModel bot;
 
   const PerformanceScreen({
     Key? key,
-    required this.strategyName,
-    required this.winRate,
-    required this.price,
-    required this.pnlColor,
-    required this.volume,
-    required this.roi,
-    required this.strategyType,
+    required this.bot,
   }) : super(key: key);
 
   @override
@@ -67,7 +56,7 @@ class _PerformanceScreenState extends State<PerformanceScreen>
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          widget.strategyName,
+          widget.bot.name,
           style: TextStyle(
             color: notifier.textColor,
             fontSize: 18,
@@ -148,7 +137,9 @@ class _PerformanceScreenState extends State<PerformanceScreen>
             ),
           ),
           // Signals Tab
-          SignalsScreen(),
+          SignalsScreen(
+            bot: widget.bot,
+          ),
         ],
       ),
     );

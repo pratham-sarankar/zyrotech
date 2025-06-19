@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 // Flutter imports:
+import 'package:crowwn/features/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -9,7 +10,6 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:crowwn/screens/config/common.dart';
 import '../../dark_mode.dart';
-import '../Home/bottom.dart';
 
 class Items extends StatefulWidget {
   const Items({super.key});
@@ -685,8 +685,7 @@ class _ItemsState extends State<Items> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        const BottomBarScreen(),
+                                    builder: (context) => const HomeScreen(),
                                   ));
                             },
                             child: Container(
