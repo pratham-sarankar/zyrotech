@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:crowwn/features/brokers/presentation/providers/binance_provider.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -18,6 +19,7 @@ import 'firebase_options.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
 import 'services/auth_storage_service.dart';
+import 'services/binance_service.dart';
 import 'package:crowwn/features/profile/presentation/providers/profile_provider.dart';
 import 'package:crowwn/features/profile/data/repositories/profile_repository_impl.dart';
 
@@ -42,6 +44,13 @@ void main() async {
             );
           },
         ),
+        Provider<BinanceService>(
+          create: (context) {
+            return BinanceService(
+              apiService: context.read<ApiService>(),
+            );
+          },
+        ),
         Provider<AuthService>(
           create: (context) => AuthService(
             context.read<ApiService>(),
@@ -63,6 +72,14 @@ void main() async {
           create: (context) {
             return BotProvider(
               BotRepositoryImpl(context.read<ApiService>()),
+            );
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return BinanceProvider(
+              binanceService: context.read<BinanceService>(),
+              authStorage: context.read<AuthStorageService>(),
             );
           },
         ),
