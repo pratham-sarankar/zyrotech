@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Message%20&%20Notification/Notifications.dart';
-import '../../../screens/Home/performance/performance_screen.dart';
+import '../../bot/presentation/screen/bot_detail_screen.dart';
 import 'package:crowwn/features/home/presentation/providers/bot_provider.dart';
 
 import '../../../dark_mode.dart'; // Assuming Dark mode.dart is needed for theme colors
@@ -842,7 +842,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PerformanceScreen(
+            builder: (context) => BotDetailsScreen(
               bot: bot,
             ),
           ),

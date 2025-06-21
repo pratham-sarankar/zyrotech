@@ -22,6 +22,8 @@ import 'services/auth_storage_service.dart';
 import 'services/binance_service.dart';
 import 'package:crowwn/features/profile/presentation/providers/profile_provider.dart';
 import 'package:crowwn/features/profile/data/repositories/profile_repository_impl.dart';
+import 'features/bot/data/services/bot_subscription_service.dart';
+import 'features/bot/presentation/providers/bot_details_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,10 +53,25 @@ void main() async {
             );
           },
         ),
+        Provider<BotSubscriptionService>(
+          create: (context) {
+            return BotSubscriptionService(
+              apiService: context.read<ApiService>(),
+            );
+          },
+        ),
         Provider<AuthService>(
           create: (context) => AuthService(
             context.read<ApiService>(),
           ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return BinanceProvider(
+              binanceService: context.read<BinanceService>(),
+              authStorage: context.read<AuthStorageService>(),
+            );
+          },
         ),
         ChangeNotifierProvider(
           create: (context) {
@@ -77,9 +94,8 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) {
-            return BinanceProvider(
-              binanceService: context.read<BinanceService>(),
-              authStorage: context.read<AuthStorageService>(),
+            return BotDetailsProvider(
+              subscriptionService: context.read<BotSubscriptionService>(),
             );
           },
         ),

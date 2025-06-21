@@ -11,14 +11,14 @@ import 'package:crowwn/models/signal.dart';
 import 'package:crowwn/repositories/signal_repository.dart';
 import 'package:provider/provider.dart';
 
-class SignalsScreen extends StatefulWidget {
-  const SignalsScreen({super.key, required this.bot});
+class BotSignalsScreen extends StatefulWidget {
+  const BotSignalsScreen({super.key, required this.bot});
   final BotModel bot;
   @override
-  State<SignalsScreen> createState() => _SignalsScreenState();
+  State<BotSignalsScreen> createState() => _BotSignalsScreenState();
 }
 
-class _SignalsScreenState extends State<SignalsScreen> {
+class _BotSignalsScreenState extends State<BotSignalsScreen> {
   ColorNotifire notifier = ColorNotifire();
   final SignalRepository signalRepository = SignalRepository();
   bool isLoading = false;
