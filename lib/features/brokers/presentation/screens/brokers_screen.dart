@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:crowwn/features/brokers/presentation/providers/binance_provider.dart';
+import 'package:crowwn/features/brokers/presentation/providers/delta_provider.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -34,9 +35,10 @@ class _BrokersScreenState extends State<BrokersScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    // Initialize Binance provider
+    // Initialize providers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<BinanceProvider>().initialize();
+      context.read<DeltaProvider>().initialize();
     });
   }
 
@@ -603,136 +605,425 @@ class _BrokersScreenState extends State<BrokersScreen>
                   },
                 ),
                 // Delta Tab
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: notifier.tabBar1,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.1),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Image.asset(
-                                  "assets/images/delta.png",
-                                  height: 100,
-                                  width: 100,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                'Connect to Delta Exchange',
-                                style: TextStyle(
-                                  color: notifier.textColor,
-                                  fontSize: 22,
-                                  fontFamily: "Manrope-Bold",
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Enter your Delta Exchange API credentials to connect your account',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color:
-                                      notifier.textColor.withValues(alpha: 0.7),
-                                  fontSize: 14,
-                                  fontFamily: "Manrope-Regular",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: notifier.tabBar1,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                Consumer<DeltaProvider>(
+                  builder: (context, deltaProvider, child) {
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        if (deltaProvider.isConnected) {
+                          await deltaProvider.refreshBalance();
+                        }
+                      },
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'API Credentials',
-                                style: TextStyle(
-                                  color: notifier.textColor,
-                                  fontSize: 18,
-                                  fontFamily: "Manrope-Bold",
+                              // Header section
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: notifier.tabBar1,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Colors.white.withValues(alpha: 0.1),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Image.asset(
+                                        "assets/images/delta.png",
+                                        height: 100,
+                                        width: 100,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Text(
+                                      deltaProvider.isConnected
+                                          ? 'Connected to Delta Exchange'
+                                          : 'Connect to Delta Exchange',
+                                      style: TextStyle(
+                                        color: notifier.textColor,
+                                        fontSize: 22,
+                                        fontFamily: "Manrope-Bold",
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      deltaProvider.isConnected
+                                          ? 'Your Delta Exchange account is connected and ready'
+                                          : 'Enter your Delta Exchange API credentials to connect your account',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: notifier.textColor
+                                            .withValues(alpha: 0.7),
+                                        fontSize: 14,
+                                        fontFamily: "Manrope-Regular",
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              TextField(
-                                controller: _deltaApiKeyController,
-                                decoration: InputDecoration(
-                                  labelText: 'API Key',
-                                  labelStyle:
-                                      TextStyle(color: notifier.textColor),
-                                  filled: true,
-                                  fillColor: notifier.background,
-                                  border: OutlineInputBorder(
+
+                              // Error display
+                              if (deltaProvider.error != null)
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(16),
+                                  margin: const EdgeInsets.only(bottom: 16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide.none,
+                                    border: Border.all(
+                                        color:
+                                            Colors.red.withValues(alpha: 0.3)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.error_outline,
+                                          color: Colors.red, size: 20),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          deltaProvider.error!,
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 14,
+                                            fontFamily: "Manrope-Regular",
+                                          ),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () =>
+                                            deltaProvider.clearError(),
+                                        icon: Icon(Icons.close,
+                                            color: Colors.red, size: 20),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                style: TextStyle(color: notifier.textColor),
-                              ),
-                              const SizedBox(height: 12),
-                              TextField(
-                                controller: _deltaApiSecretController,
-                                decoration: InputDecoration(
-                                  labelText: 'API Secret',
-                                  labelStyle:
-                                      TextStyle(color: notifier.textColor),
-                                  filled: true,
-                                  fillColor: notifier.background,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide.none,
+
+                              // Balance display (if connected)
+                              if (deltaProvider.isConnected &&
+                                  deltaProvider.balance != null)
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(20),
+                                  margin: const EdgeInsets.only(bottom: 16),
+                                  decoration: BoxDecoration(
+                                    color: notifier.tabBar1,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Current Balance',
+                                            style: TextStyle(
+                                              color: notifier.textColor,
+                                              fontSize: 18,
+                                              fontFamily: "Manrope-Bold",
+                                            ),
+                                          ),
+                                          if (deltaProvider.isLoading)
+                                            SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
+                                                  const Color(0xff6B39F4),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                          color: notifier.background,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Available ${deltaProvider.balance!.asset}',
+                                              style: TextStyle(
+                                                color: notifier.textColor
+                                                    .withValues(alpha: 0.7),
+                                                fontSize: 12,
+                                                fontFamily: "Manrope-Regular",
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              '${deltaProvider.balance!.availableBalance.toStringAsFixed(2)} ${deltaProvider.balance!.asset}',
+                                              style: TextStyle(
+                                                color: notifier.textColor,
+                                                fontSize: 16,
+                                                fontFamily: "Manrope-Bold",
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                obscureText: true,
-                                style: TextStyle(color: notifier.textColor),
-                              ),
-                              const SizedBox(height: 24),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    // TODO: Implement Delta Exchange API connection
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xff6B39F4),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
+
+                              // Connection form (if not connected)
+                              if (!deltaProvider.isConnected)
+                                Container(
+                                  padding: const EdgeInsets.all(24),
+                                  decoration: BoxDecoration(
+                                    color: notifier.tabBar1,
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
-                                  child: const Text(
-                                    'Connect Delta',
-                                    style: TextStyle(
-                                      fontFamily: "Manrope-Bold",
-                                      fontSize: 16,
-                                    ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'API Credentials',
+                                        style: TextStyle(
+                                          color: notifier.textColor,
+                                          fontSize: 18,
+                                          fontFamily: "Manrope-Bold",
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      TextField(
+                                        controller: _deltaApiKeyController,
+                                        decoration: InputDecoration(
+                                          labelText: 'API Key',
+                                          labelStyle: TextStyle(
+                                              color: notifier.textColor),
+                                          filled: true,
+                                          fillColor: notifier.background,
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                        style: TextStyle(
+                                            color: notifier.textColor),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      TextField(
+                                        controller: _deltaApiSecretController,
+                                        decoration: InputDecoration(
+                                          labelText: 'API Secret',
+                                          labelStyle: TextStyle(
+                                              color: notifier.textColor),
+                                          filled: true,
+                                          fillColor: notifier.background,
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            borderSide: BorderSide.none,
+                                          ),
+                                        ),
+                                        obscureText: true,
+                                        style: TextStyle(
+                                            color: notifier.textColor),
+                                      ),
+                                      const SizedBox(height: 24),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: ElevatedButton(
+                                          onPressed: deltaProvider.isConnecting
+                                              ? null
+                                              : () async {
+                                                  if (_deltaApiKeyController
+                                                          .text
+                                                          .trim()
+                                                          .isEmpty ||
+                                                      _deltaApiSecretController
+                                                          .text
+                                                          .trim()
+                                                          .isEmpty) {
+                                                    ToastUtils.showError(
+                                                      context: context,
+                                                      message:
+                                                          'Please enter both API key and secret',
+                                                    );
+                                                    return;
+                                                  }
+
+                                                  final success =
+                                                      await deltaProvider
+                                                          .connect(
+                                                    apiKey:
+                                                        _deltaApiKeyController
+                                                            .text,
+                                                    apiSecret:
+                                                        _deltaApiSecretController
+                                                            .text,
+                                                  );
+
+                                                  if (success) {
+                                                    _deltaApiKeyController
+                                                        .clear();
+                                                    _deltaApiSecretController
+                                                        .clear();
+                                                    ToastUtils.showSuccess(
+                                                      context: context,
+                                                      message:
+                                                          'Successfully connected to Delta Exchange!',
+                                                    );
+                                                  }
+                                                },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                const Color(0xff6B39F4),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          child: deltaProvider.isConnecting
+                                              ? SizedBox(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                                Color>(
+                                                            Colors.white),
+                                                  ),
+                                                )
+                                              : const Text(
+                                                  'Connect Delta',
+                                                  style: TextStyle(
+                                                    fontFamily: "Manrope-Bold",
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
+
+                              // Disconnect button (if connected)
+                              if (deltaProvider.isConnected)
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(24),
+                                  decoration: BoxDecoration(
+                                    color: notifier.tabBar1,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Connection Status',
+                                        style: TextStyle(
+                                          color: notifier.textColor,
+                                          fontSize: 18,
+                                          fontFamily: "Manrope-Bold",
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            'Connected to Delta Exchange',
+                                            style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 14,
+                                              fontFamily: "Manrope-Medium",
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 24),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: ElevatedButton(
+                                          onPressed: deltaProvider.isLoading
+                                              ? null
+                                              : () async {
+                                                  await deltaProvider
+                                                      .disconnect();
+                                                  ToastUtils.showInfo(
+                                                    context: context,
+                                                    message:
+                                                        'Disconnected from Delta Exchange',
+                                                  );
+                                                },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red,
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          child: deltaProvider.isLoading
+                                              ? SizedBox(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                                Color>(
+                                                            Colors.white),
+                                                  ),
+                                                )
+                                              : const Text(
+                                                  'Disconnect',
+                                                  style: TextStyle(
+                                                    fontFamily: "Manrope-Bold",
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

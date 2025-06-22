@@ -356,15 +356,16 @@ class _ProfileState extends State<Profile> {
                         AppConstants.Height(12),
                         ProfileTile.regular(
                           image: "assets/images/notification.png",
-                          name: "Push Notifications",
-                          description: "Notification preferences",
+                          name: "Notifications",
+                          description: "All notifications",
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const Push_Notifications(),
-                                ));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const Push_Notifications(),
+                              ),
+                            );
                           },
                         ),
                         ProfileTile.withSwitch(

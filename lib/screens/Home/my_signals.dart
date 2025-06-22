@@ -58,7 +58,7 @@ class _MySignalsState extends State<MySignals>
         title: Column(
           children: [
             Text(
-              'My Signals',
+              'Signals',
               style: TextStyle(
                 color: notifier.textColor,
                 fontFamily: 'Manrope_bold',

@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:crowwn/features/brokers/presentation/providers/binance_provider.dart';
+import 'package:crowwn/features/brokers/presentation/providers/delta_provider.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -20,6 +21,7 @@ import 'services/api_service.dart';
 import 'services/auth_service.dart';
 import 'services/auth_storage_service.dart';
 import 'services/binance_service.dart';
+import 'services/delta_service.dart';
 import 'package:crowwn/features/profile/presentation/providers/profile_provider.dart';
 import 'package:crowwn/features/profile/data/repositories/profile_repository_impl.dart';
 import 'features/bot/data/services/bot_subscription_service.dart';
@@ -53,6 +55,13 @@ void main() async {
             );
           },
         ),
+        Provider<DeltaService>(
+          create: (context) {
+            return DeltaService(
+              apiService: context.read<ApiService>(),
+            );
+          },
+        ),
         Provider<BotSubscriptionService>(
           create: (context) {
             return BotSubscriptionService(
@@ -69,6 +78,14 @@ void main() async {
           create: (context) {
             return BinanceProvider(
               binanceService: context.read<BinanceService>(),
+              authStorage: context.read<AuthStorageService>(),
+            );
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return DeltaProvider(
+              deltaService: context.read<DeltaService>(),
               authStorage: context.read<AuthStorageService>(),
             );
           },
