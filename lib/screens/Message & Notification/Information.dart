@@ -31,7 +31,6 @@ class _InformationState extends State<Information> {
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Column(
             children: [
-              AppConstants.Height(20),
               ListView.builder(
                 itemCount: model.length,
                 physics: const NeverScrollableScrollPhysics(),

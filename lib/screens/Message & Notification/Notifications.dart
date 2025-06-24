@@ -21,13 +21,11 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
   String selectedFilter = "Message";
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
   }
 
   ColorNotifire notifier = ColorNotifire();
@@ -298,57 +296,7 @@ class _NotificationsState extends State<Notifications>
           const SizedBox(width: 10),
         ],
       ),
-      body: Column(
-        children: [
-          AppConstants.Height(30),
-          Container(
-            height: 55,
-            width: 330,
-            decoration: BoxDecoration(
-              border: Border.all(color: notifier.getContainerBorder),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 0),
-              child: TabBar(
-                padding:
-                    const EdgeInsets.only(left: 2, right: 2, top: 2, bottom: 2),
-                controller: _tabController,
-                dividerColor: Colors.transparent,
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: notifier.getContainerBorder,
-                ),
-                indicatorColor: Colors.transparent,
-                indicatorSize: TabBarIndicatorSize.tab,
-                tabs: [
-                  Tab(
-                    child: Text(
-                      "Information",
-                      style: TextStyle(color: notifier.textColor, fontSize: 13),
-                    ),
-                  ),
-                  Tab(
-                    child: Text(
-                      "Activity",
-                      style: TextStyle(color: notifier.textColor, fontSize: 13),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: const [
-                Information(),
-                Activity(),
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: Information(),
     );
   }
 }
