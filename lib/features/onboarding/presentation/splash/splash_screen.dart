@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Login%20Screens/login_screen.dart';
@@ -97,15 +98,23 @@ class _SplashState extends State<Splash> {
                 ),
               ),
               AppConstants.Height(5),
-              const Text(
-                "Version 0.0.1",
-                style: TextStyle(
-                  color: Color(0xffD1D1D1),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: "Manrope_semibold",
-                  letterSpacing: 0.3,
-                ),
+              FutureBuilder<PackageInfo>(
+                future: PackageInfo.fromPlatform(),
+                builder: (context, snapshot) {
+                  final version = snapshot.hasData
+                      ? 'Version ${snapshot.data!.version}'
+                      : 'Version ...';
+                  return Text(
+                    version,
+                    style: const TextStyle(
+                      color: Color(0xffD1D1D1),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Manrope_semibold",
+                      letterSpacing: 0.3,
+                    ),
+                  );
+                },
               ),
             ],
           ),
