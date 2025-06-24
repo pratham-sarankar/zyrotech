@@ -25,7 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
     const MySignals(),
     // const BotScreen(),
     const Scaffold(),
-    const Portfolio(),
+    // const Portfolio(),
+    const Scaffold(),
     const Profile(),
   ];
   ColorNotifire notifier = ColorNotifire();
