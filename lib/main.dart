@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'package:crowwn/features/brokers/presentation/providers/binance_provider.dart';
 import 'package:crowwn/features/brokers/presentation/providers/delta_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -41,9 +42,11 @@ void main() async {
         ),
         Provider<ApiService>(
           create: (context) {
-            const apiUrl = String.fromEnvironment('API_URL');
+            const debugApiUrl = String.fromEnvironment('DEBUG_API_URL');
+            const productionApiUrl =
+                String.fromEnvironment('PRODUCTION_API_URL');
             return ApiService(
-              baseUrl: apiUrl,
+              baseUrl: kDebugMode ? debugApiUrl : productionApiUrl,
               authStorage: context.read<AuthStorageService>(),
             );
           },
