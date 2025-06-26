@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'package:crowwn/features/brokers/presentation/providers/binance_provider.dart';
 import 'package:crowwn/features/brokers/presentation/providers/delta_provider.dart';
+import 'package:crowwn/features/bot/presentation/providers/signals_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,7 @@ import 'package:crowwn/features/profile/presentation/providers/profile_provider.
 import 'package:crowwn/features/profile/data/repositories/profile_repository_impl.dart';
 import 'features/bot/data/services/bot_subscription_service.dart';
 import 'features/bot/presentation/providers/bot_details_provider.dart';
+import 'repositories/signal_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,6 +67,13 @@ void main() async {
             );
           },
         ),
+        Provider<SignalRepository>(
+          create: (context) {
+            return SignalRepository(
+              apiService: context.read<ApiService>(),
+            );
+          },
+        ),
         Provider<BotSubscriptionService>(
           create: (context) {
             return BotSubscriptionService(
@@ -90,6 +99,13 @@ void main() async {
             return DeltaProvider(
               deltaService: context.read<DeltaService>(),
               authStorage: context.read<AuthStorageService>(),
+            );
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return SignalsProvider(
+              signalRepository: context.read<SignalRepository>(),
             );
           },
         ),

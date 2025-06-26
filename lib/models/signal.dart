@@ -13,9 +13,13 @@ class Signal {
   final DateTime exitTime;
   final double exitPrice;
   final String? exitReason;
-  final double? profitLoss;
-  final double? profitLossR;
+  final double profitLoss;
+  final double profitLossR;
   final int trailCount;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String id;
+  final BotInfo? bot;
 
   Signal({
     required this.tradeId,
@@ -29,65 +33,102 @@ class Signal {
     required this.exitTime,
     required this.exitPrice,
     this.exitReason,
-    this.profitLoss,
-    this.profitLossR,
+    required this.profitLoss,
+    required this.profitLossR,
     required this.trailCount,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.id,
+    this.bot,
   });
 
   factory Signal.fromMap(Map<String, dynamic> map) {
-    final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
-
     return Signal(
-      tradeId: map['trade_id'] as int,
-      direction: map['direction'] as String,
-      signalTime: dateFormat.parse(map['signal_time'] as String),
-      entryTime: dateFormat.parse(map['entry_time'] as String),
-      entryPrice: (map['entry_price'] as num).toDouble(),
-      stoploss: (map['stoploss'] as num).toDouble(),
-      target1r: (map['target_1r'] as num).toDouble(),
-      target2r: (map['target_2r'] as num).toDouble(),
-      exitTime: dateFormat.parse(map['exit_time'] as String),
-      exitPrice: (map['exit_price'] as num).toDouble(),
-      exitReason: map['exit_reason'] as String?,
-      profitLoss: map['profit_loss'] != null
-          ? (map['profit_loss'] as num).toDouble()
-          : null,
-      profitLossR: map['profit_loss_r'] != null
-          ? (map['profit_loss_r'] as num).toDouble()
-          : null,
-      trailCount: map['trail_count'] as int,
+      tradeId: map['tradeId'] as int? ?? 0,
+      direction: map['direction'] as String? ?? 'LONG',
+      signalTime: _parseDateTime(map['signalTime']),
+      entryTime: _parseDateTime(map['entryTime']),
+      entryPrice: (map['entryPrice'] as num?)?.toDouble() ?? 0.0,
+      stoploss: (map['stoploss'] as num?)?.toDouble() ?? 0.0,
+      target1r: (map['target1r'] as num?)?.toDouble() ?? 0.0,
+      target2r: (map['target2r'] as num?)?.toDouble() ?? 0.0,
+      exitTime: _parseDateTime(map['exitTime']),
+      exitPrice: (map['exitPrice'] as num?)?.toDouble() ?? 0.0,
+      exitReason: map['exitReason'] as String?,
+      profitLoss: (map['profitLoss'] as num?)?.toDouble() ?? 0.0,
+      profitLossR: (map['profitLossR'] as num?)?.toDouble() ?? 0.0,
+      trailCount: map['trailCount'] as int? ?? 0,
+      createdAt: _parseDateTime(map['createdAt']),
+      updatedAt: _parseDateTime(map['updatedAt']),
+      id: map['id'] as String? ?? '',
+      bot: map['bot'] != null ? BotInfo.fromMap(map['bot']) : null,
     );
   }
 
-  Map<String, dynamic> toMap() {
-    final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
+  static DateTime _parseDateTime(dynamic dateValue) {
+    if (dateValue == null) return DateTime.now();
 
+    if (dateValue is String) {
+      try {
+        return DateTime.parse(dateValue);
+      } catch (e) {
+        return DateTime.now();
+      }
+    }
+
+    return DateTime.now();
+  }
+
+  Map<String, dynamic> toMap() {
     return {
-      'trade_id': tradeId,
+      'tradeId': tradeId,
       'direction': direction,
-      'signal_time': dateFormat.format(signalTime),
-      'entry_time': dateFormat.format(entryTime),
-      'entry_price': entryPrice,
+      'signalTime': signalTime.toIso8601String(),
+      'entryTime': entryTime.toIso8601String(),
+      'entryPrice': entryPrice,
       'stoploss': stoploss,
-      'target_1r': target1r,
-      'target_2r': target2r,
-      'exit_time': dateFormat.format(exitTime),
-      'exit_price': exitPrice,
-      'exit_reason': exitReason,
-      'profit_loss': profitLoss,
-      'profit_loss_r': profitLossR,
-      'trail_count': trailCount,
+      'target1r': target1r,
+      'target2r': target2r,
+      'exitTime': exitTime.toIso8601String(),
+      'exitPrice': exitPrice,
+      'exitReason': exitReason,
+      'profitLoss': profitLoss,
+      'profitLossR': profitLossR,
+      'trailCount': trailCount,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'id': id,
+      'bot': bot?.toMap(),
     };
   }
 
   bool get isClosed => true;
 
   bool get isSell => direction == "SHORT";
-  double get profitAndLoss {
-    if (isSell) {
-      return entryPrice - exitPrice;
-    } else {
-      return exitPrice - entryPrice;
-    }
+
+  double get profitAndLoss => profitLoss;
+}
+
+class BotInfo {
+  final String id;
+  final String name;
+
+  BotInfo({
+    required this.id,
+    required this.name,
+  });
+
+  factory BotInfo.fromMap(Map<String, dynamic> map) {
+    return BotInfo(
+      id: map['id'] as String? ?? '',
+      name: map['name'] as String? ?? '',
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+    };
   }
 }

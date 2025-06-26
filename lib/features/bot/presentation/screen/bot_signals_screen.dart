@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/dark_mode.dart';
 import 'package:crowwn/models/signal.dart';
-import 'package:crowwn/repositories/signal_repository.dart';
-import 'package:provider/provider.dart';
+import 'package:crowwn/features/bot/presentation/providers/signals_provider.dart';
+import 'package:crowwn/utils/toast_utils.dart';
 
 class BotSignalsScreen extends StatefulWidget {
   const BotSignalsScreen({super.key, required this.bot});
@@ -20,23 +21,13 @@ class BotSignalsScreen extends StatefulWidget {
 
 class _BotSignalsScreenState extends State<BotSignalsScreen> {
   ColorNotifire notifier = ColorNotifire();
-  final SignalRepository signalRepository = SignalRepository();
-  bool isLoading = false;
-  List<Signal> signals = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchSignals();
-  }
-
-  Future<void> _fetchSignals() async {
-    setState(() {
-      isLoading = true;
-    });
-    signals = await signalRepository.getSignalsByBotId('1');
-    setState(() {
-      isLoading = false;
+    // Fetch signals for this specific bot
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SignalsProvider>().fetchSignalsByBotId(widget.bot.id);
     });
   }
 
@@ -45,12 +36,21 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: _buildSignalList(),
+      body: Consumer<SignalsProvider>(
+        builder: (context, signalsProvider, child) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              await signalsProvider.refreshSignals();
+            },
+            child: _buildSignalList(signalsProvider),
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildSignalList() {
-    if (isLoading) {
+  Widget _buildSignalList(SignalsProvider signalsProvider) {
+    if (signalsProvider.isLoading) {
       return Center(
         child: CircularProgressIndicator(
           color: notifier.textColor,
@@ -58,14 +58,76 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
       );
     }
 
-    if (signals.isEmpty) {
+    if (signalsProvider.error != null) {
       return Center(
-        child: Text(
-          'No signals found',
-          style: TextStyle(
-            color: notifier.textColor,
-            fontSize: 16,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 48,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Error loading signals',
+              style: TextStyle(
+                color: notifier.textColor,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              signalsProvider.error!,
+              style: TextStyle(
+                color: notifier.textColor.withValues(alpha: 0.7),
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                signalsProvider.clearError();
+                signalsProvider.fetchSignalsByBotId(widget.bot.id);
+              },
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (signalsProvider.signals.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.signal_cellular_alt_outlined,
+              color: notifier.textColor.withValues(alpha: 0.5),
+              size: 48,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'No signals found',
+              style: TextStyle(
+                color: notifier.textColor,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'This bot hasn\'t generated any signals yet.',
+              style: TextStyle(
+                color: notifier.textColor.withValues(alpha: 0.7),
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       );
     }
@@ -74,14 +136,14 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
       padding: const EdgeInsets.all(15),
       child: Column(
         children: [
-          _buildPerformanceCard(),
+          _buildPerformanceCard(signalsProvider),
           const SizedBox(height: 16),
           Expanded(
             child: ListView.builder(
               shrinkWrap: false,
-              itemCount: signals.length,
+              itemCount: signalsProvider.signals.length,
               itemBuilder: (context, index) {
-                final signal = signals[index];
+                final signal = signalsProvider.signals[index];
                 return _buildSignalItem(signal);
               },
             ),
@@ -91,7 +153,7 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
     );
   }
 
-  Widget _buildPerformanceCard() {
+  Widget _buildPerformanceCard(SignalsProvider signalsProvider) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -115,10 +177,17 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildPerformanceMetric(
-                  'Total PnL', '\$100', const Color(0xff6B39F4)),
+                  'Total PnL',
+                  '\$${signalsProvider.totalPnL.toStringAsFixed(2)}',
+                  signalsProvider.totalPnL >= 0 ? Colors.green : Colors.red),
               _buildPerformanceMetric(
-                  'Win Rate', '16%', const Color(0xff6B39F4)),
-              _buildPerformanceMetric('ROI', '20%', const Color(0xff6B39F4)),
+                  'Win Rate',
+                  '${signalsProvider.winRate.toStringAsFixed(1)}%',
+                  const Color(0xff6B39F4)),
+              _buildPerformanceMetric(
+                  'Avg ROI',
+                  '${signalsProvider.averageROI.toStringAsFixed(2)}%',
+                  const Color(0xff6B39F4)),
             ],
           ),
         ],
@@ -156,7 +225,7 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
         _showTradingDetailsBottomSheet(signal: signal);
       },
       child: Container(
-        margin: EdgeInsets.only(bottom: 16),
+        margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: notifier.container,
           borderRadius: BorderRadius.circular(16),
@@ -177,7 +246,7 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'BTC/USDT',
+                    signal.bot?.name ?? widget.bot.name,
                     style: TextStyle(
                       color: notifier.textColor,
                       fontSize: 16,
@@ -196,7 +265,7 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
                           ),
                         ),
                         TextSpan(
-                          text: signal.entryPrice.toString(),
+                          text: signal.entryPrice.toStringAsFixed(2),
                           style: TextStyle(
                             color: notifier.textColorGrey,
                           ),
@@ -206,7 +275,7 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
                     style: TextStyle(
                       color: signal.direction == "SHORT"
                           ? Colors.red
-                          : Color(0xff3794ff),
+                          : const Color(0xff3794ff),
                       fontSize: 12,
                     ),
                   ),
@@ -217,9 +286,9 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '\$${signal.profitAndLoss.toStringAsFixed(2)}',
+                  '\$${signal.profitLoss.toStringAsFixed(2)}',
                   style: TextStyle(
-                    color: signal.profitAndLoss.isNegative
+                    color: signal.profitLoss.isNegative
                         ? Colors.red
                         : Colors.green,
                     fontSize: 14,
@@ -264,9 +333,9 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            // Order ID
+            // Trade ID
             Text(
-              "#915765224",
+              "#${signal.tradeId}",
               style: TextStyle(
                 color: notifier.textColor.withValues(alpha: 0.7),
                 fontSize: 14,
@@ -283,58 +352,55 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'ZBT BTC Scalper',
-                                style: TextStyle(
-                                  color: notifier.textColor,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              signal.bot?.name ?? widget.bot.name,
+                              style: TextStyle(
+                                color: notifier.textColor,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
-                              const SizedBox(width: 8),
-                              Text.rich(
-                                TextSpan(
-                                  text:
-                                      "${signal.direction == "SHORT" ? "Sell" : "Buy"}",
-                                  children: [
-                                    TextSpan(
-                                      text: " at ",
-                                      style: TextStyle(
-                                        color: notifier.textColor,
-                                      ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text.rich(
+                              TextSpan(
+                                text:
+                                    "${signal.direction == "SHORT" ? "Sell" : "Buy"}",
+                                children: [
+                                  TextSpan(
+                                    text: " at ",
+                                    style: TextStyle(
+                                      color: notifier.textColor,
                                     ),
-                                    TextSpan(
-                                      text: signal.entryPrice.toString(),
-                                      style: TextStyle(
-                                        color: notifier.textColorGrey,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                style: TextStyle(
-                                  color: signal.direction == "SHORT"
-                                      ? Colors.red
-                                      : Color(0xff3794ff),
-                                  fontSize: 12,
-                                ),
+                                  ),
+                                  TextSpan(
+                                    text: signal.entryPrice.toStringAsFixed(2),
+                                    style: TextStyle(
+                                      color: notifier.textColorGrey,
+                                    ),
+                                  )
+                                ],
                               ),
-                            ],
-                          ),
-                        ],
+                              style: TextStyle(
+                                color: signal.direction == "SHORT"
+                                    ? Colors.red
+                                    : const Color(0xff3794ff),
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            '\$${signal.profitAndLoss.toStringAsFixed(2)}',
+                            '\$${signal.profitLoss.toStringAsFixed(2)}',
                             style: TextStyle(
-                              color: signal.profitAndLoss.isNegative
+                              color: signal.profitLoss.isNegative
                                   ? Colors.red
                                   : Colors.green,
                               fontSize: 14,
@@ -358,23 +424,38 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
 
                   // Trading details list
                   _buildDetailRow(
+                      "Signal time",
+                      DateFormat('dd MMM yyyy hh:mm:ss a')
+                          .format(signal.signalTime)),
+                  _buildDetailRow(
                       "Open time",
                       DateFormat('dd MMM yyyy hh:mm:ss a')
                           .format(signal.entryTime)),
                   _buildDetailRow(
                       "Open Price", signal.entryPrice.toStringAsFixed(2)),
                   _buildDetailRow(
+                      "Stop Loss", signal.stoploss.toStringAsFixed(2)),
+                  _buildDetailRow(
+                      "Target 1R", signal.target1r.toStringAsFixed(2)),
+                  _buildDetailRow(
+                      "Target 2R", signal.target2r.toStringAsFixed(2)),
+                  _buildDetailRow(
                       "Close time",
                       DateFormat('dd MMM yyyy hh:mm:ss a')
                           .format(signal.exitTime)),
                   _buildDetailRow(
                       "Close Price", signal.exitPrice.toStringAsFixed(2)),
-                  _buildDetailRow("P&L Price",
-                      "\$${signal.profitAndLoss.toStringAsFixed(2)}"),
+                  if (signal.exitReason != null)
+                    _buildDetailRow("Exit Reason", signal.exitReason!),
+                  _buildDetailRow(
+                      "P&L", "\$${signal.profitLoss.toStringAsFixed(2)}"),
+                  _buildDetailRow(
+                      "P&L R", "${signal.profitLossR.toStringAsFixed(2)}%"),
+                  _buildDetailRow("Trail Count", signal.trailCount.toString()),
                   const SizedBox(height: 32),
 
-                  // View Chart Button
-                  Container(
+                  // Close Button
+                  SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
@@ -388,7 +469,7 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
                         ),
                         elevation: 0,
                       ),
-                      child: Text(
+                      child: const Text(
                         "Close",
                         style: TextStyle(
                           color: Colors.white,
