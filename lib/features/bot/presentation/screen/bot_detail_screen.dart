@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:crowwn/features/bot/presentation/screen/bot_signals_screen.dart';
 import '../../../../dark_mode.dart';
-import '../providers/bot_details_provider.dart';
 
 class BotDetailsScreen extends StatefulWidget {
   final BotModel bot;

@@ -13,24 +13,51 @@ class SignalsProvider extends ChangeNotifier {
 
   List<Signal> _signals = [];
   bool _isLoading = false;
+  bool _isLoadingMore = false;
   String? _error;
   String? _currentBotId;
+
+  // Pagination state
+  int _currentPage = 1;
+  int _totalPages = 1;
+  int _totalSignals = 0;
+  bool _hasNextPage = false;
+  bool _hasPrevPage = false;
+  static const int _pageSize = 20;
 
   // Getters
   List<Signal> get signals => _signals;
   bool get isLoading => _isLoading;
+  bool get isLoadingMore => _isLoadingMore;
   String? get error => _error;
   String? get currentBotId => _currentBotId;
 
-  /// Fetch signals for a specific bot
+  // Pagination getters
+  int get currentPage => _currentPage;
+  int get totalPages => _totalPages;
+  int get totalSignals => _totalSignals;
+  bool get hasNextPage => _hasNextPage;
+  bool get hasPrevPage => _hasPrevPage;
+  bool get canLoadMore => _hasNextPage && !_isLoadingMore;
+
+  /// Fetch signals for a specific bot (first page)
   Future<void> fetchSignalsByBotId(String botId) async {
     _isLoading = true;
     _error = null;
     _currentBotId = botId;
+    _currentPage = 1;
+    _signals.clear();
     notifyListeners();
 
     try {
-      _signals = await _signalRepository.getSignalsByBotId(botId);
+      final response = await _signalRepository.getSignalsByBotId(
+        botId,
+        page: _currentPage,
+        limit: _pageSize,
+      );
+
+      _signals = response.signals;
+      _updatePaginationState(response.pagination);
     } catch (e) {
       if (e is ApiError) {
         _error = e.message;
@@ -43,15 +70,52 @@ class SignalsProvider extends ChangeNotifier {
     }
   }
 
-  /// Fetch all signals
+  /// Load more signals for the current bot
+  Future<void> loadMoreSignals() async {
+    if (!_hasNextPage || _isLoadingMore || _currentBotId == null) return;
+
+    _isLoadingMore = true;
+    notifyListeners();
+
+    try {
+      final response = await _signalRepository.getSignalsByBotId(
+        _currentBotId!,
+        page: _currentPage + 1,
+        limit: _pageSize,
+      );
+
+      _signals.addAll(response.signals);
+      _currentPage++;
+      _updatePaginationState(response.pagination);
+    } catch (e) {
+      if (e is ApiError) {
+        _error = e.message;
+      } else {
+        _error = 'Failed to load more signals: ${e.toString()}';
+      }
+    } finally {
+      _isLoadingMore = false;
+      notifyListeners();
+    }
+  }
+
+  /// Fetch all signals (first page)
   Future<void> fetchAllSignals() async {
     _isLoading = true;
     _error = null;
     _currentBotId = null;
+    _currentPage = 1;
+    _signals.clear();
     notifyListeners();
 
     try {
-      _signals = await _signalRepository.getAllSignals();
+      final response = await _signalRepository.getAllSignals(
+        page: _currentPage,
+        limit: _pageSize,
+      );
+
+      _signals = response.signals;
+      _updatePaginationState(response.pagination);
     } catch (e) {
       if (e is ApiError) {
         _error = e.message;
@@ -60,6 +124,34 @@ class SignalsProvider extends ChangeNotifier {
       }
     } finally {
       _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Load more signals for all signals
+  Future<void> loadMoreAllSignals() async {
+    if (!_hasNextPage || _isLoadingMore) return;
+
+    _isLoadingMore = true;
+    notifyListeners();
+
+    try {
+      final response = await _signalRepository.getAllSignals(
+        page: _currentPage + 1,
+        limit: _pageSize,
+      );
+
+      _signals.addAll(response.signals);
+      _currentPage++;
+      _updatePaginationState(response.pagination);
+    } catch (e) {
+      if (e is ApiError) {
+        _error = e.message;
+      } else {
+        _error = 'Failed to load more signals: ${e.toString()}';
+      }
+    } finally {
+      _isLoadingMore = false;
       notifyListeners();
     }
   }
@@ -77,6 +169,15 @@ class SignalsProvider extends ChangeNotifier {
   void clearError() {
     _error = null;
     notifyListeners();
+  }
+
+  /// Update pagination state from response
+  void _updatePaginationState(PaginationInfo pagination) {
+    _currentPage = pagination.currentPage;
+    _totalPages = pagination.totalPages;
+    _totalSignals = pagination.totalSignals;
+    _hasNextPage = pagination.hasNextPage;
+    _hasPrevPage = pagination.hasPrevPage;
   }
 
   /// Get signals filtered by direction

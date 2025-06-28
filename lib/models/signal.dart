@@ -1,5 +1,4 @@
 // Package imports:
-import 'package:intl/intl.dart';
 
 class Signal {
   final int tradeId;
@@ -130,5 +129,61 @@ class BotInfo {
       'id': id,
       'name': name,
     };
+  }
+}
+
+class PaginationInfo {
+  final int currentPage;
+  final int totalPages;
+  final int totalSignals;
+  final bool hasNextPage;
+  final bool hasPrevPage;
+
+  PaginationInfo({
+    required this.currentPage,
+    required this.totalPages,
+    required this.totalSignals,
+    required this.hasNextPage,
+    required this.hasPrevPage,
+  });
+
+  factory PaginationInfo.fromMap(Map<String, dynamic> map) {
+    return PaginationInfo(
+      currentPage: map['currentPage'] as int? ?? 1,
+      totalPages: map['totalPages'] as int? ?? 1,
+      totalSignals: map['totalSignals'] as int? ?? 0,
+      hasNextPage: map['hasNextPage'] as bool? ?? false,
+      hasPrevPage: map['hasPrevPage'] as bool? ?? false,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'currentPage': currentPage,
+      'totalPages': totalPages,
+      'totalSignals': totalSignals,
+      'hasNextPage': hasNextPage,
+      'hasPrevPage': hasPrevPage,
+    };
+  }
+}
+
+class SignalsResponse {
+  final List<Signal> signals;
+  final PaginationInfo pagination;
+
+  SignalsResponse({
+    required this.signals,
+    required this.pagination,
+  });
+
+  factory SignalsResponse.fromMap(Map<String, dynamic> map) {
+    return SignalsResponse(
+      signals: (map['data'] as List?)
+              ?.map<Signal>((signal) => Signal.fromMap(signal))
+              .toList() ??
+          [],
+      pagination: PaginationInfo.fromMap(map['pagination'] ?? {}),
+    );
   }
 }

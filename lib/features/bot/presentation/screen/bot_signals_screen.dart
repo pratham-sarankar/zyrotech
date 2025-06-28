@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:crowwn/dark_mode.dart';
 import 'package:crowwn/models/signal.dart';
 import 'package:crowwn/features/bot/presentation/providers/signals_provider.dart';
-import 'package:crowwn/utils/toast_utils.dart';
 
 class BotSignalsScreen extends StatefulWidget {
   const BotSignalsScreen({super.key, required this.bot});
@@ -21,14 +20,35 @@ class BotSignalsScreen extends StatefulWidget {
 
 class _BotSignalsScreenState extends State<BotSignalsScreen> {
   ColorNotifire notifier = ColorNotifire();
+  late ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
+
     // Fetch signals for this specific bot
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<SignalsProvider>().fetchSignalsByBotId(widget.bot.id);
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      final signalsProvider = context.read<SignalsProvider>();
+      if (signalsProvider.canLoadMore) {
+        signalsProvider.loadMoreSignals();
+      }
+    }
   }
 
   @override
@@ -140,15 +160,57 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
           const SizedBox(height: 16),
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               shrinkWrap: false,
-              itemCount: signalsProvider.signals.length,
+              itemCount: signalsProvider.signals.length +
+                  (signalsProvider.isLoadingMore || signalsProvider.canLoadMore
+                      ? 1
+                      : 0),
               itemBuilder: (context, index) {
+                if (index == signalsProvider.signals.length) {
+                  // Show loading indicator at the bottom
+                  return _buildLoadingMoreIndicator(
+                      signalsProvider.isLoadingMore);
+                }
                 final signal = signalsProvider.signals[index];
                 return _buildSignalItem(signal);
               },
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingMoreIndicator(bool isLoadingMore) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (isLoadingMore) ...[
+              SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: notifier.textColor,
+                ),
+              ),
+              const SizedBox(width: 12),
+            ],
+            Text(
+              isLoadingMore
+                  ? 'Loading more signals...'
+                  : 'More signals available',
+              style: TextStyle(
+                color: notifier.textColor.withValues(alpha: 0.7),
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -164,13 +226,25 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Performance Overview',
-            style: TextStyle(
-              color: notifier.textColor,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Performance Overview',
+                style: TextStyle(
+                  color: notifier.textColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '${signalsProvider.currentPage}/${signalsProvider.totalPages}',
+                style: TextStyle(
+                  color: notifier.textColor.withValues(alpha: 0.7),
+                  fontSize: 12,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           Row(

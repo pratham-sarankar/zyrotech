@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 // Project imports:
 import '../../dark_mode.dart';
 import '../config/common.dart';
-import 'Activity.dart';
 import 'Information.dart';
 
 class Notifications extends StatefulWidget {

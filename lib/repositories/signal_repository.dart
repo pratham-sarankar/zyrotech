@@ -2,7 +2,6 @@
 import 'dart:convert';
 
 // Package imports:
-import 'package:http/http.dart' as http;
 
 // Project imports:
 import 'package:crowwn/models/signal.dart';
@@ -16,18 +15,21 @@ class SignalRepository {
     required ApiService apiService,
   }) : _apiService = apiService;
 
-  Future<List<Signal>> getSignalsByBotId(String botId) async {
+  Future<SignalsResponse> getSignalsByBotId(
+    String botId, {
+    int page = 1,
+    int limit = 20,
+  }) async {
     try {
-      final response = await _apiService.get('/api/signals?botId=$botId');
+      final response = await _apiService.get(
+        '/api/signals?botId=$botId&page=$page&limit=$limit',
+      );
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
 
         if (result['status'] == 'success') {
-          final signals = result['data'] as List;
-          return signals
-              .map<Signal>((signal) => Signal.fromMap(signal))
-              .toList();
+          return SignalsResponse.fromMap(result);
         } else {
           throw ApiError.fromMap(result);
         }
@@ -41,18 +43,20 @@ class SignalRepository {
     }
   }
 
-  Future<List<Signal>> getAllSignals() async {
+  Future<SignalsResponse> getAllSignals({
+    int page = 1,
+    int limit = 20,
+  }) async {
     try {
-      final response = await _apiService.get('/api/signals');
+      final response = await _apiService.get(
+        '/api/signals?page=$page&limit=$limit',
+      );
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
 
         if (result['status'] == 'success') {
-          final signals = result['data'] as List;
-          return signals
-              .map<Signal>((signal) => Signal.fromMap(signal))
-              .toList();
+          return SignalsResponse.fromMap(result);
         } else {
           throw ApiError.fromMap(result);
         }
