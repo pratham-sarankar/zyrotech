@@ -154,28 +154,27 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
 
     return Padding(
       padding: const EdgeInsets.all(15),
-      child: Column(
+      child: ListView(
+        controller: _scrollController,
         children: [
           _buildPerformanceCard(signalsProvider),
           const SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              shrinkWrap: false,
-              itemCount: signalsProvider.signals.length +
-                  (signalsProvider.isLoadingMore || signalsProvider.canLoadMore
-                      ? 1
-                      : 0),
-              itemBuilder: (context, index) {
-                if (index == signalsProvider.signals.length) {
-                  // Show loading indicator at the bottom
-                  return _buildLoadingMoreIndicator(
-                      signalsProvider.isLoadingMore);
-                }
-                final signal = signalsProvider.signals[index];
-                return _buildSignalItem(signal);
-              },
-            ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: signalsProvider.signals.length +
+                (signalsProvider.isLoadingMore || signalsProvider.canLoadMore
+                    ? 1
+                    : 0),
+            itemBuilder: (context, index) {
+              if (index == signalsProvider.signals.length) {
+                // Show loading indicator at the bottom
+                return _buildLoadingMoreIndicator(
+                    signalsProvider.isLoadingMore);
+              }
+              final signal = signalsProvider.signals[index];
+              return _buildSignalItem(signal);
+            },
           ),
         ],
       ),
