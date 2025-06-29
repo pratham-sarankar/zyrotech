@@ -388,174 +388,188 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: notifier.background,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Drag handle bar
-            Container(
-              margin: const EdgeInsets.only(top: 8),
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: notifier.textColor.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Trade ID
-            Text(
-              "#${signal.tradeId}",
-              style: TextStyle(
-                color: notifier.textColor.withValues(alpha: 0.7),
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Top section with Pair, Action/Price, PnL, and Close Price
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+        return DraggableScrollableSheet(
+          initialChildSize: 0.75,
+          minChildSize: 0.3,
+          maxChildSize: 0.9,
+          expand: false,
+          builder: (context, scrollController) {
+            return Column(
+              children: [
+                // Drag handle bar
+                Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: notifier.textColor.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Trade ID
+                Text(
+                  "#${signal.tradeId}",
+                  style: TextStyle(
+                    color: notifier.textColor.withValues(alpha: 0.7),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Scrollable content
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Top section with Pair, Action/Price, PnL, and Close Price
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              signal.bot?.name ?? widget.bot.name,
-                              style: TextStyle(
-                                color: notifier.textColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text.rich(
-                              TextSpan(
-                                text:
-                                    "${signal.direction == "SHORT" ? "Sell" : "Buy"}",
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  TextSpan(
-                                    text: " at ",
+                                  Text(
+                                    signal.bot?.name ?? widget.bot.name,
                                     style: TextStyle(
                                       color: notifier.textColor,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  TextSpan(
-                                    text: signal.entryPrice.toStringAsFixed(2),
-                                    style: TextStyle(
-                                      color: notifier.textColorGrey,
+                                  const SizedBox(height: 8),
+                                  Text.rich(
+                                    TextSpan(
+                                      text:
+                                          "${signal.direction == "SHORT" ? "Sell" : "Buy"}",
+                                      children: [
+                                        TextSpan(
+                                          text: " at ",
+                                          style: TextStyle(
+                                            color: notifier.textColor,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: signal.entryPrice
+                                              .toStringAsFixed(2),
+                                          style: TextStyle(
+                                            color: notifier.textColorGrey,
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                  )
+                                    style: TextStyle(
+                                      color: signal.direction == "SHORT"
+                                          ? Colors.red
+                                          : const Color(0xff3794ff),
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 ],
                               ),
-                              style: TextStyle(
-                                color: signal.direction == "SHORT"
-                                    ? Colors.red
-                                    : const Color(0xff3794ff),
-                                fontSize: 12,
-                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '\$${signal.profitLoss.toStringAsFixed(2)}',
+                                  style: TextStyle(
+                                    color: signal.profitLoss.isNegative
+                                        ? Colors.red
+                                        : Colors.green,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  DateFormat('dd MMM yyyy hh:mm:ss a')
+                                      .format(signal.entryTime),
+                                  style: TextStyle(
+                                    color: notifier.textColorGrey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '\$${signal.profitLoss.toStringAsFixed(2)}',
-                            style: TextStyle(
-                              color: signal.profitLoss.isNegative
-                                  ? Colors.red
-                                  : Colors.green,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
+                        const SizedBox(height: 24),
+
+                        // Trading details list
+                        _buildDetailRow(
+                            "Signal time",
                             DateFormat('dd MMM yyyy hh:mm:ss a')
-                                .format(signal.entryTime),
-                            style: TextStyle(
-                              color: notifier.textColorGrey,
-                              fontSize: 12,
+                                .format(signal.signalTime)),
+                        _buildDetailRow(
+                            "Open time",
+                            DateFormat('dd MMM yyyy hh:mm:ss a')
+                                .format(signal.entryTime)),
+                        _buildDetailRow(
+                            "Open Price", signal.entryPrice.toStringAsFixed(2)),
+                        _buildDetailRow(
+                            "Stop Loss", signal.stoploss.toStringAsFixed(2)),
+                        _buildDetailRow(
+                            "Target 1R", signal.target1r.toStringAsFixed(2)),
+                        _buildDetailRow(
+                            "Target 2R", signal.target2r.toStringAsFixed(2)),
+                        _buildDetailRow(
+                            "Close time",
+                            DateFormat('dd MMM yyyy hh:mm:ss a')
+                                .format(signal.exitTime)),
+                        _buildDetailRow(
+                            "Close Price", signal.exitPrice.toStringAsFixed(2)),
+                        if (signal.exitReason != null)
+                          _buildDetailRow("Exit Reason", signal.exitReason!),
+                        _buildDetailRow(
+                            "P&L", "\$${signal.profitLoss.toStringAsFixed(2)}"),
+                        _buildDetailRow("P&L R",
+                            "${signal.profitLossR.toStringAsFixed(2)}%"),
+                        _buildDetailRow(
+                            "Trail Count", signal.trailCount.toString()),
+                        const SizedBox(height: 32),
+                        // Close Button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 204, 47, 47),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 0,
+                            ),
+                            child: const Text(
+                              "Close",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Trading details list
-                  _buildDetailRow(
-                      "Signal time",
-                      DateFormat('dd MMM yyyy hh:mm:ss a')
-                          .format(signal.signalTime)),
-                  _buildDetailRow(
-                      "Open time",
-                      DateFormat('dd MMM yyyy hh:mm:ss a')
-                          .format(signal.entryTime)),
-                  _buildDetailRow(
-                      "Open Price", signal.entryPrice.toStringAsFixed(2)),
-                  _buildDetailRow(
-                      "Stop Loss", signal.stoploss.toStringAsFixed(2)),
-                  _buildDetailRow(
-                      "Target 1R", signal.target1r.toStringAsFixed(2)),
-                  _buildDetailRow(
-                      "Target 2R", signal.target2r.toStringAsFixed(2)),
-                  _buildDetailRow(
-                      "Close time",
-                      DateFormat('dd MMM yyyy hh:mm:ss a')
-                          .format(signal.exitTime)),
-                  _buildDetailRow(
-                      "Close Price", signal.exitPrice.toStringAsFixed(2)),
-                  if (signal.exitReason != null)
-                    _buildDetailRow("Exit Reason", signal.exitReason!),
-                  _buildDetailRow(
-                      "P&L", "\$${signal.profitLoss.toStringAsFixed(2)}"),
-                  _buildDetailRow(
-                      "P&L R", "${signal.profitLossR.toStringAsFixed(2)}%"),
-                  _buildDetailRow("Trail Count", signal.trailCount.toString()),
-                  const SizedBox(height: 32),
-
-                  // Close Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 204, 47, 47),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
                         ),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        "Close",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         );
       },
     );
