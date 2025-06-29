@@ -19,11 +19,37 @@ class SignalRepository {
     String botId, {
     int page = 1,
     int limit = 20,
+    String? direction,
+    String? today,
+    String? yesterday,
+    String? thisWeek,
+    String? thisMonth,
+    String? startDate,
+    String? endDate,
+    String? date,
   }) async {
     try {
-      final response = await _apiService.get(
-        '/api/signals?botId=$botId&page=$page&limit=$limit',
-      );
+      final queryParams = <String, String>{
+        'botId': botId,
+        'page': page.toString(),
+        'limit': limit.toString(),
+      };
+
+      // Add optional parameters
+      if (direction != null) queryParams['direction'] = direction;
+      if (today != null) queryParams['today'] = today;
+      if (yesterday != null) queryParams['yesterday'] = yesterday;
+      if (thisWeek != null) queryParams['thisWeek'] = thisWeek;
+      if (thisMonth != null) queryParams['thisMonth'] = thisMonth;
+      if (startDate != null) queryParams['startDate'] = startDate;
+      if (endDate != null) queryParams['endDate'] = endDate;
+      if (date != null) queryParams['date'] = date;
+
+      final queryString = queryParams.entries
+          .map((e) => '${e.key}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+
+      final response = await _apiService.get('/api/signals?$queryString');
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
@@ -46,11 +72,36 @@ class SignalRepository {
   Future<SignalsResponse> getAllSignals({
     int page = 1,
     int limit = 20,
+    String? direction,
+    String? today,
+    String? yesterday,
+    String? thisWeek,
+    String? thisMonth,
+    String? startDate,
+    String? endDate,
+    String? date,
   }) async {
     try {
-      final response = await _apiService.get(
-        '/api/signals?page=$page&limit=$limit',
-      );
+      final queryParams = <String, String>{
+        'page': page.toString(),
+        'limit': limit.toString(),
+      };
+
+      // Add optional parameters
+      if (direction != null) queryParams['direction'] = direction;
+      if (today != null) queryParams['today'] = today;
+      if (yesterday != null) queryParams['yesterday'] = yesterday;
+      if (thisWeek != null) queryParams['thisWeek'] = thisWeek;
+      if (thisMonth != null) queryParams['thisMonth'] = thisMonth;
+      if (startDate != null) queryParams['startDate'] = startDate;
+      if (endDate != null) queryParams['endDate'] = endDate;
+      if (date != null) queryParams['date'] = date;
+
+      final queryString = queryParams.entries
+          .map((e) => '${e.key}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+
+      final response = await _apiService.get('/api/signals?$queryString');
 
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);

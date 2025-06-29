@@ -25,6 +25,16 @@ class SignalsProvider extends ChangeNotifier {
   bool _hasPrevPage = false;
   static const int _pageSize = 20;
 
+  // Filter state
+  String? _direction;
+  String? _today;
+  String? _yesterday;
+  String? _thisWeek;
+  String? _thisMonth;
+  String? _startDate;
+  String? _endDate;
+  String? _date;
+
   // Getters
   List<Signal> get signals => _signals;
   bool get isLoading => _isLoading;
@@ -40,6 +50,83 @@ class SignalsProvider extends ChangeNotifier {
   bool get hasPrevPage => _hasPrevPage;
   bool get canLoadMore => _hasNextPage && !_isLoadingMore;
 
+  // Filter getters
+  String? get direction => _direction;
+  String? get today => _today;
+  String? get yesterday => _yesterday;
+  String? get thisWeek => _thisWeek;
+  String? get thisMonth => _thisMonth;
+  String? get startDate => _startDate;
+  String? get endDate => _endDate;
+  String? get date => _date;
+
+  /// Set date filter
+  ///
+  /// For today, yesterday, thisWeek, and thisMonth parameters:
+  /// - Use 'yes', 'true', or '1' to enable the filter
+  /// - Use null to disable the filter
+  void setDateFilter({
+    String? direction,
+    String? today,
+    String? yesterday,
+    String? thisWeek,
+    String? thisMonth,
+    String? startDate,
+    String? endDate,
+    String? date,
+  }) {
+    _direction = direction;
+    _today = today;
+    _yesterday = yesterday;
+    _thisWeek = thisWeek;
+    _thisMonth = thisMonth;
+    _startDate = startDate;
+    _endDate = endDate;
+    _date = date;
+    notifyListeners();
+  }
+
+  /// Set boolean date filters with proper API values
+  ///
+  /// This method automatically converts boolean values to 'yes' for the API
+  void setBooleanDateFilters({
+    bool? today,
+    bool? yesterday,
+    bool? thisWeek,
+    bool? thisMonth,
+  }) {
+    _today = today == true ? 'yes' : null;
+    _yesterday = yesterday == true ? 'yes' : null;
+    _thisWeek = thisWeek == true ? 'yes' : null;
+    _thisMonth = thisMonth == true ? 'yes' : null;
+    notifyListeners();
+  }
+
+  /// Clear all filters
+  void clearFilters() {
+    _direction = null;
+    _today = null;
+    _yesterday = null;
+    _thisWeek = null;
+    _thisMonth = null;
+    _startDate = null;
+    _endDate = null;
+    _date = null;
+    notifyListeners();
+  }
+
+  /// Check if any filters are active
+  bool get hasActiveFilters {
+    return _direction != null ||
+        _today != null ||
+        _yesterday != null ||
+        _thisWeek != null ||
+        _thisMonth != null ||
+        _startDate != null ||
+        _endDate != null ||
+        _date != null;
+  }
+
   /// Fetch signals for a specific bot (first page)
   Future<void> fetchSignalsByBotId(String botId) async {
     _isLoading = true;
@@ -54,6 +141,14 @@ class SignalsProvider extends ChangeNotifier {
         botId,
         page: _currentPage,
         limit: _pageSize,
+        direction: _direction,
+        today: _today,
+        yesterday: _yesterday,
+        thisWeek: _thisWeek,
+        thisMonth: _thisMonth,
+        startDate: _startDate,
+        endDate: _endDate,
+        date: _date,
       );
 
       _signals = response.signals;
@@ -82,6 +177,14 @@ class SignalsProvider extends ChangeNotifier {
         _currentBotId!,
         page: _currentPage + 1,
         limit: _pageSize,
+        direction: _direction,
+        today: _today,
+        yesterday: _yesterday,
+        thisWeek: _thisWeek,
+        thisMonth: _thisMonth,
+        startDate: _startDate,
+        endDate: _endDate,
+        date: _date,
       );
 
       _signals.addAll(response.signals);
@@ -112,6 +215,14 @@ class SignalsProvider extends ChangeNotifier {
       final response = await _signalRepository.getAllSignals(
         page: _currentPage,
         limit: _pageSize,
+        direction: _direction,
+        today: _today,
+        yesterday: _yesterday,
+        thisWeek: _thisWeek,
+        thisMonth: _thisMonth,
+        startDate: _startDate,
+        endDate: _endDate,
+        date: _date,
       );
 
       _signals = response.signals;
@@ -139,6 +250,14 @@ class SignalsProvider extends ChangeNotifier {
       final response = await _signalRepository.getAllSignals(
         page: _currentPage + 1,
         limit: _pageSize,
+        direction: _direction,
+        today: _today,
+        yesterday: _yesterday,
+        thisWeek: _thisWeek,
+        thisMonth: _thisMonth,
+        startDate: _startDate,
+        endDate: _endDate,
+        date: _date,
       );
 
       _signals.addAll(response.signals);
