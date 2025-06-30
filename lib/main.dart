@@ -2,6 +2,7 @@
 import 'package:crowwn/features/brokers/presentation/providers/binance_provider.dart';
 import 'package:crowwn/features/brokers/presentation/providers/delta_provider.dart';
 import 'package:crowwn/features/bot/presentation/providers/signals_provider.dart';
+import 'package:crowwn/features/user_signals/presentation/providers/user_signals_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,8 @@ import 'package:crowwn/features/onboarding/presentation/providers/kyc_provider.d
 import 'package:crowwn/features/onboarding/presentation/splash/splash_screen.dart';
 import 'package:crowwn/features/home/data/repositories/bot_repository_impl.dart';
 import 'package:crowwn/features/home/presentation/providers/bot_provider.dart';
+import 'package:crowwn/features/user_signals/data/repositories/user_signals_repository_impl.dart';
+import 'package:crowwn/features/user_signals/data/services/user_signals_service.dart';
 import 'firebase_options.dart';
 import 'services/api_service.dart';
 import 'services/auth_service.dart';
@@ -132,6 +135,17 @@ void main() async {
           create: (context) {
             return BotDetailsProvider(
               subscriptionService: context.read<BotSubscriptionService>(),
+            );
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return UserSignalsProvider(
+              userSignalsRepository: UserSignalsRepositoryImpl(
+                userSignalsService: UserSignalsService(
+                  apiService: context.read<ApiService>(),
+                ),
+              ),
             );
           },
         ),
