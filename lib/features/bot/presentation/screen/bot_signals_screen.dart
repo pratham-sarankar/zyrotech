@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:crowwn/dark_mode.dart';
 import 'package:crowwn/models/signal.dart';
 import 'package:crowwn/features/bot/presentation/providers/signals_provider.dart';
+import 'package:crowwn/features/bot/presentation/widgets/performance_overview_widget.dart';
 
 class BotSignalsScreen extends StatefulWidget {
   const BotSignalsScreen({super.key, required this.bot});
@@ -292,6 +293,14 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
   }
 
   Widget _buildPerformanceCard(SignalsProvider signalsProvider) {
+    // If we have performance overview data from the API, use the new widget
+    if (signalsProvider.performanceOverview != null) {
+      return PerformanceOverviewWidget(
+        performanceOverview: signalsProvider.performanceOverview!,
+      );
+    }
+
+    // Fallback to basic performance metrics if no overview data
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

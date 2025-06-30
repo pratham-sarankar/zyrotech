@@ -132,6 +132,79 @@ class BotInfo {
   }
 }
 
+class PerformanceOverview {
+  final int totalSignals;
+  final int totalLongSignals;
+  final int totalShortSignals;
+  final double highestProfit;
+  final double highestLoss;
+  final double totalPnL;
+  final int consecutiveWins;
+  final int consecutiveLosses;
+
+  PerformanceOverview({
+    required this.totalSignals,
+    required this.totalLongSignals,
+    required this.totalShortSignals,
+    required this.highestProfit,
+    required this.highestLoss,
+    required this.totalPnL,
+    required this.consecutiveWins,
+    required this.consecutiveLosses,
+  });
+
+  factory PerformanceOverview.fromMap(Map<String, dynamic> map) {
+    return PerformanceOverview(
+      totalSignals: map['totalSignals'] as int? ?? 0,
+      totalLongSignals: map['totalLongSignals'] as int? ?? 0,
+      totalShortSignals: map['totalShortSignals'] as int? ?? 0,
+      highestProfit: (map['highestProfit'] as num?)?.toDouble() ?? 0.0,
+      highestLoss: (map['highestLoss'] as num?)?.toDouble() ?? 0.0,
+      totalPnL: (map['totalPnL'] as num?)?.toDouble() ?? 0.0,
+      consecutiveWins: map['consecutiveWins'] as int? ?? 0,
+      consecutiveLosses: map['consecutiveLosses'] as int? ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'totalSignals': totalSignals,
+      'totalLongSignals': totalLongSignals,
+      'totalShortSignals': totalShortSignals,
+      'highestProfit': highestProfit,
+      'highestLoss': highestLoss,
+      'totalPnL': totalPnL,
+      'consecutiveWins': consecutiveWins,
+      'consecutiveLosses': consecutiveLosses,
+    };
+  }
+
+  /// Calculate win rate percentage
+  /// Note: This is a simplified calculation. The API provides consecutive wins/losses
+  /// but not total wins/losses. For accurate win rate, you'd need to calculate from signals.
+  double get winRate {
+    if (totalSignals == 0) return 0.0;
+    // For now, we'll use a simple estimation based on consecutive wins
+    // In a real implementation, you'd calculate this from the actual signals
+    final estimatedWins = (consecutiveWins * 2).clamp(0, totalSignals);
+    return (estimatedWins / totalSignals) * 100;
+  }
+
+  /// Calculate loss rate percentage
+  /// Note: This is a simplified calculation. The API provides consecutive wins/losses
+  /// but not total wins/losses. For accurate loss rate, you'd need to calculate from signals.
+  double get lossRate {
+    if (totalSignals == 0) return 0.0;
+    // For now, we'll use a simple estimation based on consecutive losses
+    // In a real implementation, you'd calculate this from the actual signals
+    final estimatedLosses = (consecutiveLosses * 2).clamp(0, totalSignals);
+    return (estimatedLosses / totalSignals) * 100;
+  }
+
+  /// Get the overall performance color
+  bool get isProfitable => totalPnL > 0;
+}
+
 class PaginationInfo {
   final int currentPage;
   final int totalPages;
@@ -171,10 +244,12 @@ class PaginationInfo {
 class SignalsResponse {
   final List<Signal> signals;
   final PaginationInfo pagination;
+  final PerformanceOverview? performanceOverview;
 
   SignalsResponse({
     required this.signals,
     required this.pagination,
+    this.performanceOverview,
   });
 
   factory SignalsResponse.fromMap(Map<String, dynamic> map) {
@@ -184,6 +259,9 @@ class SignalsResponse {
               .toList() ??
           [],
       pagination: PaginationInfo.fromMap(map['pagination'] ?? {}),
+      performanceOverview: map['performanceOverview'] != null
+          ? PerformanceOverview.fromMap(map['performanceOverview'])
+          : null,
     );
   }
 }

@@ -16,6 +16,7 @@ class SignalsProvider extends ChangeNotifier {
   bool _isLoadingMore = false;
   String? _error;
   String? _currentBotId;
+  PerformanceOverview? _performanceOverview;
 
   // Pagination state
   int _currentPage = 1;
@@ -41,6 +42,7 @@ class SignalsProvider extends ChangeNotifier {
   bool get isLoadingMore => _isLoadingMore;
   String? get error => _error;
   String? get currentBotId => _currentBotId;
+  PerformanceOverview? get performanceOverview => _performanceOverview;
 
   // Pagination getters
   int get currentPage => _currentPage;
@@ -134,6 +136,7 @@ class SignalsProvider extends ChangeNotifier {
     _currentBotId = botId;
     _currentPage = 1;
     _signals.clear();
+    _performanceOverview = null;
     notifyListeners();
 
     try {
@@ -152,6 +155,7 @@ class SignalsProvider extends ChangeNotifier {
       );
 
       _signals = response.signals;
+      _performanceOverview = response.performanceOverview;
       _updatePaginationState(response.pagination);
     } catch (e) {
       if (e is ApiError) {
@@ -209,6 +213,7 @@ class SignalsProvider extends ChangeNotifier {
     _currentBotId = null;
     _currentPage = 1;
     _signals.clear();
+    _performanceOverview = null;
     notifyListeners();
 
     try {
@@ -226,6 +231,7 @@ class SignalsProvider extends ChangeNotifier {
       );
 
       _signals = response.signals;
+      _performanceOverview = response.performanceOverview;
       _updatePaginationState(response.pagination);
     } catch (e) {
       if (e is ApiError) {
