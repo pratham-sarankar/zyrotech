@@ -65,7 +65,6 @@ class AuthService {
       '/api/auth/login',
       body: jsonEncode({'email': email, 'password': password}),
     );
-
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
@@ -81,7 +80,6 @@ class AuthService {
           'profile',
         ],
       );
-      await googleSignIn.signOut();
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
       if (googleSignInAccount == null) {

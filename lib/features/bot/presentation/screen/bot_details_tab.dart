@@ -26,6 +26,7 @@ class _BotDetailsTabState extends State<BotDetailsTab> {
 
   @override
   Widget build(BuildContext context) {
+    notifier = Provider.of<ColorNotifire>(context, listen: true);
     return Consumer<BotDetailsProvider>(
       builder: (context, botDetailsProvider, child) {
         return Scaffold(

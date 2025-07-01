@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "120628086177-8461k6r73upgrfgg2fmjkknljnc1me0d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zyrotech.app",
+            "certificate_hash": "e17ab1fa32b3c81a322d7f4ad31d539cced448cd"
+          }
+        },
+        {
           "client_id": "120628086177-92i5saks0ji1hder26v7ebv7mpa0d0m3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

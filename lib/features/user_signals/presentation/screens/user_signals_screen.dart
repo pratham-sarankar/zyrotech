@@ -55,7 +55,7 @@ class _UserSignalsScreenState extends State<UserSignalsScreen>
     notifier = Provider.of<ColorNotifire>(context, listen: true);
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: notifier.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: true,

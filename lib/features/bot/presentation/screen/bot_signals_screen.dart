@@ -60,7 +60,8 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: false,
-        leadingWidth: 5,
+        leadingWidth: 0,
+        leading: Container(),
         elevation: 0,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
