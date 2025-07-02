@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'package:crowwn/features/brokers/presentation/providers/binance_provider.dart';
+import 'package:crowwn/features/brokers/presentation/screens/brokers_screen.dart';
 import 'package:crowwn/features/home/data/models/bot_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:crowwn/screens/Message%20&%20Notification/Notifications.dart';
 import '../../bot/presentation/screen/bot_detail_screen.dart';
 import 'package:crowwn/features/home/presentation/providers/bot_provider.dart';
+import 'package:crowwn/services/binance_service.dart';
+import 'package:crowwn/features/profile/presentation/providers/profile_provider.dart';
 
 import '../../../dark_mode.dart'; // Assuming Dark mode.dart is needed for theme colors
 
@@ -184,6 +188,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
     final botProvider = Provider.of<BotProvider>(context, listen: true);
+    final binanceService = Provider.of<BinanceService>(context, listen: false);
 
     // Get greeting based on current time
     String greeting = _getTimeBasedGreeting();
@@ -215,175 +220,166 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
       child: Scaffold(
         backgroundColor: notifier.background,
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Modern Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.08),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: CircleAvatar(
-                              radius: 26,
-                              backgroundImage:
-                                  AssetImage("assets/images/144.png"),
-                            ),
-                          ),
-                          const SizedBox(width: 14),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+          child: RefreshIndicator(
+            onRefresh: () async {
+              setState(() {});
+            },
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Modern Header
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Row(
                             children: [
-                              Text(
-                                "${greeting} 👋",
-                                style: TextStyle(
-                                  color:
-                                      notifier.textColor.withValues(alpha: 0.7),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.08),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: CircleAvatar(
+                                  radius: 26,
+                                  backgroundImage:
+                                      AssetImage("assets/images/144.png"),
                                 ),
                               ),
-                              const SizedBox(height: 2),
-                              Text(
-                                "Pratham", // TODO: Replace with dynamic user name
-                                style: TextStyle(
-                                  color: notifier.textColor,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${greeting} 👋",
+                                      style: TextStyle(
+                                        color: notifier.textColor
+                                            .withValues(alpha: 0.7),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Consumer<ProfileProvider>(
+                                      builder:
+                                          (context, profileProvider, child) {
+                                        final userName =
+                                            profileProvider.profile?.fullName ??
+                                                '';
+                                        return Text(
+                                          userName.isNotEmpty
+                                              ? userName
+                                              : "Dear User",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: notifier.textColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          _modernIconButton(Icons.notifications_outlined),
-                          const SizedBox(width: 10),
-                          _modernIconButton(Icons.settings_outlined),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 28),
-
-                  // Balance & PnL Card
-                  _balancePnlCard(notifier),
-                  const SizedBox(height: 28),
-
-                  // Broker Connection Status
-                  _brokerStatusCard(notifier),
-                  const SizedBox(height: 28),
-
-                  // Strategies Section (Horizontal Scroll)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Trending Strategies",
-                        style: TextStyle(
-                          color: notifier.textColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      Icon(Icons.trending_up, color: Color(0xff6B39F4)),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: 170,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        _strategyCard(
-                          name: "Bitcoin Alpha",
-                          ticker: "BTC/USDT",
-                          roi: "+12.5%",
-                          color: Colors.purple,
-                          isPositive: true,
-                        ),
-                        const SizedBox(width: 14),
-                        _strategyCard(
-                          name: "Ethereum Swing",
-                          ticker: "ETH/USDT",
-                          roi: "+7.2%",
-                          color: Colors.blue,
-                          isPositive: true,
-                        ),
-                        const SizedBox(width: 14),
-                        _strategyCard(
-                          name: "Solana Grid",
-                          ticker: "SOL/USDT",
-                          roi: "-2.3%",
-                          color: Colors.orange,
-                          isPositive: false,
-                        ),
-                        const SizedBox(width: 14),
-                        _strategyCard(
-                          name: "Cardano Boost",
-                          ticker: "ADA/USDT",
-                          roi: "+5.2%",
-                          color: Colors.indigo,
-                          isPositive: true,
+                        Row(
+                          children: [
+                            _modernIconButton(Icons.notifications_outlined),
+                            const SizedBox(width: 10),
+                            _modernIconButton(Icons.settings_outlined),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 32),
-
-                  // Filter Tabs
-                  _modernFilterTabs(),
-                  const SizedBox(height: 20),
-
-                  // Modern Bot List
-                  if (botProvider.isLoading)
-                    Column(
-                      children:
-                          List.generate(3, (index) => _buildShimmerBotCard()),
-                    )
-                  else if (botProvider.bots.isNotEmpty)
-                    Column(
-                      children: botProvider.bots
-                          .map((bot) => _modernBotCard(bot, notifier))
-                          .toList(),
-                    )
-                  else
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: notifier.container,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                            color: notifier.textColor.withValues(alpha: 0.1)),
+                    const SizedBox(height: 28),
+                    // Broker Connection Status
+                    _brokerStatusCard(notifier),
+                    const SizedBox(height: 28),
+                    // Strategies Section (Horizontal Scroll)
+                    Text(
+                      "Crypto Currencies",
+                      style: TextStyle(
+                        color: notifier.textColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                      child: Center(
-                        child: Text(
-                          'No bots available',
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Modern Crypto Price Card
+                    _cryptoPriceCard(binanceService),
+                    const SizedBox(height: 40),
+
+                    // Strategies Section (Horizontal Scroll)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Trending Strategies",
                           style: TextStyle(
-                            color: notifier.textColor.withValues(alpha: 0.7),
-                            fontSize: 14,
+                            color: notifier.textColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Icon(Icons.trending_up, color: Color(0xff6B39F4)),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Filter Tabs
+                    _modernFilterTabs(),
+                    const SizedBox(height: 20),
+
+                    // Modern Bot List
+                    if (botProvider.isLoading)
+                      Column(
+                        children:
+                            List.generate(3, (index) => _buildShimmerBotCard()),
+                      )
+                    else if (botProvider.bots.isNotEmpty)
+                      Column(
+                        children: botProvider.bots
+                            .map((bot) => _modernBotCard(bot, notifier))
+                            .toList(),
+                      )
+                    else
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: notifier.container,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                              color: notifier.textColor.withValues(alpha: 0.1)),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'No bots available',
+                            style: TextStyle(
+                              color: notifier.textColor.withValues(alpha: 0.7),
+                              fontSize: 14,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -429,252 +425,109 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     );
   }
 
-  // Balance & PnL Card
-  Widget _balancePnlCard(ColorNotifire notifier) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        gradient: LinearGradient(
-          colors: [Color(0xff6B39F4), Color(0xffA084E8)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Total Balance",
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.8),
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "\$2,525.52", // TODO: Replace with dynamic balance
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.trending_up,
-                          color: Colors.greenAccent, size: 16),
-                      const SizedBox(width: 4),
-                      Text(
-                        "+4.2%",
-                        style: TextStyle(
-                          color: Colors.greenAccent,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 36,
-            child: CustomPaint(
-              painter: LineChartPainter(color: Colors.white, isPositive: true),
-              size: const Size(double.infinity, 36),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   // Broker Connection Status Card
   Widget _brokerStatusCard(ColorNotifire notifier) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: notifier.container.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: notifier.textColor.withValues(alpha: 0.08)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.7),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(Icons.account_balance_wallet,
-                color: Color(0xff6B39F4), size: 22),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Binance",
-                  style: TextStyle(
-                    color: notifier.textColor,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  "Connected Broker",
-                  style: TextStyle(
-                    color: notifier.textColor.withValues(alpha: 0.7),
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.green.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  "Connected",
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Modern horizontal strategy card
-  Widget _strategyCard({
-    required String name,
-    required String ticker,
-    required String roi,
-    required Color color,
-    required bool isPositive,
-  }) {
-    return Container(
-      width: 150,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            color.withValues(alpha: 0.85),
-            color.withValues(alpha: 0.65)
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Consumer<BinanceProvider>(
+        builder: (context, binanceProvider, child) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: notifier.container.withValues(alpha: 0.7),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: notifier.textColor.withValues(alpha: 0.08)),
         ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.12),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.show_chart, color: Colors.white, size: 22),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  ticker,
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.7),
+                borderRadius: BorderRadius.circular(12),
               ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Text(
-            name,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+              child: Icon(
+                Icons.account_balance_wallet,
+                color: Color(0xff6B39F4),
+                size: 25,
+              ),
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const Spacer(),
-          Row(
-            children: [
-              Icon(
-                isPositive ? Icons.trending_up : Icons.trending_down,
-                color: isPositive ? Colors.greenAccent : Colors.redAccent,
-                size: 16,
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Binance",
+                    style: TextStyle(
+                      color: notifier.textColor,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    "Connect${binanceProvider.isConnected ? "ed" : ''} Broker",
+                    style: TextStyle(
+                      color: notifier.textColor.withValues(alpha: 0.7),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 4),
-              Text(
-                roi,
-                style: TextStyle(
-                  color: isPositive ? Colors.greenAccent : Colors.redAccent,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+            ),
+            if (binanceProvider.isConnected)
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.green.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+                child: Row(
+                  children: [
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: Colors.green,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      "Connected",
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else
+              FilledButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BrokersScreen(),
+                    ),
+                  );
+                },
+                style: FilledButton.styleFrom(
+                  backgroundColor: notifier.outlinedButtonColor,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text("Connect"),
+              )
+          ],
+        ),
+      );
+    });
   }
 
   // Modern filter tabs
@@ -1136,5 +989,117 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     } else {
       return 'Good Evening';
     }
+  }
+
+  Widget _cryptoPriceCard(BinanceService binanceService) {
+    final coins = [
+      {
+        'symbol': 'BTCUSDT',
+        'name': 'Bitcoin',
+        'icon': 'assets/images/Bitcoin.png',
+        'gradient': [Color(0xffF7931A), Color(0xffFFB300)],
+      },
+      {
+        'symbol': 'ETHUSDT',
+        'name': 'Ethereum',
+        'icon': 'assets/images/Ethereum (ETH).png',
+        'gradient': [Color(0xff627EEA), Color(0xff8CA6DB)],
+      },
+      {
+        'symbol': 'SOLUSDT',
+        'name': 'Solana',
+        'icon': 'assets/images/SOL.png',
+        'gradient': [Color(0xff00FFA3), Color(0xffDC1FFF)],
+      },
+    ];
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: coins.map((coin) {
+        return Expanded(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 6),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              gradient: LinearGradient(
+                colors: List<Color>.from(coin['gradient'] as List),
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: (coin['gradient'] as List<Color>)
+                      .first
+                      .withValues(alpha: 0.13),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withValues(alpha: 0.13),
+                  ),
+                  padding: const EdgeInsets.all(7),
+                  child: Image.asset(
+                    coin['icon'] as String,
+                    width: 28,
+                    height: 28,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  coin['name'] as String,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                FutureBuilder<double>(
+                  future:
+                      binanceService.getLatestPrice(coin['symbol'] as String),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Container(
+                        width: 48,
+                        height: 14,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.13),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(
+                        '--',
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    } else {
+                      return Text(
+                        '\$${snapshot.data!.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
   }
 }

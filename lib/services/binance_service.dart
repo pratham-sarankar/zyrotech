@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 // Project imports:
 import '../features/brokers/domain/models/binance_balance.dart';
@@ -47,6 +48,19 @@ class BinanceService {
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  /// Fetch latest price for a symbol from Binance public API
+  Future<double> getLatestPrice(String symbol) async {
+    final url =
+        Uri.parse('https://api.binance.com/api/v3/ticker/price?symbol=$symbol');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return double.parse(data['price']);
+    } else {
+      throw Exception('Failed to fetch price for $symbol');
     }
   }
 }
