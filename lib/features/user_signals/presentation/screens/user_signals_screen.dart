@@ -114,7 +114,7 @@ class _UserSignalsScreenState extends State<UserSignalsScreen>
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.1),
+                        color: Colors.red.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -146,22 +146,23 @@ class _UserSignalsScreenState extends State<UserSignalsScreen>
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
             decoration: BoxDecoration(
-              color: notifier.container.withOpacity(0.5),
+              color: notifier.container.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: notifier.textColor.withOpacity(0.1)),
+              border:
+                  Border.all(color: notifier.textColor.withValues(alpha: 0.1)),
             ),
             child: TabBar(
               controller: _tabController,
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: const Color(0xff6B39F4).withOpacity(0.1),
+                color: const Color(0xff6B39F4).withValues(alpha: 0.1),
                 border: Border.all(
-                  color: const Color(0xff6B39F4).withOpacity(0.3),
+                  color: const Color(0xff6B39F4).withValues(alpha: 0.3),
                 ),
               ),
               indicatorSize: TabBarIndicatorSize.tab,
               labelColor: const Color(0xff6B39F4),
-              unselectedLabelColor: notifier.textColor.withOpacity(0.7),
+              unselectedLabelColor: notifier.textColor.withValues(alpha: 0.7),
               labelStyle: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -180,7 +181,7 @@ class _UserSignalsScreenState extends State<UserSignalsScreen>
                         size: 18,
                         color: _tabController.index == 0
                             ? const Color(0xff6B39F4)
-                            : notifier.textColor.withOpacity(0.7)),
+                            : notifier.textColor.withValues(alpha: 0.7)),
                     const SizedBox(width: 8),
                     const Text('Open'),
                   ],
@@ -192,7 +193,7 @@ class _UserSignalsScreenState extends State<UserSignalsScreen>
                         size: 18,
                         color: _tabController.index == 1
                             ? const Color(0xff6B39F4)
-                            : notifier.textColor.withOpacity(0.7)),
+                            : notifier.textColor.withValues(alpha: 0.7)),
                     const SizedBox(width: 8),
                     const Text('Closed'),
                   ],

@@ -19,19 +19,27 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
-  List<Widget> myChildren = [
-    const HomeTabScreen(),
-    const UserSignalsScreen(),
-    // const BotScreen(),
-    const Scaffold(),
-    // const Portfolio(),
-    const Scaffold(),
-    const Profile(),
-  ];
   ColorNotifire notifier = ColorNotifire();
   @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
+    // Create the HomeTabScreen first so it can use the callback
+    final homeTab = HomeTabScreen(
+      onSettingsTap: () {
+        setState(() {
+          currentIndex = 4;
+        });
+      },
+    );
+    final myChildren = [
+      homeTab,
+      const UserSignalsScreen(),
+      // const BotScreen(),
+      const Scaffold(),
+      // const Portfolio(),
+      const Scaffold(),
+      const Profile(),
+    ];
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Align(
