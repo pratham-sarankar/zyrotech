@@ -856,33 +856,33 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Direction filter
-                  _buildSectionTitle('Direction'),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 8,
-                    children: [
-                      _buildChip('All', null, _selectedDirection),
-                      ..._directions.map((direction) =>
-                          _buildChip(direction, direction, _selectedDirection)),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
+                  // _buildSectionTitle('Direction'),
+                  // const SizedBox(height: 12),
+                  // Wrap(
+                  //   spacing: 8,
+                  //   children: [
+                  //     _buildChip('All', null, _selectedDirection),
+                  //     ..._directions.map((direction) =>
+                  //         _buildChip(direction, direction, _selectedDirection)),
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 24),
 
                   // Quick date filters
-                  _buildSectionTitle('Quick Date Filters'),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      _buildChip('All Time', null, _selectedDateFilter),
-                      ..._dateFilters.map((filter) => _buildChip(
-                          filter['label']!,
-                          filter['value']!,
-                          _selectedDateFilter)),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
+                  // _buildSectionTitle('Quick Date Filters'),
+                  // const SizedBox(height: 12),
+                  // Wrap(
+                  //   spacing: 8,
+                  //   runSpacing: 8,
+                  //   children: [
+                  //     _buildChip('All Time', null, _selectedDateFilter),
+                  //     ..._dateFilters.map((filter) => _buildChip(
+                  //         filter['label']!,
+                  //         filter['value']!,
+                  //         _selectedDateFilter)),
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 24),
 
                   // Custom date range
                   _buildSectionTitle('Custom Date Range'),
