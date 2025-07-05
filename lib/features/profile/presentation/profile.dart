@@ -354,19 +354,20 @@ class _ProfileState extends State<Profile> {
                               fontSize: 16),
                         ),
                         AppConstants.Height(12),
-                        ProfileTile.regular(
-                          image: "assets/images/notification.png",
-                          name: "Notifications",
-                          description: "All notifications",
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Notifications(),
-                              ),
-                            );
-                          },
-                        ),
+                        // notification tile disabled for now
+                        // ProfileTile.regular(
+                        //   image: "assets/images/notification.png",
+                        //   name: "Notifications",
+                        //   description: "All notifications",
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) => const Notifications(),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
                         ProfileTile.withSwitch(
                           image: "assets/images/light dark mode.png",
                           name: "Light/Dark Mode",
