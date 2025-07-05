@@ -299,7 +299,8 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                         ),
                         Row(
                           children: [
-                            _modernIconButton(Icons.notifications_outlined),
+                            // notification icon disabled for now
+                            // _modernIconButton(Icons.notifications_outlined),
                             const SizedBox(width: 10),
                             _modernIconButton(Icons.settings_outlined),
                           ],
