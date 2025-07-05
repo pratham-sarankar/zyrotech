@@ -340,7 +340,7 @@ class _ProfileState extends State<Profile> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const BrokersScreen(),
+                                builder: (context) => const BrokersScreen(initialTab: 0),
                               ),
                             );
                           },

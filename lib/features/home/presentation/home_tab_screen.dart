@@ -1,6 +1,9 @@
 // Flutter imports:
 import 'package:crowwn/features/brokers/presentation/providers/binance_provider.dart';
+import 'package:crowwn/features/brokers/presentation/providers/delta_provider.dart';
 import 'package:crowwn/features/brokers/presentation/screens/brokers_screen.dart';
+import 'package:crowwn/features/brokers/domain/models/binance_balance.dart';
+import 'package:crowwn/features/brokers/domain/models/delta_balance.dart';
 import 'package:crowwn/features/home/data/models/bot_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -181,6 +184,9 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     // Fetch bots when the screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<BotProvider>().fetchBots();
+      // Initialize broker providers
+      context.read<BinanceProvider>().initialize();
+      context.read<DeltaProvider>().initialize();
     });
   }
 
@@ -223,6 +229,16 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
           child: RefreshIndicator(
             onRefresh: () async {
               setState(() {});
+              // Refresh broker balances
+              final binanceProvider = context.read<BinanceProvider>();
+              final deltaProvider = context.read<DeltaProvider>();
+              
+              if (binanceProvider.isConnected) {
+                await binanceProvider.refreshBalance();
+              }
+              if (deltaProvider.isConnected) {
+                await deltaProvider.refreshBalance();
+              }
             },
             child: SingleChildScrollView(
               child: Padding(
@@ -308,9 +324,11 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                       ],
                     ),
                     const SizedBox(height: 28),
-                    // Broker Connection Status
-                    _brokerStatusCard(notifier),
+                    
+                    // Broker Cards Section
+                    _brokerCardsSection(notifier),
                     const SizedBox(height: 28),
+                    
                     // Strategies Section (Horizontal Scroll)
                     Text(
                       "Crypto Currencies",
@@ -426,109 +444,366 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     );
   }
 
-  // Broker Connection Status Card
-  Widget _brokerStatusCard(ColorNotifire notifier) {
-    return Consumer<BinanceProvider>(
-        builder: (context, binanceProvider, child) {
-      return Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: notifier.container.withValues(alpha: 0.7),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: notifier.textColor.withValues(alpha: 0.08)),
-        ),
-        child: Row(
+  // Broker Cards Section
+  Widget _brokerCardsSection(ColorNotifire notifier) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.7),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                Icons.account_balance_wallet,
-                color: Color(0xff6B39F4),
-                size: 25,
+            Text(
+              "Broker Connections",
+              style: TextStyle(
+                color: notifier.textColor,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Binance",
-                    style: TextStyle(
-                      color: notifier.textColor,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
+            Row(
+              children: [
+                Icon(
+                  Icons.swipe_left,
+                  color: notifier.textColor.withValues(alpha: 0.6),
+                  size: 16,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  "Swipe",
+                  style: TextStyle(
+                    color: notifier.textColor.withValues(alpha: 0.6),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    "Connect${binanceProvider.isConnected ? "ed" : ''} Broker",
-                    style: TextStyle(
-                      color: notifier.textColor.withValues(alpha: 0.7),
-                      fontSize: 12,
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 90,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            clipBehavior: Clip.none,
+            children: [
+              _buildBrokerCard(
+                brokerName: "Binance",
+                logoPath: "assets/images/binance.jpeg",
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFF7931A), Color(0xFFF8D147)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                isConnected: context.watch<BinanceProvider>().isConnected,
+                balance: context.watch<BinanceProvider>().balance,
+                isLoading: context.watch<BinanceProvider>().isLoading,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BrokersScreen(initialTab: 0),
                     ),
+                  );
+                },
+              ),
+              const SizedBox(width: 12),
+              _buildBrokerCard(
+                brokerName: "Delta",
+                logoPath: "assets/images/delta_logo.png",
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF00D4FF), Color(0xFF0099CC)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                isConnected: context.watch<DeltaProvider>().isConnected,
+                balance: context.watch<DeltaProvider>().balance,
+                isLoading: context.watch<DeltaProvider>().isLoading,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BrokersScreen(initialTab: 1),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Individual Broker Card
+  Widget _buildBrokerCard({
+    required String brokerName,
+    required String logoPath,
+    required LinearGradient gradient,
+    required bool isConnected,
+    dynamic balance,
+    required bool isLoading,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        width: MediaQuery.of(context).size.width - 40, // Full width minus padding
+        clipBehavior: Clip.none,
+        decoration: BoxDecoration(
+          gradient: gradient,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: gradient.colors.first.withValues(alpha: 0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(16), // Reduced from 20 to 16
+              child: Row(
+                children: [
+                  // Left side - Logo and status
+                  Row(
+                    children: [
+                      Container(
+                        width: 40, // Increased from 36 to 48
+                        height: 40, // Increased from 36 to 48
+                        padding: brokerName == "Delta" 
+                            ? const EdgeInsets.all(0) // Less padding for Delta
+                            : const EdgeInsets.all(8), // Normal padding for others
+                        decoration: BoxDecoration(
+                          color: Colors.white, // Changed to solid white
+                          borderRadius: BorderRadius.circular(12), // Increased radius
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.1),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8), // Adjusted for padding
+                          child: Image.asset(
+                            logoPath,
+                            fit: BoxFit.contain, // Changed to contain for better logo display
+                            width: brokerName == "Delta" ? 36 : null, // Force width for Delta
+                            height: brokerName == "Delta" ? 36 : null, // Force height for Delta
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                        children: [
+                          Text(
+                            brokerName,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16, // Reduced from 18 to 16
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 2), // Reduced from 4 to 2
+                          Row(
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: isConnected ? Colors.green : Colors.grey,
+                                  shape: BoxShape.circle,
+                                  boxShadow: isConnected ? [
+                                    BoxShadow(
+                                      color: Colors.green.withValues(alpha: 0.5),
+                                      blurRadius: 4,
+                                      spreadRadius: 1,
+                                    ),
+                                  ] : null,
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                isConnected ? "Connected" : "Disconnected",
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                  fontSize: 11, // Reduced from 12 to 11
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  // Right side - Balance or connection status
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                    children: [
+                      if (isConnected && balance != null)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            if (isLoading)
+                              _buildShimmerLoader()
+                            else
+                              Text(
+                                _formatBalance(balance),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18, // Reduced from 20 to 18
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            const SizedBox(height: 2), // Reduced from 4 to 2
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                  size: 12, // Reduced from 14 to 12
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "Active",
+                                  style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.8),
+                                    fontSize: 11, // Reduced from 12 to 11
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      else
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Connect Now",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14, // Reduced from 16 to 14
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 2), // Reduced from 4 to 2
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.add_circle_outline,
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                  size: 12, // Reduced from 14 to 12
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "Tap to connect",
+                                  style: TextStyle(
+                                    color: Colors.white.withValues(alpha: 0.8),
+                                    fontSize: 11, // Reduced from 12 to 11
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                    ],
                   ),
                 ],
               ),
             ),
-            if (binanceProvider.isConnected)
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.green.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: Colors.green,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      "Connected",
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            else
-              FilledButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BrokersScreen(),
-                    ),
-                  );
-                },
-                style: FilledButton.styleFrom(
-                  backgroundColor: notifier.outlinedButtonColor,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text("Connect"),
-              )
-          ],
+          ),
         ),
-      );
-    });
+      ),
+    );
+  }
+
+  // Shimmer loading effect for balance
+  Widget _buildShimmerLoader() {
+    return Container(
+      width: 80,
+      height: 16,
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Stack(
+        children: [
+          Container(
+            width: 80,
+            height: 16,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.white.withValues(alpha: 0.1),
+                  Colors.white.withValues(alpha: 0.3),
+                  Colors.white.withValues(alpha: 0.1),
+                ],
+                stops: const [0.0, 0.5, 1.0],
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: -1.0, end: 1.0),
+              duration: const Duration(milliseconds: 1500),
+              builder: (context, value, child) {
+                return Transform.translate(
+                  offset: Offset(value * 80, 0),
+                  child: Container(
+                    width: 40,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Colors.white.withValues(alpha: 0.4),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Format balance based on broker type
+  String _formatBalance(dynamic balance) {
+    if (balance is BinanceBalance) {
+      final totalBalance = balance.btcBalance + balance.btcLocked;
+      if (totalBalance >= 1) {
+        return "${totalBalance.toStringAsFixed(2)} BTC";
+      } else {
+        return "${(totalBalance * 1000).toStringAsFixed(0)} mBTC";
+      }
+    } else if (balance is DeltaBalance) {
+      return "${balance.availableBalance.toStringAsFixed(2)} ${balance.asset}";
+    }
+    return "0.00";
   }
 
   // Modern filter tabs

@@ -11,7 +11,8 @@ import '../../../../dark_mode.dart';
 import '../../../../utils/toast_utils.dart';
 
 class BrokersScreen extends StatefulWidget {
-  const BrokersScreen({super.key});
+  final int initialTab;
+  const BrokersScreen({super.key, this.initialTab = 0});
 
   @override
   State<BrokersScreen> createState() => _BrokersScreenState();
@@ -34,7 +35,7 @@ class _BrokersScreenState extends State<BrokersScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialTab);
     // Initialize providers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<BinanceProvider>().initialize();
