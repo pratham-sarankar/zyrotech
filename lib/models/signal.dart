@@ -1,49 +1,49 @@
 // Package imports:
 
 class Signal {
-  final int tradeId;
+  final String tradeId;
   final String direction;
-  final DateTime signalTime;
-  final DateTime entryTime;
+  final DateTime? signalTime;
+  final DateTime? entryTime;
   final double entryPrice;
   final double stoploss;
   final double target1r;
   final double target2r;
-  final DateTime exitTime;
-  final double exitPrice;
+  final DateTime? exitTime;
+  final num? exitPrice;
   final String? exitReason;
   final double profitLoss;
   final double profitLossR;
   final int trailCount;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   final String id;
   final BotInfo? bot;
 
   Signal({
     required this.tradeId,
     required this.direction,
-    required this.signalTime,
-    required this.entryTime,
+    this.signalTime,
+    this.entryTime,
     required this.entryPrice,
     required this.stoploss,
     required this.target1r,
     required this.target2r,
-    required this.exitTime,
-    required this.exitPrice,
+    this.exitTime,
+    this.exitPrice,
     this.exitReason,
     required this.profitLoss,
     required this.profitLossR,
     required this.trailCount,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
     required this.id,
     this.bot,
   });
 
   factory Signal.fromMap(Map<String, dynamic> map) {
     return Signal(
-      tradeId: map['tradeId'] as int? ?? 0,
+      tradeId: map['tradeId'],
       direction: map['direction'] as String? ?? 'LONG',
       signalTime: _parseDateTime(map['signalTime']),
       entryTime: _parseDateTime(map['entryTime']),
@@ -52,7 +52,7 @@ class Signal {
       target1r: (map['target1r'] as num?)?.toDouble() ?? 0.0,
       target2r: (map['target2r'] as num?)?.toDouble() ?? 0.0,
       exitTime: _parseDateTime(map['exitTime']),
-      exitPrice: (map['exitPrice'] as num?)?.toDouble() ?? 0.0,
+      exitPrice: map['exitPrice'],
       exitReason: map['exitReason'] as String?,
       profitLoss: (map['profitLoss'] as num?)?.toDouble() ?? 0.0,
       profitLossR: (map['profitLossR'] as num?)?.toDouble() ?? 0.0,
@@ -64,38 +64,28 @@ class Signal {
     );
   }
 
-  static DateTime _parseDateTime(dynamic dateValue) {
-    if (dateValue == null) return DateTime.now();
-
-    if (dateValue is String) {
-      try {
-        return DateTime.parse(dateValue);
-      } catch (e) {
-        return DateTime.now();
-      }
-    }
-
-    return DateTime.now();
+  static DateTime? _parseDateTime(dynamic dateValue) {
+    return DateTime.tryParse(dateValue ?? '');
   }
 
   Map<String, dynamic> toMap() {
     return {
       'tradeId': tradeId,
       'direction': direction,
-      'signalTime': signalTime.toIso8601String(),
-      'entryTime': entryTime.toIso8601String(),
+      'signalTime': signalTime?.toIso8601String(),
+      'entryTime': entryTime?.toIso8601String(),
       'entryPrice': entryPrice,
       'stoploss': stoploss,
       'target1r': target1r,
       'target2r': target2r,
-      'exitTime': exitTime.toIso8601String(),
+      'exitTime': exitTime?.toIso8601String(),
       'exitPrice': exitPrice,
       'exitReason': exitReason,
       'profitLoss': profitLoss,
       'profitLossR': profitLossR,
       'trailCount': trailCount,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
       'id': id,
       'bot': bot?.toMap(),
     };

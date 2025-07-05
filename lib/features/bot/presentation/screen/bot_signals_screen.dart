@@ -466,6 +466,7 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
               ),
             ),
             Column(
+              spacing: 4,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
@@ -478,14 +479,15 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  DateFormat('dd MMM yyyy hh:mm:ss a').format(signal.entryTime),
-                  style: TextStyle(
-                    color: notifier.textColorGrey,
-                    fontSize: 12,
+                if (signal.entryTime != null)
+                  Text(
+                    DateFormat('dd MMM yyyy hh:mm:ss a')
+                        .format(signal.entryTime!),
+                    style: TextStyle(
+                      color: notifier.textColorGrey,
+                      fontSize: 12,
+                    ),
                   ),
-                ),
               ],
             ),
           ],
@@ -504,9 +506,9 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
       ),
       builder: (context) {
         return DraggableScrollableSheet(
-          initialChildSize: 0.75,
+          initialChildSize: 0.4,
           minChildSize: 0.3,
-          maxChildSize: 0.9,
+          maxChildSize: 0.5,
           expand: false,
           builder: (context, scrollController) {
             return Column(
@@ -588,6 +590,7 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
                               ),
                             ),
                             Column(
+                              spacing: 4,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
@@ -600,52 +603,37 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  DateFormat('dd MMM yyyy hh:mm:ss a')
-                                      .format(signal.entryTime),
-                                  style: TextStyle(
-                                    color: notifier.textColorGrey,
-                                    fontSize: 12,
+                                if (signal.entryTime != null)
+                                  Text(
+                                    DateFormat('dd MMM yyyy hh:mm:ss a')
+                                        .format(signal.entryTime!),
+                                    style: TextStyle(
+                                      color: notifier.textColorGrey,
+                                      fontSize: 12,
+                                    ),
                                   ),
-                                ),
                               ],
                             ),
                           ],
                         ),
                         const SizedBox(height: 24),
 
-                        // Trading details list
-                        _buildDetailRow(
-                            "Signal time",
-                            DateFormat('dd MMM yyyy hh:mm:ss a')
-                                .format(signal.signalTime)),
-                        _buildDetailRow(
-                            "Open time",
-                            DateFormat('dd MMM yyyy hh:mm:ss a')
-                                .format(signal.entryTime)),
+                        if (signal.entryTime != null)
+                          _buildDetailRow(
+                              "Open time",
+                              DateFormat('dd MMM yyyy hh:mm:ss a')
+                                  .format(signal.entryTime!)),
                         _buildDetailRow(
                             "Open Price", signal.entryPrice.toStringAsFixed(2)),
-                        _buildDetailRow(
-                            "Stop Loss", signal.stoploss.toStringAsFixed(2)),
-                        _buildDetailRow(
-                            "Target 1R", signal.target1r.toStringAsFixed(2)),
-                        _buildDetailRow(
-                            "Target 2R", signal.target2r.toStringAsFixed(2)),
-                        _buildDetailRow(
+                        if (signal.exitTime != null)
+                          _buildDetailRow(
                             "Close time",
                             DateFormat('dd MMM yyyy hh:mm:ss a')
-                                .format(signal.exitTime)),
-                        _buildDetailRow(
-                            "Close Price", signal.exitPrice.toStringAsFixed(2)),
-                        if (signal.exitReason != null)
-                          _buildDetailRow("Exit Reason", signal.exitReason!),
-                        _buildDetailRow(
-                            "P&L", "\$${signal.profitLoss.toStringAsFixed(2)}"),
-                        _buildDetailRow("P&L R",
-                            "${signal.profitLossR.toStringAsFixed(2)}%"),
-                        _buildDetailRow(
-                            "Trail Count", signal.trailCount.toString()),
+                                .format(signal.exitTime!),
+                          ),
+                        if (signal.exitPrice != null)
+                          _buildDetailRow("Close Price",
+                              signal.exitPrice!.toStringAsFixed(2)),
                         const SizedBox(height: 32),
                         // Close Button
                         SizedBox(
