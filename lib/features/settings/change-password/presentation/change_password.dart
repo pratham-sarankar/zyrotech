@@ -237,7 +237,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _changePassword,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff6B39F4),
+                      backgroundColor: const Color(0xff2e9844),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

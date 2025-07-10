@@ -156,7 +156,7 @@ class _PersonalDataState extends State<PersonalData> {
               // Image.asset(
               //   "assets/images/edit.png",
               //   scale: 3,
-              //   color: const Color(0xff6B39F4),
+              //   color: const Color(0xff2e9844),
               // ),
               // const SizedBox(width: 10),
             ],
@@ -183,7 +183,7 @@ class _PersonalDataState extends State<PersonalData> {
                     //         decoration: BoxDecoration(
                     //           shape: BoxShape.circle,
                     //           border: Border.all(
-                    //             color: const Color(0xff6B39F4),
+                    //             color: const Color(0xff2e9844),
                     //             width: 2,
                     //           ),
                     //           boxShadow: [
@@ -204,7 +204,7 @@ class _PersonalDataState extends State<PersonalData> {
                     //         width: 36,
                     //         decoration: BoxDecoration(
                     //           shape: BoxShape.circle,
-                    //           color: const Color(0xff6B39F4),
+                    //           color: const Color(0xff2e9844),
                     //           border: Border.all(
                     //             color: notifier.isDark
                     //                 ? const Color(0xff0F172A)
@@ -421,10 +421,10 @@ class _PersonalDataState extends State<PersonalData> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: const Color(0xff6B39F4),
+                color: const Color(0xff2e9844),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff6B39F4).withValues(alpha: 0.3),
+                    color: const Color(0xff2e9844).withValues(alpha: 0.3),
                     blurRadius: 10,
                     spreadRadius: 0,
                     offset: const Offset(0, 5),

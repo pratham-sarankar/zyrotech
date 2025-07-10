@@ -214,7 +214,7 @@ class _LoginState extends State<Login> {
                               ],
                             ),
                             const Spacer(),
-                            Image.asset("assets/images/144.png",
+                            Image.asset("assets/images/app-icon.png",
                                 color: notifier.isDark ? Colors.white : null,
                                 height: height / 6),
                             const Spacer(),

@@ -12,7 +12,7 @@ class WaitingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/images/144.png',
+              'assets/images/app-icon.png',
               width: 120,
               height: 120,
             ),

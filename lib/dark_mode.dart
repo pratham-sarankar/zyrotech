@@ -62,7 +62,7 @@ class ColorNotifire with ChangeNotifier {
   get sort => isDark ? const Color(0xff1E293B) : const Color(0xffE2E8F0);
   get iconButton => isDark ? const Color(0xff334155) : const Color(0xffFFFFFF);
 
-  bool _isDark = false;
+  bool _isDark = true;
   bool get isDark => _isDark;
 
   void isavalable(bool value) {

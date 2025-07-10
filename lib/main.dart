@@ -2,6 +2,8 @@
 import 'package:crowwn/features/brokers/presentation/providers/binance_provider.dart';
 import 'package:crowwn/features/brokers/presentation/providers/delta_provider.dart';
 import 'package:crowwn/features/bot/presentation/providers/signals_provider.dart';
+import 'package:crowwn/features/groups/presentation/providers/groups_provider.dart';
+import 'package:crowwn/features/subscriptions/presentation/providers/subscriptions_provider.dart';
 import 'package:crowwn/features/user_signals/presentation/providers/user_signals_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,6 @@ import 'package:crowwn/dark_mode.dart';
 import 'package:crowwn/features/onboarding/data/repositories/kyc_repository_impl.dart';
 import 'package:crowwn/features/onboarding/presentation/providers/kyc_provider.dart';
 import 'package:crowwn/features/onboarding/presentation/splash/splash_screen.dart';
-import 'package:crowwn/features/home/data/repositories/bot_repository_impl.dart';
 import 'package:crowwn/features/home/presentation/providers/bot_provider.dart';
 import 'package:crowwn/features/user_signals/data/repositories/user_signals_repository_impl.dart';
 import 'package:crowwn/features/user_signals/data/services/user_signals_service.dart';
@@ -127,7 +128,14 @@ void main() async {
         ChangeNotifierProvider(
           create: (context) {
             return BotProvider(
-              BotRepositoryImpl(context.read<ApiService>()),
+              context.read<ApiService>(),
+            );
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return GroupsProvider(
+              context.read<ApiService>(),
             );
           },
         ),
@@ -135,6 +143,7 @@ void main() async {
           create: (context) {
             return BotDetailsProvider(
               subscriptionService: context.read<BotSubscriptionService>(),
+              apiService: context.read<ApiService>(),
             );
           },
         ),
@@ -146,6 +155,13 @@ void main() async {
                   apiService: context.read<ApiService>(),
                 ),
               ),
+            );
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return SubscriptionsProvider(
+              context.read<ApiService>(),
             );
           },
         ),

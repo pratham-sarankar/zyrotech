@@ -216,7 +216,7 @@ class _ReasonState extends State<ExperienceScreen> {
                   Radius.circular(20),
                 ),
               ),
-              backgroundColor: const Color(0xff6B39F4),
+              backgroundColor: const Color(0xff2e9844),
             ),
             onPressed:
                 kycProvider.isLoading || _isSubmitting ? null : _handleSubmit,
@@ -284,7 +284,7 @@ class _ReasonState extends State<ExperienceScreen> {
                         : notifier.textField,
                     border: Border.all(
                       color: isSelected(index)
-                          ? const Color(0xff6B39F4)
+                          ? const Color(0xff2e9844)
                           : Colors.transparent,
                       width: 1.5,
                     ),
@@ -295,7 +295,7 @@ class _ReasonState extends State<ExperienceScreen> {
                       fontFamily: "Manrope-SemiBold",
                       fontSize: 13,
                       color: isSelected(index)
-                          ? const Color(0xff6B39F4)
+                          ? const Color(0xff2e9844)
                           : Colors.grey,
                     ),
                   ),
@@ -311,7 +311,7 @@ class _ReasonState extends State<ExperienceScreen> {
   Widget indicator({required double value}) {
     return LinearProgressIndicator(
       value: value,
-      color: const Color(0xff6B39F4),
+      color: const Color(0xff2e9844),
       backgroundColor: notifier.linerIndicator,
     );
   }

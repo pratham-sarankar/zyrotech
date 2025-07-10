@@ -201,10 +201,10 @@ class _RiskProfilingScreenState extends State<RiskProfilingScreen> {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                color: const Color(0xff6B39F4),
+                color: const Color(0xff2e9844),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff6B39F4).withValues(alpha: 0.3),
+                    color: const Color(0xff2e9844).withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -272,7 +272,7 @@ class _RiskProfilingScreenState extends State<RiskProfilingScreen> {
           color: isSelected ? const Color(0xffF8F5FF) : notifier.textField,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isSelected ? const Color(0xff6B39F4) : Colors.transparent,
+            color: isSelected ? const Color(0xff2e9844) : Colors.transparent,
             width: 1.5,
           ),
         ),
@@ -284,7 +284,7 @@ class _RiskProfilingScreenState extends State<RiskProfilingScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? const Color(0xff6B39F4) : Colors.grey,
+                  color: isSelected ? const Color(0xff2e9844) : Colors.grey,
                   width: 2,
                 ),
               ),
@@ -293,7 +293,7 @@ class _RiskProfilingScreenState extends State<RiskProfilingScreen> {
                       child: Icon(
                         Icons.check,
                         size: 14,
-                        color: Color(0xff6B39F4),
+                        color: Color(0xff2e9844),
                       ),
                     )
                   : null,
@@ -304,7 +304,7 @@ class _RiskProfilingScreenState extends State<RiskProfilingScreen> {
                 option,
                 style: TextStyle(
                   color:
-                      isSelected ? const Color(0xff6B39F4) : notifier.textColor,
+                      isSelected ? const Color(0xff2e9844) : notifier.textColor,
                   fontFamily: "Manrope-Medium",
                 ),
               ),
@@ -358,7 +358,7 @@ class _RiskProfilingScreenState extends State<RiskProfilingScreen> {
           color: isSelected ? const Color(0xffF8F5FF) : notifier.textField,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isSelected ? const Color(0xff6B39F4) : Colors.transparent,
+            color: isSelected ? const Color(0xff2e9844) : Colors.transparent,
             width: 1.5,
           ),
         ),
@@ -366,7 +366,7 @@ class _RiskProfilingScreenState extends State<RiskProfilingScreen> {
           child: Text(
             label,
             style: TextStyle(
-              color: isSelected ? const Color(0xff6B39F4) : notifier.textColor,
+              color: isSelected ? const Color(0xff2e9844) : notifier.textColor,
               fontFamily: "Manrope-SemiBold",
             ),
           ),

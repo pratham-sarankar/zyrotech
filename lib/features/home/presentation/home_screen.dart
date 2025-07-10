@@ -1,4 +1,6 @@
 // Flutter imports:
+import 'package:crowwn/features/brokers/presentation/screens/brokers_screen.dart';
+import 'package:crowwn/features/subscriptions/presentation/screens/my_subscriptions_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
@@ -35,31 +37,31 @@ class _HomeScreenState extends State<HomeScreen> {
       homeTab,
       const UserSignalsScreen(),
       // const BotScreen(),
-      const Scaffold(),
       // const Portfolio(),
-      const Scaffold(),
+      const MySubscriptionsScreen(),
+      const BrokersScreen(),
       const Profile(),
     ];
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Align(
-        alignment: const Alignment(0, 0.99),
-        child: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              currentIndex = 2;
-            });
-          },
-          backgroundColor: const Color(0xff6B39F4),
-          child: Image(
-            image: const AssetImage("assets/images/robot.png"),
-            fit: BoxFit.contain,
-            color: Colors.white,
-            height: 26,
-            width: 26,
-          ),
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: Align(
+      //   alignment: const Alignment(0, 0.99),
+      //   child: FloatingActionButton(
+      //     onPressed: () {
+      //       setState(() {
+      //         currentIndex = 2;
+      //       });
+      //     },
+      //     backgroundColor: const Color(0xff2e9844),
+      //     child: Image(
+      //       image: const AssetImage("assets/images/robot.png"),
+      //       fit: BoxFit.contain,
+      //       color: Colors.white,
+      //       height: 26,
+      //       width: 26,
+      //     ),
+      //   ),
+      // ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: notifier.background,
         type: BottomNavigationBarType.fixed,
@@ -152,9 +154,36 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             label: "Signals",
           ),
-          const BottomNavigationBarItem(
-            label: "",
-            icon: Text(""),
+          BottomNavigationBarItem(
+            icon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/images/Portfolio.png",
+                    color: notifier.bottom,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+            activeIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset(
+                    "assets/images/Portfolio_fill.png",
+                    color: notifier.bottom,
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+            label: "Subscriptions",
           ),
           BottomNavigationBarItem(
             icon: Column(
@@ -185,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 4),
               ],
             ),
-            label: "Portfolio",
+            label: "Broker",
           ),
           BottomNavigationBarItem(
             icon: Column(

@@ -35,7 +35,8 @@ class _BrokersScreenState extends State<BrokersScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this, initialIndex: widget.initialTab);
+    _tabController =
+        TabController(length: 2, vsync: this, initialIndex: widget.initialTab);
     // Initialize providers
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<BinanceProvider>().initialize();
@@ -59,16 +60,16 @@ class _BrokersScreenState extends State<BrokersScreen>
     return Scaffold(
       backgroundColor: notifier.background,
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Image.asset(
-            "assets/images/arrow-narrow-left (1).png",
-            scale: 3,
-            color: Colors.white,
-          ),
-        ),
+        // leading: GestureDetector(
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //   },
+        //   child: Image.asset(
+        //     "assets/images/arrow-narrow-left (1).png",
+        //     scale: 3,
+        //     color: Colors.white,
+        //   ),
+        // ),
         title: Text(
           'API Connection',
           style: TextStyle(

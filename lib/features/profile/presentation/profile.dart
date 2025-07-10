@@ -3,7 +3,6 @@ import 'package:crowwn/features/brokers/presentation/screens/brokers_screen.dart
 import 'package:crowwn/features/profile/presentation/personal_data.dart';
 import 'package:crowwn/features/profile/presentation/widgets/profile_tile.dart';
 import 'package:crowwn/features/settings/change-password/presentation/change_password.dart';
-import 'package:crowwn/screens/Message%20&%20Notification/Notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconly/iconly.dart';
@@ -17,9 +16,7 @@ import 'package:crowwn/screens/Login%20Screens/login_screen.dart';
 import '../../../dark_mode.dart';
 import '../../../screens/Account&setting/About App.dart';
 import '../../../screens/Account&setting/Help Center.dart';
-import '../../../screens/Account&setting/Identify_Verification.dart';
 import '../../../screens/Account&setting/Privacy&Policy.dart';
-import '../../../screens/Account&setting/Refferal Code.dart';
 import '../../../screens/Account&setting/Terms&conditions.dart';
 import '../../../screens/config/common.dart';
 import '../../../services/auth_service.dart';
@@ -318,20 +315,21 @@ class _ProfileState extends State<Profile> {
                             );
                           },
                         ),
-                        ProfileTile.regular(
-                          image: 'assets/images/Identycard_.png',
-                          name: 'Identify Verification',
-                          description: 'Verify your identity',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const Identify_Verification(),
-                              ),
-                            );
-                          },
-                        ),
+                        // ProfileTile.regular(
+                        //   image: 'assets/images/Identycard_.png',
+                        //   name: 'Identify Verification',
+                        //   description: 'Verify your identity',
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //         builder: (context) =>
+                        //             const Identify_Verification(),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+
                         ProfileTile.regular(
                           image: 'assets/images/cloud-connection.png',
                           name: 'API Connection',
@@ -340,7 +338,8 @@ class _ProfileState extends State<Profile> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const BrokersScreen(initialTab: 0),
+                                builder: (context) =>
+                                    const BrokersScreen(initialTab: 0),
                               ),
                             );
                           },
@@ -438,20 +437,21 @@ class _ProfileState extends State<Profile> {
                                 ));
                           },
                         ),
+                        // ProfileTile.regular(
+                        //   image: "assets/images/card.png",
+                        //   name: "Refferal Code",
+                        //   description: "Refferal Program",
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //           builder: (context) => const Reffle_code(),
+                        //         ));
+                        //   },
+                        // ),
+
                         ProfileTile.regular(
-                          image: "assets/images/card.png",
-                          name: "Refferal Code",
-                          description: "Refferal Program",
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Reffle_code(),
-                                ));
-                          },
-                        ),
-                        ProfileTile.regular(
-                          image: "assets/images/144.png",
+                          image: "assets/images/app-icon.png",
                           name: "About App",
                           description: "About Us",
                           onTap: () {

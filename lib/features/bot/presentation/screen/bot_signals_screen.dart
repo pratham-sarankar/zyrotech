@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/dark_mode.dart';
-import 'package:crowwn/models/signal.dart';
 import 'package:crowwn/features/bot/presentation/providers/signals_provider.dart';
 import 'package:crowwn/features/bot/presentation/widgets/performance_overview_widget.dart';
 
@@ -332,13 +331,13 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: const Color(0xff6B39F4).withValues(alpha: 0.1),
+                        color: const Color(0xff2e9844).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         'Filtered',
                         style: TextStyle(
-                          color: const Color(0xff6B39F4),
+                          color: const Color(0xff2e9844),
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
                         ),
@@ -367,11 +366,11 @@ class _BotSignalsScreenState extends State<BotSignalsScreen> {
               _buildPerformanceMetric(
                   'Win Rate',
                   '${signalsProvider.winRate.toStringAsFixed(1)}%',
-                  const Color(0xff6B39F4)),
+                  const Color(0xff2e9844)),
               _buildPerformanceMetric(
                   'Avg ROI',
                   '${signalsProvider.averageROI.toStringAsFixed(2)}%',
-                  const Color(0xff6B39F4)),
+                  const Color(0xff2e9844)),
             ],
           ),
         ],
@@ -615,7 +614,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                     child: ElevatedButton(
                       onPressed: _applyFilters,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff6B39F4),
+                        backgroundColor: const Color(0xff2e9844),
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -677,11 +676,11 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xff6B39F4) : notifier.container,
+          color: isSelected ? const Color(0xff2e9844) : notifier.container,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected
-                ? const Color(0xff6B39F4)
+                ? const Color(0xff2e9844)
                 : notifier.textColor.withValues(alpha: 0.2),
           ),
         ),
@@ -710,7 +709,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
             return Theme(
               data: Theme.of(context).copyWith(
                 colorScheme: ColorScheme.light(
-                  primary: const Color(0xff6B39F4),
+                  primary: const Color(0xff2e9844),
                   onPrimary: Colors.white,
                   surface: notifier.background,
                   onSurface: notifier.textColor,

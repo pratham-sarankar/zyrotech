@@ -3,7 +3,6 @@ import 'package:crowwn/features/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 // Project imports:
@@ -50,36 +49,31 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = Provider.of<ColorNotifire>(context, listen: true);
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    final size = MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: notifier.background,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image(
-                image: const AssetImage(
-                  "assets/images/144.png",
-                ),
-                color: notifier.isDark ? Colors.white : null,
-                height: height / 8.5,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image(
+              image: const AssetImage(
+                "assets/images/app-icon.png",
               ),
-              AppConstants.Width(width / 19),
-              Text(
-                "ZyroBot",
-                style: TextStyle(
-                  color: notifier.textColor,
-                  fontSize: 30,
-                  fontFamily: "Manrope-Bold",
-                ),
-              )
-            ],
-          )
-        ],
+              color: notifier.isDark ? Colors.white : null,
+              width: size.height * 0.2,
+            ),
+            Text(
+              "FinFx",
+              style: TextStyle(
+                color: notifier.textColor,
+                fontFamily: "Manrope-Bold",
+                fontSize: size.width * 0.08,
+                height: 1,
+              ),
+            )
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: notifier.background,

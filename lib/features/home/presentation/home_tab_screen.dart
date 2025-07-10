@@ -4,7 +4,9 @@ import 'package:crowwn/features/brokers/presentation/providers/delta_provider.da
 import 'package:crowwn/features/brokers/presentation/screens/brokers_screen.dart';
 import 'package:crowwn/features/brokers/domain/models/binance_balance.dart';
 import 'package:crowwn/features/brokers/domain/models/delta_balance.dart';
-import 'package:crowwn/features/home/data/models/bot_model.dart';
+import 'package:crowwn/features/home/presentation/widgets/bot_card.dart';
+import 'package:crowwn/features/groups/presentation/providers/groups_provider.dart';
+import 'package:crowwn/features/groups/data/models/group_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,9 +15,7 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:crowwn/screens/Message%20&%20Notification/Notifications.dart';
-import '../../bot/presentation/screen/bot_detail_screen.dart';
 import 'package:crowwn/features/home/presentation/providers/bot_provider.dart';
-import 'package:crowwn/services/binance_service.dart';
 import 'package:crowwn/features/profile/presentation/providers/profile_provider.dart';
 
 import '../../../dark_mode.dart'; // Assuming Dark mode.dart is needed for theme colors
@@ -175,15 +175,14 @@ class HomeTabScreen extends StatefulWidget {
 
 class _HomeTabScreenState extends State<HomeTabScreen> {
   ColorNotifire notifier = ColorNotifire();
-  String selectedTimeFilter = "Trending";
-  String selectedExchange = "Binance";
+  GroupModel? selectedGroup;
 
   @override
   void initState() {
     super.initState();
-    // Fetch bots when the screen loads
+    // Fetch groups when the screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<BotProvider>().fetchBots();
+      context.read<GroupsProvider>().fetchGroups();
       // Initialize broker providers
       context.read<BinanceProvider>().initialize();
       context.read<DeltaProvider>().initialize();
@@ -193,11 +192,21 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   @override
   Widget build(BuildContext context) {
     notifier = Provider.of<ColorNotifire>(context, listen: true);
+    final size = MediaQuery.sizeOf(context);
     final botProvider = Provider.of<BotProvider>(context, listen: true);
-    final binanceService = Provider.of<BinanceService>(context, listen: false);
+    final groupsProvider = Provider.of<GroupsProvider>(context, listen: true);
 
     // Get greeting based on current time
     String greeting = _getTimeBasedGreeting();
+
+    // Set default selected group if not set and groups are available
+    if (selectedGroup == null && groupsProvider.groups.isNotEmpty) {
+      selectedGroup = groupsProvider.groups.first;
+      // Fetch bots for the first group
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<BotProvider>().fetchBotsByGroup(selectedGroup!.id);
+      });
+    }
 
     // Show error via Snackbar if there's an error
     if (botProvider.error != null) {
@@ -209,6 +218,19 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
           ),
         );
         botProvider.clearError();
+      });
+    }
+
+    // Show groups error via Snackbar if there's an error
+    if (groupsProvider.error != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(groupsProvider.error!),
+            backgroundColor: Colors.red,
+          ),
+        );
+        groupsProvider.clearError();
       });
     }
 
@@ -229,10 +251,17 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
           child: RefreshIndicator(
             onRefresh: () async {
               setState(() {});
+              // Refresh groups and bots
+              await context.read<GroupsProvider>().fetchGroups();
+              if (selectedGroup != null) {
+                await context
+                    .read<BotProvider>()
+                    .fetchBotsByGroup(selectedGroup!.id);
+              }
               // Refresh broker balances
               final binanceProvider = context.read<BinanceProvider>();
               final deltaProvider = context.read<DeltaProvider>();
-              
+
               if (binanceProvider.isConnected) {
                 await binanceProvider.refreshBalance();
               }
@@ -254,25 +283,12 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                         Expanded(
                           child: Row(
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color:
-                                          Colors.black.withValues(alpha: 0.08),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: CircleAvatar(
-                                  radius: 26,
-                                  backgroundImage:
-                                      AssetImage("assets/images/144.png"),
-                                ),
+                              Image.asset(
+                                "assets/images/app-icon.png",
+                                width: size.width * 0.12,
+                                height: size.width * 0.12,
                               ),
-                              const SizedBox(width: 14),
+                              const SizedBox(width: 5),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,6 +300,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                                             .withValues(alpha: 0.7),
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
+                                        height: 1.2,
                                       ),
                                     ),
                                     const SizedBox(height: 2),
@@ -303,6 +320,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                                             color: notifier.textColor,
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
+                                            height: 1,
                                           ),
                                         );
                                       },
@@ -324,25 +342,10 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                       ],
                     ),
                     const SizedBox(height: 28),
-                    
+
                     // Broker Cards Section
                     _brokerCardsSection(notifier),
                     const SizedBox(height: 28),
-                    
-                    // Strategies Section (Horizontal Scroll)
-                    Text(
-                      "Crypto Currencies",
-                      style: TextStyle(
-                        color: notifier.textColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Modern Crypto Price Card
-                    _cryptoPriceCard(binanceService),
-                    const SizedBox(height: 40),
 
                     // Strategies Section (Horizontal Scroll)
                     Row(
@@ -356,13 +359,16 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Icon(Icons.trending_up, color: Color(0xff6B39F4)),
+                        Icon(Icons.trending_up, color: Color(0xff2e9844)),
                       ],
                     ),
                     const SizedBox(height: 20),
 
                     // Filter Tabs
-                    _modernFilterTabs(),
+                    if (groupsProvider.isLoading)
+                      _buildShimmerFilterTabs()
+                    else
+                      _modernFilterTabs(groupsProvider.groups),
                     const SizedBox(height: 20),
 
                     // Modern Bot List
@@ -374,7 +380,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                     else if (botProvider.bots.isNotEmpty)
                       Column(
                         children: botProvider.bots
-                            .map((bot) => _modernBotCard(bot, notifier))
+                            .map((bot) => BotCard(bot: bot))
                             .toList(),
                       )
                     else
@@ -389,7 +395,9 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                         ),
                         child: Center(
                           child: Text(
-                            'No bots available',
+                            selectedGroup != null
+                                ? 'No bots available for ${selectedGroup!.name}'
+                                : 'No bots available',
                             style: TextStyle(
                               color: notifier.textColor.withValues(alpha: 0.7),
                               fontSize: 14,
@@ -550,7 +558,8 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        width: MediaQuery.of(context).size.width - 40, // Full width minus padding
+        width:
+            MediaQuery.of(context).size.width - 40, // Full width minus padding
         clipBehavior: Clip.none,
         decoration: BoxDecoration(
           gradient: gradient,
@@ -578,12 +587,14 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                       Container(
                         width: 40, // Increased from 36 to 48
                         height: 40, // Increased from 36 to 48
-                        padding: brokerName == "Delta" 
+                        padding: brokerName == "Delta"
                             ? const EdgeInsets.all(0) // Less padding for Delta
-                            : const EdgeInsets.all(8), // Normal padding for others
+                            : const EdgeInsets.all(
+                                8), // Normal padding for others
                         decoration: BoxDecoration(
                           color: Colors.white, // Changed to solid white
-                          borderRadius: BorderRadius.circular(12), // Increased radius
+                          borderRadius:
+                              BorderRadius.circular(12), // Increased radius
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withValues(alpha: 0.1),
@@ -593,19 +604,26 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                           ],
                         ),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8), // Adjusted for padding
+                          borderRadius:
+                              BorderRadius.circular(8), // Adjusted for padding
                           child: Image.asset(
                             logoPath,
-                            fit: BoxFit.contain, // Changed to contain for better logo display
-                            width: brokerName == "Delta" ? 36 : null, // Force width for Delta
-                            height: brokerName == "Delta" ? 36 : null, // Force height for Delta
+                            fit: BoxFit
+                                .contain, // Changed to contain for better logo display
+                            width: brokerName == "Delta"
+                                ? 36
+                                : null, // Force width for Delta
+                            height: brokerName == "Delta"
+                                ? 36
+                                : null, // Force height for Delta
                           ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                        mainAxisAlignment:
+                            MainAxisAlignment.center, // Center vertically
                         children: [
                           Text(
                             brokerName,
@@ -623,15 +641,19 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                                 width: 8,
                                 height: 8,
                                 decoration: BoxDecoration(
-                                  color: isConnected ? Colors.green : Colors.grey,
+                                  color:
+                                      isConnected ? Colors.green : Colors.grey,
                                   shape: BoxShape.circle,
-                                  boxShadow: isConnected ? [
-                                    BoxShadow(
-                                      color: Colors.green.withValues(alpha: 0.5),
-                                      blurRadius: 4,
-                                      spreadRadius: 1,
-                                    ),
-                                  ] : null,
+                                  boxShadow: isConnected
+                                      ? [
+                                          BoxShadow(
+                                            color: Colors.green
+                                                .withValues(alpha: 0.5),
+                                            blurRadius: 4,
+                                            spreadRadius: 1,
+                                          ),
+                                        ]
+                                      : null,
                                 ),
                               ),
                               const SizedBox(width: 6),
@@ -653,7 +675,8 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                   // Right side - Balance or connection status
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                    mainAxisAlignment:
+                        MainAxisAlignment.center, // Center vertically
                     children: [
                       if (isConnected && balance != null)
                         Column(
@@ -807,18 +830,19 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   }
 
   // Modern filter tabs
-  Widget _modernFilterTabs() {
-    final tabs = ["Trending", "BTC/USDT", "XAU/USD", "Solana", "ETH/USDT"];
+  Widget _modernFilterTabs(List<GroupModel> groups) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: tabs.map((tab) {
-          final isSelected = selectedTimeFilter == tab;
+        children: groups.map((group) {
+          final isSelected = selectedGroup?.id == group.id;
           return GestureDetector(
             onTap: () {
               setState(() {
-                selectedTimeFilter = tab;
+                selectedGroup = group;
               });
+              // Always fetch fresh bots for the selected group
+              context.read<BotProvider>().fetchBotsByGroup(group.id);
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
@@ -826,30 +850,30 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? const Color(0xff6B39F4).withValues(alpha: 0.12)
+                    ? const Color(0xff2e9844).withValues(alpha: 0.12)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(14),
                 border: isSelected
                     ? Border.all(
-                        color: const Color(0xff6B39F4).withValues(alpha: 0.3))
+                        color: const Color(0xff2e9844).withValues(alpha: 0.3))
                     : null,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    _getTabIcon(tab),
+                    _getTabIcon(group.name),
                     size: 15,
                     color: isSelected
-                        ? const Color(0xff6B39F4)
+                        ? const Color(0xff2e9844)
                         : notifier.textColor.withValues(alpha: 0.7),
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    tab,
+                    group.name,
                     style: TextStyle(
                       color: isSelected
-                          ? const Color(0xff6B39F4)
+                          ? const Color(0xff2e9844)
                           : notifier.textColor.withValues(alpha: 0.7),
                       fontSize: 13,
                       fontWeight:
@@ -865,173 +889,42 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     );
   }
 
-  // Modern bot card
-  Widget _modernBotCard(BotModel bot, ColorNotifire notifier) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BotDetailsScreen(
-              bot: bot,
-            ),
-          ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          color: notifier.container,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: notifier.textColor.withValues(alpha: 0.08)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: notifier.textColor.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child:
-                    Icon(Icons.show_chart, color: Color(0xff6B39F4), size: 22),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            bot.name,
-                            style: TextStyle(
-                              color: notifier.textColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Color(0xff6B39F4).withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            "High Frequency", // TODO: Replace with dynamic type
-                            style: TextStyle(
-                              color: Color(0xff6B39F4),
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Icon(Icons.trending_up, color: Colors.green, size: 15),
-                        const SizedBox(width: 4),
-                        Text(
-                          "Win Rate: 78%", // TODO: Replace with dynamic win rate
-                          style: TextStyle(
-                            color: notifier.textColor.withValues(alpha: 0.7),
-                            fontSize: 13,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Icon(Icons.attach_money, color: Colors.amber, size: 15),
-                        const SizedBox(width: 2),
-                        Text(
-                          "\$1,878.80", // TODO: Replace with dynamic price
-                          style: TextStyle(
-                            color: notifier.textColor.withValues(alpha: 0.7),
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        _buildMetricChip("BTC/USDT", Icons.currency_exchange),
-                        const SizedBox(width: 8),
-                        _buildMetricChip("ROI: +12.5%", Icons.trending_up),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.green.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.trending_up,
-                                  size: 14, color: Colors.green),
-                              const SizedBox(width: 4),
-                              Text(
-                                "Profit",
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMetricChip(String text, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: notifier.textColor.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(12),
-      ),
+  Widget _buildShimmerFilterTabs() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon,
-              size: 14, color: notifier.textColor.withValues(alpha: 0.7)),
-          const SizedBox(width: 4),
-          Text(
-            text,
-            style: TextStyle(
-              color: notifier.textColor.withValues(alpha: 0.7),
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
+        children: List.generate(4, (index) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: notifier.textColor.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(14),
             ),
-          ),
-        ],
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 15,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    color: notifier.textColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Container(
+                  width: 60,
+                  height: 13,
+                  decoration: BoxDecoration(
+                    color: notifier.textColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
@@ -1240,19 +1133,17 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   }
 
   IconData _getTabIcon(String tabName) {
-    switch (tabName) {
-      case "Today":
-        return Icons.today_outlined;
-      case "This Week":
-        return Icons.calendar_view_week;
-      case "This Month":
-        return Icons.calendar_month;
-      case "This Year":
-        return Icons.calendar_today;
-      case "All Time":
-        return Icons.history;
+    switch (tabName.toLowerCase()) {
+      case "commodities":
+        return Icons.inventory_2_outlined;
+      case "currency":
+        return Icons.currency_exchange_outlined;
+      case "stocks":
+        return Icons.trending_up_outlined;
+      case "crypto":
+        return Icons.currency_bitcoin_outlined;
       default:
-        return Icons.calendar_today;
+        return Icons.category_outlined;
     }
   }
 
@@ -1265,117 +1156,5 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     } else {
       return 'Good Evening';
     }
-  }
-
-  Widget _cryptoPriceCard(BinanceService binanceService) {
-    final coins = [
-      {
-        'symbol': 'BTCUSDT',
-        'name': 'Bitcoin',
-        'icon': 'assets/images/Bitcoin.png',
-        'gradient': [Color(0xffF7931A), Color(0xffFFB300)],
-      },
-      {
-        'symbol': 'ETHUSDT',
-        'name': 'Ethereum',
-        'icon': 'assets/images/Ethereum (ETH).png',
-        'gradient': [Color(0xff627EEA), Color(0xff8CA6DB)],
-      },
-      {
-        'symbol': 'SOLUSDT',
-        'name': 'Solana',
-        'icon': 'assets/images/SOL.png',
-        'gradient': [Color(0xff00FFA3), Color(0xffDC1FFF)],
-      },
-    ];
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: coins.map((coin) {
-        return Expanded(
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 6),
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-              gradient: LinearGradient(
-                colors: List<Color>.from(coin['gradient'] as List),
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: (coin['gradient'] as List<Color>)
-                      .first
-                      .withValues(alpha: 0.13),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.13),
-                  ),
-                  padding: const EdgeInsets.all(7),
-                  child: Image.asset(
-                    coin['icon'] as String,
-                    width: 28,
-                    height: 28,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  coin['name'] as String,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                FutureBuilder<double>(
-                  future:
-                      binanceService.getLatestPrice(coin['symbol'] as String),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Container(
-                        width: 48,
-                        height: 14,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.13),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                        '--',
-                        style: TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    } else {
-                      return Text(
-                        '\$${snapshot.data!.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      }).toList(),
-    );
   }
 }
